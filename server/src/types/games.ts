@@ -1,0 +1,13 @@
+export interface Game {
+    id: number;
+    pgn: string;
+    white_player: string;
+    black_player: string;
+    result: string;
+    event: string;
+    game_date: Date;
+    created_at: Date;
+}
+
+export type CreateGameInput = Omit<Game, "created_at" | "id">;
+export type GamePublic = Game;

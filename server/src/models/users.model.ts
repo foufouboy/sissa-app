@@ -15,12 +15,17 @@ export const UserModel = {
         }
     },
 
-    async findById(id: number) {
+    async findById(id: number): Promise<User | undefined> {
         try {
-            return await query(
-                `SELECT * FROM users WHERE id = $1`, 
+            const result = (await query<User>(
+                `SELECT * FROM users WHERE id = $1
+                LIMIT 1`, 
                 [id]
-            );
+            ));
+
+            return result[0];
+
+
         } catch (error) {
             console.error(`Erreur lors de la récupération de l'utilisateur ${id}:`, error);
             throw error;
@@ -87,10 +92,10 @@ async function main() {
     }
 
     const result = await UserModel.updateById(5, updatedUser);
-    const users = await UserModel.findAll();
+    const user = await UserModel.findById(1);
 
     console.log(result);
-    console.log(users);
+    console.log(user);
 }
 
 main();
