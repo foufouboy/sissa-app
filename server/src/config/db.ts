@@ -7,7 +7,7 @@ const pool = new Pool({
 });
 
 // Abstraction du pool.query de pg, pour notre propre usage.
-export async function query(sql: string, params: unknown[] = []) {
+export async function query<T>(sql: string, params: unknown[] = []): Promise<T[]> {
     const { rows } = await pool.query(sql, params);
     return rows;
 }

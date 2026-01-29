@@ -1,34 +1,63 @@
 import { query } from "../config/db";
+import { Roles } from "../types/roles";
+import { CreateUserInput, User } from "../types/users";
 
-// Intégrer les try/catch et les types précis plus tard
-// Puis faire tous les modèles sur ce format
-// Faire un model, puis faire des tests
+// 1. Créer les types du model
+// 2. Créer le model, avec les CRUD de base
 
 export const UserModel = {
-    async findAll() {
-        return await query(`SELECT * FROM users`);
+    async findAll(): Promise<User[]> {
+        try {
+            return await query(`SELECT * FROM users`);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des utilisateurs:", error);
+            throw error;
+        }
     },
 
     async findById(id: number) {
-        return await query(
-            `
-            SELECT id, email, first_name, last_name, role
-            FROM users WHERE id = $1`, 
-            [id]
-        );
+        try {
+            return await query(
+                `SELECT * FROM users WHERE id = $1`, 
+                [id]
+            );
+        } catch (error) {
+            console.error(`Erreur lors de la récupération de l'utilisateur ${id}:`, error);
+            throw error;
+        }
     },
 
-    async create(data: unknown) { // tout sera typé plus tard
-        const dataToArray = [...Object.values(data)];
+    async create(data: CreateUserInput) {
+        try {
+            const { email, password, first_name, last_name, role } = data;
 
-        return await query(
-            `
-            INSERT INTO users (email, password, first_name, last_name, role)
-            VALUES ($1, $2, $3, $4, COALESCE($5, 'member'))
-            `, 
-            [dataToArray]
-        )
+            return await query(
+                `INSERT INTO users (email, password, first_name, last_name, role)
+                VALUES ($1, $2, $3, $4, COALESCE($5, 'member'))`, 
+                [email, password, first_name, last_name, role || Roles.Member]
+            );
+        } catch (error) {
+            console.error("Erreur lors de la création de l'utilisateur:", error);
+            throw error;
+        }
     },
+
+    async updateById(id: number, data: CreateUserInput) {
+        // TODO
+    },
+
+    async delete(id: number) {
+        try {
+            await query(
+                `DELETE FROM users
+                WHERE id = $1`,
+                [id]
+            );
+        } catch (error) {
+            console.error("Erreur lors de la suppression de l'utilisateur:", error);
+            throw error;
+        }
+    }
 }
 
 // TESTS 
@@ -36,7 +65,7 @@ export const UserModel = {
 async function main() {
     const users = await UserModel.findAll();
     
-    users.map((user: any) => {
+    users.map((user: User) => {
         console.log(user.email);
     });
 }
