@@ -3,25 +3,67 @@ import { CreateGameInput, Game } from "../types/games";
 
 export const GameModel = {
     async findAllGamesOfPlayer(userId: number): Promise<Game[]> {
-        // TODO
+        try {
+            const result = await query<Game>(`
+                SELECT * FROM games
+                WHERE user_id = $1
+            `, [userId]);
+
+            return result;
+        } catch (error) {
+            console.error("Erreur lors de la récupération des parties:", error);
+            throw error;
+        }
     },
 
     async findById(id: number): Promise<Game | undefined> {
         // TODO 
-        const result = (await query<Game>(
+        const result = await query<Game>(
             `SELECT * FROM games WHERE id = $1
             LIMIT 1`,
             [id]
-        ));
+        );
 
         return result[0];
     },
 
     async create(data: CreateGameInput) {
-        // TODO
+        try {
+            const { pgn, white_player, black_player, result, event, game_date } = data;
+
+            return await query(`
+                INSERT INTO users (pgn, white_player, black_player, result, event, game_date)
+                VALUES ($1, $2, $3, $4, $5, $6)     
+            `, [pgn, white_player, black_player, result, event, game_date])
+        } catch (error) {
+            console.error("Erreur lors de la création de la partie", error);
+            throw error;
+        }
     },
 
     async delete(id: number) {
-        // TODO
+        try {
+            await query(
+                `DELETE FROM games
+                WHERE id = $1`,
+                [id]
+            );
+        } catch (error) {
+            console.error("Erreur lors de la suppression de l'utilisateur:", error);
+            throw error;
+        }
     }
 };
+
+// TESTS 
+
+async function main() {
+
+    // TODO: manque une table games_users car une partie peut
+    // avoir deux joueurs du même club !
+    const games = await GameModel.findById(1);
+
+    console.log(games);
+}
+
+main();
