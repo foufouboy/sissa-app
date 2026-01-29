@@ -33,7 +33,7 @@ export const UserModel = {
 
             return await query(
                 `INSERT INTO users (email, password, first_name, last_name, role)
-                VALUES ($1, $2, $3, $4, COALESCE($5, 'member'))`, 
+                VALUES ($1, $2, $3, $4, $5::roles_type)`, 
                 [email, password, first_name, last_name, role || Roles.Member]
             );
         } catch (error) {
@@ -43,7 +43,22 @@ export const UserModel = {
     },
 
     async updateById(id: number, data: CreateUserInput) {
-        // TODO
+        const { email, first_name, last_name, role } = data; // Pas encore de modifs de mdp
+
+        try {
+            return await query(`
+                UPDATE users
+                SET email = $2,
+                    first_name = $3,
+                    last_name = $4,
+                    role = $5::roles_type,
+                    updated_at = NOW()
+                WHERE id = $1
+            `, [id, email, first_name, last_name, role]);
+        } catch (error) {
+            console.error("Erreur lors de la modification de l'utilisateur:", error);
+            throw error;
+        }
     },
 
     async delete(id: number) {
@@ -63,11 +78,19 @@ export const UserModel = {
 // TESTS 
 
 async function main() {
+    const updatedUser: CreateUserInput = {
+        email: "emma@test.com",
+        first_name: "Emma",
+        last_name: "Thompson",
+        password: "hashed_password",
+        role: Roles.Member
+    }
+
+    const result = await UserModel.updateById(5, updatedUser);
     const users = await UserModel.findAll();
-    
-    users.map((user: User) => {
-        console.log(user.email);
-    });
+
+    console.log(result);
+    console.log(users);
 }
 
 main();
