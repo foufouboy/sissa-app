@@ -24,7 +24,41 @@ export const EventModel = {
     },
 
     async findById(id: number): Promise<Event> {
+        try {
+            const result = await query<Event>(`
+                SELECT * FROM event_with_user
+                WHERE event_id = $1
+            `, [id]);
 
+            const { 
+                event_id, location, start_date, 
+                end_date, all_day, title, description, 
+                created_at, updated_at, user_id, email,
+                first_name, last_name } 
+            = result;
+
+            const event: EventPublic = {
+                id: event_id,
+                location,
+                start_date,
+                end_date,
+                all_day,
+                title,
+                description,
+                created_at,
+                creator: {
+                    id: user_id,
+                    email,
+                    first_name,
+                    last_name,
+                }
+            }
+
+            return event;
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'évènement:", error);
+            throw error;
+        }
     },
 
     async create(data: CreateEventInput) {
@@ -39,3 +73,15 @@ export const EventModel = {
 
     }
 }
+
+
+// TESTS 
+
+async function main() {
+
+    const event = await EventModel.findById(1);
+
+    console.log(event);
+}
+
+main();

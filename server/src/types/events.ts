@@ -1,5 +1,7 @@
 import { UserPublic } from "./users";
 
+// TODO : Créer des EntityPublic VRAIMENT utilisables par le service
+
 export interface Event {
     id: number;
     created_by: number;
