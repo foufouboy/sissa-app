@@ -59,8 +59,6 @@ export const GameModel = {
 
 async function main() {
 
-    // TODO: manque une table games_users car une partie peut
-    // avoir deux joueurs du même club !
     const games = await GameModel.findById(1);
 
     console.log(games);

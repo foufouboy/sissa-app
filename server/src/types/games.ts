@@ -1,3 +1,7 @@
+// TODO: Problème un peu relou, mais quels types faire
+// sachant qu'on veut représenter les données sortant de BDD ET 
+// les données qu'on va réellement utiliser ?
+
 export interface Game {
     id: number;
     pgn: string;
