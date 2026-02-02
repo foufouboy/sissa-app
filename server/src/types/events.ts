@@ -1,6 +1,7 @@
 
 export interface Event {
     id: number;
+    created_by: number;
     location: string;
     start_date: Date;
     all_day: boolean;
