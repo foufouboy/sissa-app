@@ -14,4 +14,14 @@ export interface Game {
 }
 
 export type CreateGameInput = Omit<Game, "created_at" | "id">;
-export type GamePublic = Game;
+
+export interface GamePublic {
+    id: number;
+    pgn: string;
+    whitePlayer: string;
+    blackPlayer: string;
+    result: string;
+    event: string;
+    gameDate: Date;
+    createdAt: Date;
+}

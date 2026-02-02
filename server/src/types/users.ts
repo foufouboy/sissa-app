@@ -4,16 +4,24 @@ import { Roles } from "./roles";
 // pour notre logique métier
 
 export interface User {
-    id: Number;
+    id: number;
     email: string;
     first_name: string;
     last_name: string;
     password: string;
-    role?: Roles;
-    created_at?: Date;
-    updated_at?: Date;
+    role: Roles;
+    created_at: Date;
+    updated_at: Date;
 }
 
 export type CreateUserInput = Pick<User, "email" | "password" | "first_name" | "last_name" | "role">;
 
-export type UserPublic = Omit<User, "password">;
+export interface UserPublic {
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: Roles;
+    createdAt: Date;
+    updatedAt: Date;
+}

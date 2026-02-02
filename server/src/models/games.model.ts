@@ -1,30 +1,35 @@
 import { query } from "../config/db";
-import { CreateGameInput, Game } from "../types/games";
+import { CreateGameInput, GamePublic, GameWithDetails } from "../types/games";
+import { toPublicGame, toPublicGames } from "./dtos/games";
 
 export const GameModel = {
-    async findAllGamesOfPlayer(userId: number): Promise<Game[]> {
+    async findAllGamesOfPlayer(userId: number): Promise<GamePublic[]> {
         try {
-            const result = await query<Game>(`
+            const result = await query<GameWithDetails>(`
                 SELECT * FROM games
                 WHERE user_id = $1
             `, [userId]);
 
-            return result;
+            return toPublicGames(result);
         } catch (error) {
             console.error("Erreur lors de la récupération des parties:", error);
             throw error;
         }
     },
 
-    async findById(id: number): Promise<Game | undefined> {
+    async findById(id: number): Promise<GamePublic> {
         // TODO 
-        const result = await query<Game>(
+        const result = await query<GameWithDetails>(
             `SELECT * FROM games WHERE id = $1
             LIMIT 1`,
             [id]
         );
 
-        return result[0];
+        if (!result[0]) {
+            throw new Error("Partie non trouvée");
+        }
+
+        return toPublicGame(result[0]);
     },
 
     async create(data: CreateGameInput) {

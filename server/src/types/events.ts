@@ -28,14 +28,17 @@ export interface EventPublic {
         firstName: string;
         lastName: string;
     }
+    groups: string[];
 };
 
-export type EventWithCreator = Omit<Event, "id"> & {
+export type EventWithDetails = Omit<Event, "id"> & {
     event_id: number;
     user_id: number;
     email: string;
     first_name: string;
     last_name: string;
+    member_group_ids: number[];
+    member_group_names: string;
 }
 
 

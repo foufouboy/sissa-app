@@ -1,11 +1,11 @@
 import { query } from "../config/db";
-import { CreateEventInput, EventPublic, EventWithCreator } from "../types/events";
+import { CreateEventInput, EventPublic, EventWithDetails } from "../types/events";
 import { toPublicEvent, toPublicEvents } from "./dtos/events";
 
 export const EventModel = {
     async findAll(): Promise<EventPublic[]> {
         try {
-            const events = await query<EventWithCreator>(`
+            const events = await query<EventWithDetails>(`
                 SELECT * FROM events_with_creator
             `);
 
@@ -17,12 +17,22 @@ export const EventModel = {
     },
 
     async findByGroup(id: number): Promise<EventPublic[]> {
+        try {
+            const events = await query<EventWithDetails>(`
+                SELECT * FROM events_complete_details
+                WHERE $1 = ANY(member_group_ids)
+            `, [id]);
 
+            return toPublicEvents(events);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des évènements:", error);
+            throw error;
+        }
     },
 
     async findById(id: number): Promise<EventPublic> {
         try {
-            const result = await query<EventWithCreator>(`
+            const result = await query<EventWithDetails>(`
                 SELECT * FROM events_with_creator
                 WHERE event_id = $1
             `, [id]);
@@ -37,6 +47,8 @@ export const EventModel = {
             throw error;
         }
     },
+
+    // TODO : réimplémenter correctement create et update pour c/u les members_groups
 
     async create(data: CreateEventInput) {
         const { location, start_date, end_date, all_day, title, description, created_by } = data;
@@ -87,7 +99,7 @@ export const EventModel = {
 
 async function main() {
 
-    const event = await EventModel.findAll();
+    const event = await EventModel.findByGroup(4);
 
     console.log(event);
 }

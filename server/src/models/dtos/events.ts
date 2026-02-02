@@ -1,6 +1,7 @@
-import { EventPublic, EventWithCreator } from "../../types/events";
+import { EventPublic, EventWithDetails } from "../../types/events";
+import { postgresAggregationToArray } from "../../utils/utils";
 
-export const toPublicEvent = (e: EventWithCreator): EventPublic => {
+export const toPublicEvent = (e: EventWithDetails): EventPublic => {
     return {
         id: e.event_id,
         location: e.location,
@@ -16,10 +17,11 @@ export const toPublicEvent = (e: EventWithCreator): EventPublic => {
             email: e.email,
             firstName: e.first_name,
             lastName: e.last_name,
-        }
+        },
+        groups: postgresAggregationToArray(e.member_group_names),
     }
 }
 
-export const toPublicEvents = (events: EventWithCreator[]): EventPublic[] => {
+export const toPublicEvents = (events: EventWithDetails[]): EventPublic[] => {
     return events.map(e => toPublicEvent(e));
 }
