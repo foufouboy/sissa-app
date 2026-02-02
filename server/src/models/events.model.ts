@@ -6,7 +6,7 @@ export const EventModel = {
     async findAll(): Promise<EventPublic[]> {
         try {
             const events = await query<EventWithDetails>(`
-                SELECT * FROM events_with_creator
+                SELECT * FROM events_complete_details
             `);
 
             return toPublicEvents(events);
@@ -33,7 +33,7 @@ export const EventModel = {
     async findById(id: number): Promise<EventPublic> {
         try {
             const result = await query<EventWithDetails>(`
-                SELECT * FROM events_with_creator
+                SELECT * FROM events_complete_details
                 WHERE event_id = $1
             `, [id]);
 
