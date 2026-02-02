@@ -1,18 +1,15 @@
 import { query } from "../config/db";
-import { CreateEventInput, Event, EventPublic } from "../types/events";
+import { CreateEventInput, EventPublic, EventWithCreator } from "../types/events";
+import { toPublicEvents } from "./dtos/events";
 
 export const EventModel = {
     async findAll(): Promise<EventPublic[]> {
         try {
-            const results = await query<Event>(`
+            const events = await query<EventWithCreator>(`
                 SELECT * FROM events_with_creator
             `);
 
-            const publicEvents = results.map(e => {
-                // on map pour avoir EventWithCreator, puis on retourne
-            })
-
-            return publicEvents;
+            return toPublicEvents(events);
         } catch (error) {
             console.error("Erreur lors de la récupération des évènements:", error);
             throw error;
