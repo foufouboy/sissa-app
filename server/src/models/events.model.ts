@@ -51,12 +51,13 @@ export const EventModel = {
     // TODO : réimplémenter correctement create et update pour c/u les members_groups
 
     async create(data: CreateEventInput) {
-        const { location, start_date, end_date, all_day, title, description, created_by } = data;
+        const { location, start_date, end_date, all_day, title, description, created_by, member_groups_ids } = data;
         try {
             return await query(`
-                INSERT INTO events (location, start_date, end_date, all_day, title, description, created_by)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
-            `, [location, start_date, end_date, all_day, title, description, created_by]);
+                CALL create_event_with_groups(
+                    $1, $2, $3, $4, $5, $6, $7, $8
+                )
+            `, [location, start_date, end_date, all_day, title, description, created_by, member_groups_ids]);
         } catch(error) {
             console.log("Erreur lors de la création de l'évènement:", error);
             throw error;
@@ -67,16 +68,9 @@ export const EventModel = {
         const { location, start_date, end_date, all_day, title, description, created_by } = data;
         try {
             return await query(`
-                UPDATE events 
-                SET location = $2, 
-                    start_date = $3, 
-                    end_date = $4, 
-                    all_day = $5, 
-                    title = $6, 
-                    description = $7,
-                    created_by = $8,
-                    updated_at = NOW()
-                WHERE id = $1
+                CALL create_event_with_groups(
+                    $1, $2, $3, $4, $5, $6, $7, $8, $9
+                )
             `, [id, location, start_date, end_date, all_day, title, description, created_by]);
         } catch(error) {
             console.log("Erreur lors de la modification de l'évènement:", error);
@@ -99,7 +93,21 @@ export const EventModel = {
 
 async function main() {
 
-    const event = await EventModel.findByGroup(4);
+    const event = await EventModel.update(
+        4,
+        {
+            location: "Paris",
+            start_date: new Date(),
+            end_date: new Date(),
+            all_day: false,
+            title: "Blabla",
+            description: "Blabla",
+            created_by: 1,
+            member_groups_ids: [1, 2],
+            updated_at: new Date(),
+            // Changer ça. Enlever le updated at, le générer dans la procédure.
+        }
+    );
 
     console.log(event);
 }
