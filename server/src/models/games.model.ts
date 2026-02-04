@@ -1,11 +1,11 @@
 import { query } from "../config/db";
-import { CreateGameInput, GamePublic, GameWithDetails } from "../types/games";
+import { CreateGameInput, Game, GamePublic } from "../types/games";
 import { toPublicGame, toPublicGames } from "./dtos/games";
 
 export const GameModel = {
     async findAllGamesOfPlayer(userId: number): Promise<GamePublic[]> {
         try {
-            const result = await query<GameWithDetails>(`
+            const result = await query<Game>(`
                 SELECT * FROM games
                 WHERE user_id = $1
             `, [userId]);
@@ -19,7 +19,7 @@ export const GameModel = {
 
     async findById(id: number): Promise<GamePublic> {
         // TODO 
-        const result = await query<GameWithDetails>(
+        const result = await query<Game>(
             `SELECT * FROM games WHERE id = $1
             LIMIT 1`,
             [id]
