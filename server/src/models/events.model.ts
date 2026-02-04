@@ -65,13 +65,13 @@ export const EventModel = {
     },
 
     async update(id: number, data: CreateEventInput) {
-        const { location, start_date, end_date, all_day, title, description, created_by } = data;
+        const { location, start_date, end_date, all_day, title, description, created_by, member_groups_ids } = data;
         try {
             return await query(`
-                CALL create_event_with_groups(
+                CALL update_event_with_groups(
                     $1, $2, $3, $4, $5, $6, $7, $8, $9
                 )
-            `, [id, location, start_date, end_date, all_day, title, description, created_by]);
+            `, [id, location, start_date, end_date, all_day, title, description, created_by, member_groups_ids]);
         } catch(error) {
             console.log("Erreur lors de la modification de l'évènement:", error);
             throw error;
@@ -93,10 +93,9 @@ export const EventModel = {
 
 async function main() {
 
-    const event = await EventModel.update(
-        4,
+    const event = await EventModel.create(
         {
-            location: "Paris",
+            location: "Brec'h",
             start_date: new Date(),
             end_date: new Date(),
             all_day: false,
@@ -104,8 +103,6 @@ async function main() {
             description: "Blabla",
             created_by: 1,
             member_groups_ids: [1, 2],
-            updated_at: new Date(),
-            // Changer ça. Enlever le updated at, le générer dans la procédure.
         }
     );
 

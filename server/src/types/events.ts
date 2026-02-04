@@ -42,6 +42,6 @@ export type EventWithDetails = Omit<Event, "id"> & {
 }
 
 
-export type CreateEventInput = Omit<Event, "created_at" | "id"> & {
+export type CreateEventInput = Omit<Event, "created_at" | "updated_at" | "id"> & {
     member_groups_ids: number[];
 };
