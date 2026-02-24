@@ -1,6 +1,94 @@
 /**
- * SettingModel.findById(id: string);
+ * SettingModel.findByUserId(id: string);
  * SettingModel.create(data: CreateSettingInput);
  * SettingModel.update(data: CreateSettingInput);
  * SettingModel.delete(id: string);
  */
+import {
+	CreateSettingInput,
+	SettingPrivate,
+	SettingPublic,
+} from "../types/settings";
+import { query } from "../config/db";
+import { toPublicSetting, toPublicSettings } from "./dtos/settings";
+
+export const SettingModel = {
+	async findByUserId(userId: number): Promise<SettingPublic> {
+		try {
+			const result = await query<SettingPrivate>(
+				`SELECT * FROM settings WHERE user_id = $1`,
+				[userId],
+			);
+			return toPublicSetting(result[0]);
+		} catch (error) {
+			console.error(
+				"Erreur lors de la récupération des paramètres:",
+				error,
+			);
+			throw error;
+		}
+	},
+
+	async create(data: CreateSettingInput) {
+		try {
+			const { userId, preferences } = data;
+			const result = await query<SettingPrivate>(
+				`INSERT INTO settings (user_id, preferences) VALUES ($1, $2) RETURNING *`,
+				[userId, preferences],
+			);
+			return toPublicSetting(result[0]);
+		} catch (error) {
+			console.error("Erreur lors de la création des paramètres:", error);
+			throw error;
+		}
+	},
+
+	async update(data: CreateSettingInput) {
+		try {
+			const { userId, preferences } = data;
+			const result = await query<SettingPrivate>(
+				`UPDATE settings SET preferences = $1 WHERE user_id = $2 RETURNING *`,
+				[preferences, userId],
+			);
+			return toPublicSetting(result[0]);
+		} catch (error) {
+			console.error(
+				"Erreur lors de la mise à jour des paramètres:",
+				error,
+			);
+			throw error;
+		}
+	},
+
+	async delete(userId: number) {
+		try {
+			await query<SettingPrivate>(
+				`DELETE FROM settings WHERE user_id = $1`,
+				[userId],
+			);
+		} catch (error) {
+			console.error(
+				"Erreur lors de la suppression des paramètres:",
+				error,
+			);
+			throw error;
+		}
+	},
+};
+
+// TESTS
+
+async function main() {
+	const settings = await SettingModel.update({
+		userId: 1,
+		preferences: {
+			theme: "light",
+			language: "en",
+			notifications: true,
+			email: true,
+		},
+	});
+	console.log(settings);
+}
+
+main();

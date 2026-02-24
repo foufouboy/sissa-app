@@ -5,17 +5,14 @@
  * MessageModel.findByType()
  *
  * MessageModel.create()
+ * MessageModel.createForUsers() // permet de créer pour des groupes ET des users
  *
  * MessageModel.delete()
  *
  */
 
-import {
-	CreateMessageInput,
-	PrivateMessage,
-	PublicMessage,
-} from "../types/messages";
-import { pool, query } from "../config/db";
+import { PrivateMessage, PublicMessage } from "../types/messages";
+import { query } from "../config/db";
 import { toPublicMessage, toPublicMessages } from "./dtos/messages";
 
 export const MessageModel = {
@@ -91,55 +88,26 @@ export const MessageModel = {
 		}
 	},
 
-	async create(messageData: CreateMessageInput, userIds: number[]) {
-		const client = await pool.connect();
-
+	async create(messageData: PublicMessage, userIds: number[]) {
 		try {
-			await client.query("BEGIN");
-
 			const { subject, body, infoType, messageType } = messageData;
-
-			const insertResult = await client.query<PrivateMessage>(
-				`INSERT INTO messages (subject, body, info_type, message_type)
-                 VALUES ($1, $2, $3, $4)
-                 RETURNING *`,
+			const result = await query<PrivateMessage>(
+				`INSERT INTO messages (subject, body, info_type, message_type) VALUES ($1, $2, $3, $4) RETURNING *`,
 				[subject, body, infoType, messageType]
 			);
+			const newMessage = result[0];
 
-			const newMessage = insertResult.rows[0];
-
-			if (!newMessage)
-				throw new Error("TRANSACTION: Erreur pendant l'insertion");
-
-			if (userIds.length > 0) {
-				await client.query(
-					`INSERT INTO message_recipients (message_id, user_id, status)
-                     SELECT $1, UNNEST($2::int[]), 'sent'`,
-					[newMessage.id, userIds]
+			for (const userId of userIds) {
+				await query(
+					`INSERT INTO message_recipients (message_id, user_id) VALUES ($1, $2)`,
+					[newMessage.id, userId]
 				);
 			}
 
-			await client.query("COMMIT");
-
 			return toPublicMessage(newMessage);
 		} catch (error) {
-			await client.query("ROLLBACK");
 			console.error(
 				"Erreur lors de la création du message pour les utilisateurs:",
-				error
-			);
-			throw error;
-		} finally {
-			client.release();
-		}
-	},
-
-	async delete(id: number): Promise<void> {
-		try {
-			await query(`DELETE FROM messages WHERE id = $1`, [id]);
-		} catch (error) {
-			console.error(
-				`Erreur lors de la suppression du message ${id}:`,
 				error
 			);
 			throw error;
@@ -150,7 +118,8 @@ export const MessageModel = {
 // TESTS
 
 async function main() {
-	await MessageModel.delete(7);
+	const messagesByUsers = await MessageModel.findByUsers([4, 5]);
+	console.log(messagesByUsers);
 }
 
 main();
