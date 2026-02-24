@@ -1,15 +1,15 @@
 import { query } from "../config/db";
 import { Roles } from "../types/roles";
-import { CreateUserInput, User, UserPublic } from "../types/users";
+import { CreateUserInput, PrivateUser, PublicUser } from "../types/users";
 import { toPublicUser, toPublicUsers } from "./dtos/users";
 
 // 1. Créer les types du model
 // 2. Créer le model, avec les CRUD de base
 
 export const UserModel = {
-	async findAll(): Promise<UserPublic[]> {
+	async findAll(): Promise<PublicUser[]> {
 		try {
-			const result = await query<User>(`SELECT * FROM users`);
+			const result = await query<PrivateUser>(`SELECT * FROM users`);
 			return toPublicUsers(result);
 		} catch (error) {
 			console.error(
@@ -20,9 +20,9 @@ export const UserModel = {
 		}
 	},
 
-	async findById(id: number): Promise<UserPublic> {
+	async findById(id: number): Promise<PublicUser> {
 		try {
-			const result = await query<User>(
+			const result = await query<PrivateUser>(
 				`SELECT * FROM users WHERE id = $1
                 LIMIT 1`,
 				[id]
@@ -42,9 +42,9 @@ export const UserModel = {
 		}
 	},
 
-	async findRecipientsOf(messageId: number): Promise<UserPublic[]> {
+	async findRecipientsOf(messageId: number): Promise<PublicUser[]> {
 		try {
-			const result = await query<User>(
+			const result = await query<PrivateUser>(
 				`
                 SELECT u.* FROM users u
                 JOIN message_recipients mr 

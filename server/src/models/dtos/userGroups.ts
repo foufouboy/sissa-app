@@ -1,11 +1,11 @@
 import {
-	UserWithGroupsPrivate,
-	UserWithGroupsPublic,
+	PrivateUserWithGroups,
+	PublicUserWithGroups,
 } from "../../types/userGroups";
 
 export const toPublicUserWithGroups = (
-	u: UserWithGroupsPrivate,
-): UserWithGroupsPublic => {
+	u: PrivateUserWithGroups,
+): PublicUserWithGroups => {
 	return {
 		id: u.id,
 		email: u.email,
@@ -19,7 +19,7 @@ export const toPublicUserWithGroups = (
 };
 
 export const toPublicUsersWithGroups = (
-	users: UserWithGroupsPrivate[],
-): UserWithGroupsPublic[] => {
+	users: PrivateUserWithGroups[],
+): PublicUserWithGroups[] => {
 	return users.map((u) => toPublicUserWithGroups(u));
 };

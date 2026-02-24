@@ -1,6 +1,6 @@
-import { Game, GamePublic } from "../../types/games";
+import { PrivateGame, PublicGame } from "../../types/games";
 
-export const toPublicGame = (g: Game): GamePublic => {
+export const toPublicGame = (g: PrivateGame): PublicGame => {
     return {
         id: g.id,
         pgn: g.pgn,
@@ -13,6 +13,6 @@ export const toPublicGame = (g: Game): GamePublic => {
     }
 }
 
-export const toPublicGames = (games: Game[]): GamePublic[] => {
+export const toPublicGames = (games: PrivateGame[]): PublicGame[] => {
     return games.map(g => toPublicGame(g));
 }

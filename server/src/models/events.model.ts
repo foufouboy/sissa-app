@@ -1,13 +1,13 @@
 import { query } from "../config/db";
 import {
 	CreateEventInput,
-	EventPublic,
+	PublicEvent,
 	EventWithDetails,
 } from "../types/events";
 import { toPublicEvent, toPublicEvents } from "./dtos/events";
 
 export const EventModel = {
-	async findAll(): Promise<EventPublic[]> {
+	async findAll(): Promise<PublicEvent[]> {
 		try {
 			const events = await query<EventWithDetails>(`
                 SELECT * FROM events_complete_details
@@ -23,7 +23,7 @@ export const EventModel = {
 		}
 	},
 
-	async findByGroup(id: number): Promise<EventPublic[]> {
+	async findByGroup(id: number): Promise<PublicEvent[]> {
 		try {
 			const events = await query<EventWithDetails>(
 				`
@@ -43,7 +43,7 @@ export const EventModel = {
 		}
 	},
 
-	async findById(id: number): Promise<EventPublic> {
+	async findById(id: number): Promise<PublicEvent> {
 		try {
 			const result = await query<EventWithDetails>(
 				`

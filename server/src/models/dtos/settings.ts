@@ -1,6 +1,6 @@
-import { SettingPrivate, SettingPublic } from "../../types/settings";
+import { PrivateSetting, PublicSetting } from "../../types/settings";
 
-export const toPublicSetting = (s: SettingPrivate): SettingPublic => {
+export const toPublicSetting = (s: PrivateSetting): PublicSetting => {
 	return {
 		id: s.id,
 		userId: s.user_id,
@@ -11,7 +11,7 @@ export const toPublicSetting = (s: SettingPrivate): SettingPublic => {
 };
 
 export const toPublicSettings = (
-	settings: SettingPrivate[],
-): SettingPublic[] => {
+	settings: PrivateSetting[],
+): PublicSetting[] => {
 	return settings.map((s) => toPublicSetting(s));
 };

@@ -1,6 +1,6 @@
-import { User, UserPublic } from "../../types/users";
+import { PrivateUser, PublicUser } from "../../types/users";
 
-export const toPublicUser = (u: User): UserPublic => {
+export const toPublicUser = (u: PrivateUser): PublicUser => {
     return {
         id: u.id,
         email: u.email,
@@ -12,6 +12,6 @@ export const toPublicUser = (u: User): UserPublic => {
     }
 }
 
-export const toPublicUsers = (users: User[]): UserPublic[] => {
+export const toPublicUsers = (users: PrivateUser[]): PublicUser[] => {
     return users.map(u => toPublicUser(u));
 }

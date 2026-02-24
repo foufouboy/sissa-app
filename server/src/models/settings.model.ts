@@ -6,16 +6,16 @@
  */
 import {
 	CreateSettingInput,
-	SettingPrivate,
-	SettingPublic,
+	PrivateSetting,
+	PublicSetting,
 } from "../types/settings";
 import { query } from "../config/db";
 import { toPublicSetting, toPublicSettings } from "./dtos/settings";
 
 export const SettingModel = {
-	async findByUserId(userId: number): Promise<SettingPublic> {
+	async findByUserId(userId: number): Promise<PublicSetting> {
 		try {
-			const result = await query<SettingPrivate>(
+			const result = await query<PrivateSetting>(
 				`SELECT * FROM settings WHERE user_id = $1`,
 				[userId],
 			);
@@ -32,7 +32,7 @@ export const SettingModel = {
 	async create(data: CreateSettingInput) {
 		try {
 			const { userId, preferences } = data;
-			const result = await query<SettingPrivate>(
+			const result = await query<PrivateSetting>(
 				`INSERT INTO settings (user_id, preferences) VALUES ($1, $2) RETURNING *`,
 				[userId, preferences],
 			);
@@ -46,7 +46,7 @@ export const SettingModel = {
 	async update(data: CreateSettingInput) {
 		try {
 			const { userId, preferences } = data;
-			const result = await query<SettingPrivate>(
+			const result = await query<PrivateSetting>(
 				`UPDATE settings SET preferences = $1 WHERE user_id = $2 RETURNING *`,
 				[preferences, userId],
 			);
@@ -62,7 +62,7 @@ export const SettingModel = {
 
 	async delete(userId: number) {
 		try {
-			await query<SettingPrivate>(
+			await query<PrivateSetting>(
 				`DELETE FROM settings WHERE user_id = $1`,
 				[userId],
 			);

@@ -7,8 +7,8 @@
 
 import { query } from "../config/db";
 import {
-	UserWithGroupsPrivate,
-	UserWithGroupsPublic,
+	PrivateUserWithGroups,
+	PublicUserWithGroups,
 	CreateUserWithGroupsInput,
 } from "../types/userGroups";
 import {
@@ -17,9 +17,9 @@ import {
 } from "./dtos/userGroups";
 
 export const UserGroupsModel = {
-	async findAllUsers(): Promise<UserWithGroupsPublic[]> {
+	async findAllUsers(): Promise<PublicUserWithGroups[]> {
 		try {
-			const result = await query<UserWithGroupsPrivate>(
+			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups`,
 			);
 			return toPublicUsersWithGroups(result);
@@ -32,9 +32,9 @@ export const UserGroupsModel = {
 		}
 	},
 
-	async findUsersByGroup(id: string): Promise<UserWithGroupsPublic[]> {
+	async findUsersByGroup(id: string): Promise<PublicUserWithGroups[]> {
 		try {
-			const result = await query<UserWithGroupsPrivate>(
+			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups
                     WHERE groups @> jsonb_build_array(
                     jsonb_build_object('id', $1::int)
@@ -52,9 +52,9 @@ export const UserGroupsModel = {
 		}
 	},
 
-	async findUserById(id: number): Promise<UserWithGroupsPublic> {
+	async findUserById(id: number): Promise<PublicUserWithGroups> {
 		try {
-			const result = await query<UserWithGroupsPrivate>(
+			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups WHERE id = $1`,
 				[id],
 			);

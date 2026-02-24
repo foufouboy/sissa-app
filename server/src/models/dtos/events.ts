@@ -1,7 +1,7 @@
-import { EventPublic, EventWithDetails } from "../../types/events";
+import { PublicEvent, EventWithDetails } from "../../types/events";
 import { postgresAggregationToArray } from "../../utils/utils";
 
-export const toPublicEvent = (e: EventWithDetails): EventPublic => {
+export const toPublicEvent = (e: EventWithDetails): PublicEvent => {
     return {
         id: e.event_id,
         location: e.location,
@@ -22,6 +22,6 @@ export const toPublicEvent = (e: EventWithDetails): EventPublic => {
     }
 }
 
-export const toPublicEvents = (events: EventWithDetails[]): EventPublic[] => {
+export const toPublicEvents = (events: EventWithDetails[]): PublicEvent[] => {
     return events.map(e => toPublicEvent(e));
 }

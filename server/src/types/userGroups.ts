@@ -1,15 +1,15 @@
-import { User, UserPublic } from "./users";
+import { PrivateUser, PublicUser } from "./users";
 
 interface Group {
 	id: number;
 	name: string;
 }
 
-export type UserWithGroupsPrivate = User & {
+export type PrivateUserWithGroups = PrivateUser & {
 	groups: Group[];
 };
 
-export type UserWithGroupsPublic = UserPublic & {
+export type PublicUserWithGroups = PublicUser & {
 	groups: Group[];
 };
 

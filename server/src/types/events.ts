@@ -1,5 +1,5 @@
 
-export interface Event {
+export interface PrivateEvent {
     id: number;
     created_by: number;
     location: string;
@@ -12,7 +12,7 @@ export interface Event {
     updated_at: Date;
 }
 
-export interface EventPublic {
+export interface PublicEvent {
     id: number;
     location: string;
     startDate: Date;
@@ -31,7 +31,7 @@ export interface EventPublic {
     groups: string[];
 };
 
-export type EventWithDetails = Omit<Event, "id"> & {
+export type EventWithDetails = Omit<PrivateEvent, "id"> & {
     event_id: number;
     user_id: number;
     email: string;
@@ -42,6 +42,6 @@ export type EventWithDetails = Omit<Event, "id"> & {
 }
 
 
-export type CreateEventInput = Omit<Event, "created_at" | "updated_at" | "id"> & {
+export type CreateEventInput = Omit<PrivateEvent, "created_at" | "updated_at" | "id"> & {
     member_groups_ids: number[];
 };

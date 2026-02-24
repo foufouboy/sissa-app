@@ -1,4 +1,4 @@
-export interface SettingPrivate {
+export interface PrivateSetting {
 	id: number;
 	user_id: number;
 	preferences: {
@@ -11,8 +11,8 @@ export interface SettingPrivate {
 	updated_at: Date;
 }
 
-export type SettingPublic = Omit<
-	SettingPrivate,
+export type PublicSetting = Omit<
+	PrivateSetting,
 	"user_id" | "created_at" | "updated_at"
 > & {
 	userId: number;
@@ -26,4 +26,4 @@ export type SettingPublic = Omit<
 	};
 };
 
-export type CreateSettingInput = Pick<SettingPublic, "userId" | "preferences">;
+export type CreateSettingInput = Pick<PublicSetting, "userId" | "preferences">;
