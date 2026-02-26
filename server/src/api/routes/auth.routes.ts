@@ -1,14 +1,12 @@
 import { Router } from "express";
+import { authController } from "../controllers/auth.controller";
 
 const authRoutes = Router();
 
 // envoie le JWT au client après une authentification réussie
-authRoutes.post("/login", (req, res) => {});
-
-// retire le JWT du client pour le déconnecter
-authRoutes.post("/logout", (req, res) => {});
+authRoutes.post("/login", authController.login);
 
 // enregistre un nouvel utilisateur
-authRoutes.post("/register", (req, res) => {});
+authRoutes.post("/register", authController.register);
 
 export default authRoutes;

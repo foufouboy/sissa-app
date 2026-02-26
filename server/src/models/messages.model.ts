@@ -152,5 +152,3 @@ export const MessageModel = {
 async function main() {
 	await MessageModel.delete(7);
 }
-
-main();

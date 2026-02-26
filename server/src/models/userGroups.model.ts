@@ -20,13 +20,13 @@ export const UserGroupsModel = {
 	async findAllUsers(): Promise<PublicUserWithGroups[]> {
 		try {
 			const result = await query<PrivateUserWithGroups>(
-				`SELECT * FROM users_with_groups`,
+				`SELECT * FROM users_with_groups`
 			);
 			return toPublicUsersWithGroups(result);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des utilisateurs avec leurs groupes:",
-				error,
+				error
 			);
 			throw error;
 		}
@@ -39,14 +39,14 @@ export const UserGroupsModel = {
                     WHERE groups @> jsonb_build_array(
                     jsonb_build_object('id', $1::int)
                 );`,
-				[id],
+				[id]
 			);
 
 			return toPublicUsersWithGroups(result);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération du groupe d'utilisateur:",
-				error,
+				error
 			);
 			throw error;
 		}
@@ -56,7 +56,7 @@ export const UserGroupsModel = {
 		try {
 			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups WHERE id = $1`,
-				[id],
+				[id]
 			);
 			if (!result[0]) {
 				throw new Error("Utilisateur non trouvé");
@@ -65,7 +65,7 @@ export const UserGroupsModel = {
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération de l'utilisateur avec ses groupes:",
-				error,
+				error
 			);
 			throw error;
 		}
@@ -82,12 +82,12 @@ export const UserGroupsModel = {
                         $1,
                         UNNEST($2::int[]);
                 `,
-				[userId, groupIds],
+				[userId, groupIds]
 			);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la création des groupes de l'utilisateur:",
-				error,
+				error
 			);
 		}
 	},
@@ -107,7 +107,7 @@ export const UserGroupsModel = {
                 INSERT INTO users_members_groups (user_id, member_group_id)
                 SELECT $1, UNNEST($2::int[])
                 `,
-				[userId, groupIds],
+				[userId, groupIds]
 			);
 
 			await query("COMMIT");
@@ -117,12 +117,3 @@ export const UserGroupsModel = {
 		}
 	},
 };
-
-// TESTS
-
-async function main() {
-	const results = await UserGroupsModel.findUsersByGroup("2");
-	console.log(results);
-}
-
-main();

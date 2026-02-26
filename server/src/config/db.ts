@@ -1,7 +1,4 @@
-import dotenv from "dotenv";
 import { Pool } from "pg";
-
-dotenv.config({});
 
 const connectionString = process.env.PSQL_URL;
 
@@ -15,7 +12,7 @@ export const pool = new Pool({
 
 export async function query<T>(
 	sql: string,
-	params: unknown[] = [],
+	params: unknown[] = []
 ): Promise<T[]> {
 	const { rows } = await pool.query(sql, params);
 	return rows;

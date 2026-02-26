@@ -7,10 +7,10 @@ import { toPublicUser, toPublicUsers } from "./dtos/users";
 // 2. Créer le model, avec les CRUD de base
 
 export const UserModel = {
-	async findAll(): Promise<PublicUser[]> {
+	async findAll(): Promise<PrivateUser[]> {
 		try {
 			const result = await query<PrivateUser>(`SELECT * FROM users`);
-			return toPublicUsers(result);
+			return result;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des utilisateurs:",
@@ -20,7 +20,7 @@ export const UserModel = {
 		}
 	},
 
-	async findById(id: number): Promise<PublicUser> {
+	async findById(id: number): Promise<PrivateUser | null> {
 		try {
 			const result = await query<PrivateUser>(
 				`SELECT * FROM users WHERE id = $1
@@ -28,12 +28,31 @@ export const UserModel = {
 				[id]
 			);
 
-			if (!result[0]) {
-				throw new Error("Utilisateur non trouvé");
-			}
+			if (!result[0]) return null;
 
-			return toPublicUser(result[0]);
+			return result[0];
 		} catch (error) {
+			console.error(
+				`Erreur lors de la récupération de l'utilisateur ${id}:`,
+				error
+			);
+			throw error;
+		}
+	},
+
+	async findByEmail(email: string): Promise<PrivateUser | null> {
+		try {
+			const result = await query<PrivateUser>(
+				`SELECT * FROM users WHERE email = $1
+				LIMIT 1`,
+				[email]
+			);
+
+			if (!result[0]) return null;
+
+			return result[0];
+		} catch (error) {
+			console.error();
 			console.error(
 				`Erreur lors de la récupération de l'utilisateur ${id}:`,
 				error
@@ -63,15 +82,21 @@ export const UserModel = {
 		}
 	},
 
-	async create(data: CreateUserInput) {
+	async create(data: CreateUserInput): Promise<PublicUser> {
 		try {
-			const { email, password, first_name, last_name, role } = data;
+			const { email, password, firstName, lastName, role } = data;
 
-			return await query(
+			const result = await query<PrivateUser>(
 				`INSERT INTO users (email, password, first_name, last_name, role)
-                VALUES ($1, $2, $3, $4, $5::roles_type)`,
-				[email, password, first_name, last_name, role || Roles.Member]
+                VALUES ($1, $2, $3, $4, $5::roles_type) RETURNING *`,
+				[email, password, firstName, lastName, role || Roles.Member]
 			);
+
+			if (!result[0]) {
+				throw new Error("Erreur lors de la création de l'utilisateur");
+			}
+
+			return toPublicUser(result[0]);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la création de l'utilisateur:",
@@ -82,7 +107,7 @@ export const UserModel = {
 	},
 
 	async updateById(id: number, data: CreateUserInput) {
-		const { email, first_name, last_name, role } = data; // Pas encore de modifs de mdp
+		const { email, firstName, lastName, role } = data; // Pas encore de modifs de mdp
 
 		try {
 			return await query(
@@ -95,7 +120,7 @@ export const UserModel = {
                     updated_at = NOW()
                 WHERE id = $1
             `,
-				[id, email, first_name, last_name, role]
+				[id, email, firstName, lastName, role]
 			);
 		} catch (error) {
 			console.error(
@@ -122,23 +147,3 @@ export const UserModel = {
 		}
 	},
 };
-
-// TESTS
-
-async function main() {
-	const updatedUser: CreateUserInput = {
-		email: "emma@test.com",
-		first_name: "Emma",
-		last_name: "Thompson",
-		password: "hashed_password",
-		role: Roles.Member,
-	};
-
-	const result = await UserModel.updateById(5, updatedUser);
-	const user = await UserModel.findById(1);
-
-	console.log(result);
-	console.log(user);
-}
-
-main();

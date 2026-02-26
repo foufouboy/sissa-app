@@ -17,13 +17,13 @@ export const SettingModel = {
 		try {
 			const result = await query<PrivateSetting>(
 				`SELECT * FROM settings WHERE user_id = $1`,
-				[userId],
+				[userId]
 			);
 			return toPublicSetting(result[0]);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des paramètres:",
-				error,
+				error
 			);
 			throw error;
 		}
@@ -34,7 +34,7 @@ export const SettingModel = {
 			const { userId, preferences } = data;
 			const result = await query<PrivateSetting>(
 				`INSERT INTO settings (user_id, preferences) VALUES ($1, $2) RETURNING *`,
-				[userId, preferences],
+				[userId, preferences]
 			);
 			return toPublicSetting(result[0]);
 		} catch (error) {
@@ -48,13 +48,13 @@ export const SettingModel = {
 			const { userId, preferences } = data;
 			const result = await query<PrivateSetting>(
 				`UPDATE settings SET preferences = $1 WHERE user_id = $2 RETURNING *`,
-				[preferences, userId],
+				[preferences, userId]
 			);
 			return toPublicSetting(result[0]);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la mise à jour des paramètres:",
-				error,
+				error
 			);
 			throw error;
 		}
@@ -64,12 +64,12 @@ export const SettingModel = {
 		try {
 			await query<PrivateSetting>(
 				`DELETE FROM settings WHERE user_id = $1`,
-				[userId],
+				[userId]
 			);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la suppression des paramètres:",
-				error,
+				error
 			);
 			throw error;
 		}
@@ -90,5 +90,3 @@ async function main() {
 	});
 	console.log(settings);
 }
-
-main();

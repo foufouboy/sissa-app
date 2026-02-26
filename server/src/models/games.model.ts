@@ -10,7 +10,7 @@ export const GameModel = {
                 SELECT * FROM games
                 WHERE user_id = $1
             `,
-				[userId],
+				[userId]
 			);
 
 			return toPublicGames(result);
@@ -25,7 +25,7 @@ export const GameModel = {
 			const result = await query<PrivateGame>(
 				`SELECT * FROM games WHERE id = $1
             LIMIT 1`,
-				[id],
+				[id]
 			);
 
 			if (!result[0]) {
@@ -36,7 +36,7 @@ export const GameModel = {
 		} catch (error) {
 			console.error(
 				`Erreur lors de la récupération de la partie ${id}:`,
-				error,
+				error
 			);
 			throw error;
 		}
@@ -67,7 +67,7 @@ export const GameModel = {
 					event,
 					game_date,
 					user_id,
-				],
+				]
 			);
 		} catch (error) {
 			console.error("Erreur lors de la création de la partie:", error);
@@ -80,13 +80,10 @@ export const GameModel = {
 			await query(
 				`DELETE FROM games
                 WHERE id = $1`,
-				[id],
+				[id]
 			);
 		} catch (error) {
-			console.error(
-				"Erreur lors de la suppression de la partie:",
-				error,
-			);
+			console.error("Erreur lors de la suppression de la partie:", error);
 			throw error;
 		}
 	},
@@ -99,5 +96,3 @@ async function main() {
 
 	console.log(games);
 }
-
-main();
