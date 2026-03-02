@@ -13,10 +13,16 @@
 import {
 	CreateMessageInput,
 	PrivateMessage,
+	PrivateUserMessage,
 	PublicMessage,
+	PublicUserMessage,
 } from "../types/messages";
 import { pool, query } from "../config/db";
-import { toPublicMessage, toPublicMessages } from "./dtos/messages";
+import {
+	toPublicMessage,
+	toPublicMessages,
+	toPublicUserMessages,
+} from "./dtos/messages";
 
 export const MessageModel = {
 	async findAll(): Promise<PublicMessage[]> {
@@ -85,6 +91,28 @@ export const MessageModel = {
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des messages par utilisateurs:",
+				error
+			);
+			throw error;
+		}
+	},
+
+	async findByUserWithStatus(userId: number): Promise<PublicUserMessage[]> {
+		try {
+			const result = await query<PrivateUserMessage>(
+				`SELECT 
+					m.id, m.subject, m.body, m.info_type, m.message_type, m.created_at,
+					mr.id as recipient_id, mr.status, mr.sent_at, mr.email_sent
+				FROM messages m
+				JOIN message_recipients mr ON m.id = mr.message_id
+				WHERE mr.user_id = $1
+				ORDER BY mr.sent_at DESC`,
+				[userId]
+			);
+			return toPublicUserMessages(result);
+		} catch (error) {
+			console.error(
+				"Erreur lors de la récupération des messages avec statut:",
 				error
 			);
 			throw error;
