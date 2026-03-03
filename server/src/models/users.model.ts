@@ -40,6 +40,22 @@ export const UserModel = {
 		}
 	},
 
+	async findByIds(ids: number[]): Promise<PublicUser[]> {
+		try {
+			const result = await query<PrivateUser>(
+				`SELECT * FROM users WHERE id = ANY($1)`,
+				[ids]
+			);
+			return toPublicUsers(result);
+		} catch (error) {
+			console.error(
+				"Erreur lors de la récupération des utilisateurs par IDs:",
+				error
+			);
+			throw error;
+		}
+	},
+
 	async findByEmail(email: string): Promise<PrivateUser | null> {
 		try {
 			const result = await query<PrivateUser>(

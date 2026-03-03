@@ -1,7 +1,9 @@
 import { MessageModel } from "../models/messages.model";
 import { MessageRecipientsModel } from "../models/messagesRecipients.model";
 import { UserGroupsModel } from "../models/userGroups.model";
+import { UserModel } from "../models/users.model";
 import { CreateMessageInput } from "../types/messages";
+import sgMail from "../config/sendGrid";
 
 export const messagesService = {
   async markAsRead(recipientId: number) {
@@ -52,9 +54,23 @@ export const messagesService = {
   },
 
   async sendMailToUsers(messageData: CreateMessageInput, userIds: number[]) {
-    // on utililsera le service de mail pour envoyer le mail
     try {
       const message = await MessageModel.create(messageData, userIds);
+
+      if (messageData.messageType === "email") {
+        const users = await UserModel.findByIds(userIds);
+        const emails = users.map((user) => user.email);
+
+        if (emails.length > 0) {
+          await sgMail.sendMultiple({
+            to: emails,
+            from: process.env.SENDGRID_FROM_EMAIL || "noreply@sissa.com",
+            subject: messageData.subject,
+            html: messageData.body,
+          });
+        }
+      }
+
       return message;
     } catch (error) {
       console.error("Erreur messagesService.sendMailToUsers:", error);
@@ -63,7 +79,6 @@ export const messagesService = {
   },
 
   async sendMailToGroup(messageData: CreateMessageInput, groupId: string) {
-    // on utililsera le service de mail pour envoyer le mail
     try {
       const usersInGroup = await UserGroupsModel.findUsersByGroup(groupId);
       const userIds = usersInGroup.map((user) => user.id);
