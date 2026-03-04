@@ -25,6 +25,49 @@ import {
 } from "./dtos/messages";
 
 export const MessageModel = {
+	async create(messageData: CreateMessageInput, userIds: number[]) {
+		const client = await pool.connect();
+
+		try {
+			await client.query("BEGIN");
+
+			const { subject, body, infoType, messageType } = messageData;
+
+			const insertResult = await client.query<PrivateMessage>(
+				`INSERT INTO messages (subject, body, info_type, message_type)
+                 VALUES ($1, $2, $3, $4)
+                 RETURNING *`,
+				[subject, body, infoType, messageType]
+			);
+
+			const newMessage = insertResult.rows[0];
+
+			if (!newMessage)
+				throw new Error("TRANSACTION: Erreur pendant l'insertion");
+
+			if (userIds.length > 0) {
+				await client.query(
+					`INSERT INTO message_recipients (message_id, user_id, status)
+                     SELECT $1, UNNEST($2::int[]), 'sent'`,
+					[newMessage.id, userIds]
+				);
+			}
+
+			await client.query("COMMIT");
+
+			return toPublicMessage(newMessage);
+		} catch (error) {
+			await client.query("ROLLBACK");
+			console.error(
+				"Erreur lors de la création du message pour les utilisateurs:",
+				error
+			);
+			throw error;
+		} finally {
+			client.release();
+		}
+	},
+
 	async findAll(): Promise<PublicMessage[]> {
 		try {
 			const result = await query<PrivateMessage>(
@@ -116,49 +159,6 @@ export const MessageModel = {
 				error
 			);
 			throw error;
-		}
-	},
-
-	async create(messageData: CreateMessageInput, userIds: number[]) {
-		const client = await pool.connect();
-
-		try {
-			await client.query("BEGIN");
-
-			const { subject, body, infoType, messageType } = messageData;
-
-			const insertResult = await client.query<PrivateMessage>(
-				`INSERT INTO messages (subject, body, info_type, message_type)
-                 VALUES ($1, $2, $3, $4)
-                 RETURNING *`,
-				[subject, body, infoType, messageType]
-			);
-
-			const newMessage = insertResult.rows[0];
-
-			if (!newMessage)
-				throw new Error("TRANSACTION: Erreur pendant l'insertion");
-
-			if (userIds.length > 0) {
-				await client.query(
-					`INSERT INTO message_recipients (message_id, user_id, status)
-                     SELECT $1, UNNEST($2::int[]), 'sent'`,
-					[newMessage.id, userIds]
-				);
-			}
-
-			await client.query("COMMIT");
-
-			return toPublicMessage(newMessage);
-		} catch (error) {
-			await client.query("ROLLBACK");
-			console.error(
-				"Erreur lors de la création du message pour les utilisateurs:",
-				error
-			);
-			throw error;
-		} finally {
-			client.release();
 		}
 	},
 
