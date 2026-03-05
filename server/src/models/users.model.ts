@@ -75,13 +75,17 @@ export const UserModel = {
   },
 
   // TODO EN RENTRANT
+  // + UNIFORMISER TYPE DE RETOUR DES MODELES
+
   async findStudentsOf(teacherId: number): Promise<PrivateUser[]> {
     try {
       const result = await query<PrivateUser>(
-        `SELECT * FROM users WHERE id = $1`,
+        `SELECT * FROM users 
+		JOIN teachers_students ON users.id = teachers_students.student_id 
+		WHERE teachers_students.teacher_id = $1`,
         [teacherId],
       );
-      return toPublicUsers(result);
+      return result;
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des étudiants d'un professeur:",
@@ -94,7 +98,7 @@ export const UserModel = {
   async findTeachersOf(studentId: number): Promise<PrivateUser[]> {
     try {
       const result = await query<PrivateUser>(
-        `SELECT * FROM users WHERE id = $1`,
+        `SELECT * FROM users JOIN teachers_students ON users.id = teachers_students.teacher_id WHERE teachers_students.student_id = $1`,
         [studentId],
       );
       return result;
