@@ -7,127 +7,133 @@ import { toPublicUser, toPublicUsers } from "./dtos/users";
 // 2. Créer le model, avec les CRUD de base
 
 export const UserModel = {
-	async findAll(): Promise<PrivateUser[]> {
-		try {
-			const result = await query<PrivateUser>(`SELECT * FROM users`);
-			return result;
-		} catch (error) {
-			console.error(
-				"Erreur lors de la récupération des utilisateurs:",
-				error
-			);
-			throw error;
-		}
-	},
+  async findAll(): Promise<PrivateUser[]> {
+    try {
+      const result = await query<PrivateUser>(`SELECT * FROM users`);
+      return result;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des utilisateurs:", error);
+      throw error;
+    }
+  },
 
-	async findById(id: number): Promise<PrivateUser | null> {
-		try {
-			const result = await query<PrivateUser>(
-				`SELECT * FROM users WHERE id = $1
+  async findById(id: number): Promise<PrivateUser | null> {
+    try {
+      const result = await query<PrivateUser>(
+        `SELECT * FROM users WHERE id = $1
                 LIMIT 1`,
-				[id]
-			);
+        [id],
+      );
 
-			if (!result[0]) return null;
+      if (!result[0]) return null;
 
-			return result[0];
-		} catch (error) {
-			console.error(
-				`Erreur lors de la récupération de l'utilisateur ${id}:`,
-				error
-			);
-			throw error;
-		}
-	},
+      return result[0];
+    } catch (error) {
+      console.error(
+        `Erreur lors de la récupération de l'utilisateur ${id}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 
-	async findByIds(ids: number[]): Promise<PublicUser[]> {
-		try {
-			const result = await query<PrivateUser>(
-				`SELECT * FROM users WHERE id = ANY($1)`,
-				[ids]
-			);
-			return toPublicUsers(result);
-		} catch (error) {
-			console.error(
-				"Erreur lors de la récupération des utilisateurs par IDs:",
-				error
-			);
-			throw error;
-		}
-	},
+  async findByIds(ids: number[]): Promise<PublicUser[]> {
+    try {
+      const result = await query<PrivateUser>(
+        `SELECT * FROM users WHERE id = ANY($1)`,
+        [ids],
+      );
+      return toPublicUsers(result);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des utilisateurs par IDs:",
+        error,
+      );
+      throw error;
+    }
+  },
 
-	async findByEmail(email: string): Promise<PrivateUser | null> {
-		try {
-			const result = await query<PrivateUser>(
-				`SELECT * FROM users WHERE email = $1
+  async findByEmail(email: string): Promise<PrivateUser | null> {
+    try {
+      const result = await query<PrivateUser>(
+        `SELECT * FROM users WHERE email = $1
 				LIMIT 1`,
-				[email]
-			);
+        [email],
+      );
 
-			if (!result[0]) return null;
+      if (!result[0]) return null;
 
-			return result[0];
-		} catch (error) {
-			console.error();
-			console.error(
-				`Erreur lors de la récupération de l'utilisateur ${id}:`,
-				error
-			);
-			throw error;
-		}
-	},
+      return result[0];
+    } catch (error) {
+      console.error();
+      console.error(
+        `Erreur lors de la récupération de l'utilisateur ${id}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 
-	async findRecipientsOf(messageId: number): Promise<PublicUser[]> {
-		try {
-			const result = await query<PrivateUser>(
-				`
-                SELECT u.* FROM users u
-                JOIN message_recipients mr 
-                ON $1 = mr.message_id AND u.id = mr.user_id
-            `,
-				[messageId]
-			);
+  // TODO EN RENTRANT
+  async findStudentsOf(teacherId: number): Promise<PrivateUser[]> {
+    try {
+      const result = await query<PrivateUser>(
+        `SELECT * FROM users WHERE id = $1`,
+        [teacherId],
+      );
+      return toPublicUsers(result);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des étudiants d'un professeur:",
+        error,
+      );
+      throw error;
+    }
+  },
 
-			return toPublicUsers(result);
-		} catch (error) {
-			console.error(
-				"Erreur lors de la récupération des utilisateurs du message:",
-				error
-			);
-			throw error;
-		}
-	},
+  async findTeachersOf(studentId: number): Promise<PrivateUser[]> {
+    try {
+      const result = await query<PrivateUser>(
+        `SELECT * FROM users WHERE id = $1`,
+        [studentId],
+      );
+      return result;
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des professeurs d'un étudiant:",
+        error,
+      );
+      throw error;
+    }
+  },
 
-	async create(data: CreateUserInput): Promise<PublicUser> {
-		try {
-			const { email, password, firstName, lastName, role } = data;
+  async create(data: CreateUserInput): Promise<PublicUser> {
+    try {
+      const { email, password, firstName, lastName, role } = data;
 
-			const result = await query<PrivateUser>(
-				`INSERT INTO users (email, password, first_name, last_name, role)
+      const result = await query<PrivateUser>(
+        `INSERT INTO users (email, password, first_name, last_name, role)
                 VALUES ($1, $2, $3, $4, $5::roles_type) RETURNING *`,
-				[email, password, firstName, lastName, role || Roles.Member]
-			);
+        [email, password, firstName, lastName, role || Roles.Member],
+      );
 
-			if (!result[0]) {
-				throw new Error("Erreur lors de la création de l'utilisateur");
-			}
+      if (!result[0]) {
+        throw new Error("Erreur lors de la création de l'utilisateur");
+      }
 
-			return toPublicUser(result[0]);
-		} catch (error) {
-			console.error(
-				"Erreur lors de la création de l'utilisateur:",
-				error
-			);
-			throw error;
-		}
-	},
+      return toPublicUser(result[0]);
+    } catch (error) {
+      console.error("Erreur lors de la création de l'utilisateur:", error);
+      throw error;
+    }
+  },
 
-	async updateById(id: number, data: CreateUserInput) {
-		const { email, firstName, lastName, role } = data; // Pas encore de modifs de mdp
+  async updateById(id: number, data: CreateUserInput) {
+    const { email, firstName, lastName, role } = data; // Pas encore de modifs de mdp
 
-		try {
-			return await query(
-				`
+    try {
+      return await query(
+        `
                 UPDATE users
                 SET email = $2,
                     first_name = $3,
@@ -136,30 +142,24 @@ export const UserModel = {
                     updated_at = NOW()
                 WHERE id = $1
             `,
-				[id, email, firstName, lastName, role]
-			);
-		} catch (error) {
-			console.error(
-				"Erreur lors de la modification de l'utilisateur:",
-				error
-			);
-			throw error;
-		}
-	},
+        [id, email, firstName, lastName, role],
+      );
+    } catch (error) {
+      console.error("Erreur lors de la modification de l'utilisateur:", error);
+      throw error;
+    }
+  },
 
-	async delete(id: number) {
-		try {
-			await query(
-				`DELETE FROM users
+  async delete(id: number) {
+    try {
+      await query(
+        `DELETE FROM users
                 WHERE id = $1`,
-				[id]
-			);
-		} catch (error) {
-			console.error(
-				"Erreur lors de la suppression de l'utilisateur:",
-				error
-			);
-			throw error;
-		}
-	},
+        [id],
+      );
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'utilisateur:", error);
+      throw error;
+    }
+  },
 };

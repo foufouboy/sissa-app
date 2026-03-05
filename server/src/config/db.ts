@@ -1,19 +1,21 @@
+import dotenv from "dotenv";
 import { Pool } from "pg";
+dotenv.config();
 
 const connectionString = process.env.PSQL_URL;
 
 if (!connectionString) {
-	throw new Error("PSQL_URL is not defined in environment variables");
+  throw new Error("PSQL_URL is not defined in environment variables");
 }
 
 export const pool = new Pool({
-	connectionString,
+  connectionString,
 });
 
 export async function query<T>(
-	sql: string,
-	params: unknown[] = []
+  sql: string,
+  params: unknown[] = [],
 ): Promise<T[]> {
-	const { rows } = await pool.query(sql, params);
-	return rows;
+  const { rows } = await pool.query(sql, params);
+  return rows;
 }
