@@ -87,11 +87,3 @@ export const GameModel = {
 		}
 	},
 };
-
-// TESTS
-
-async function main() {
-	const games = await GameModel.findById(1);
-
-	console.log(games);
-}

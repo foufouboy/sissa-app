@@ -90,18 +90,3 @@ export const SettingModel = {
 		}
 	},
 };
-
-// TESTS
-
-async function main() {
-	const settings = await SettingModel.update({
-		userId: 1,
-		preferences: {
-			theme: "light",
-			language: "en",
-			notifications: true,
-			email: true,
-		},
-	});
-	console.log(settings);
-}

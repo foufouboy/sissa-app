@@ -103,12 +103,3 @@ export const usersService = {
 		}
 	},
 };
-
-// TESTS
-
-async function main() {
-	const usersOfGroup = await usersService.getUsersOfGroup(2);
-	console.log(usersOfGroup);
-}
-
-main();

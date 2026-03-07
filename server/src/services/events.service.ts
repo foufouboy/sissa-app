@@ -83,20 +83,3 @@ export const eventsService = {
     }
   },
 };
-
-// TESTS
-
-async function main() {
-  await eventsService.createEvent({
-    location: "Brec'h",
-    start_date: new Date(),
-    end_date: new Date(),
-    all_day: false,
-    title: "Blabla",
-    description: "Blabla",
-    created_by: 1,
-    member_groups_ids: [1, 2],
-  });
-}
-
-main();

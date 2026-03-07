@@ -133,20 +133,3 @@ export const EventModel = {
     }
   },
 };
-
-// TESTS
-
-async function main() {
-  const event = await EventModel.create({
-    location: "Brec'h",
-    start_date: new Date(),
-    end_date: new Date(),
-    all_day: false,
-    title: "Blabla",
-    description: "Blabla",
-    created_by: 1,
-    member_groups_ids: [1, 2],
-  });
-
-  console.log(event);
-}

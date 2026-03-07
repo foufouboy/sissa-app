@@ -61,12 +61,3 @@ export const gamesService = {
 
 	// On verra pour la fonction stats plus tard
 };
-
-// TESTS
-
-async function main() {
-	const games = await gamesService.getGamesOfUser(1);
-	console.log(games);
-}
-
-main();

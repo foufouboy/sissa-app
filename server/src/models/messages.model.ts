@@ -172,9 +172,3 @@ export const MessageModel = {
 		}
 	},
 };
-
-// TESTS
-
-async function main() {
-	await MessageModel.delete(7);
-}

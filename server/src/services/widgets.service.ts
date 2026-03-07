@@ -149,15 +149,3 @@ export const widgetsService = {
 		};
 	},
 };
-
-// TESTS
-
-async function main() {
-	const adminUsersOverview =
-		await widgetsService.getAdminUsersOverviewWidget();
-	const widgets = await widgetsService.getDashboardWidgets(1);
-
-	console.log(adminUsersOverview, widgets);
-}
-
-main();
