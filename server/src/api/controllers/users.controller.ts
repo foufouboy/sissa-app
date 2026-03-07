@@ -18,13 +18,6 @@ export const usersController = {
 	async getOne(req: Request, res: Response) {
 		try {
 			const userId = Number(req.params.user_id);
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre user_id invalide" });
-			}
-
 			const user = await usersService.getProfileDetails(userId);
 			return res.status(200).json(user);
 		} catch (error) {
@@ -36,13 +29,6 @@ export const usersController = {
 	async getGames(req: Request, res: Response) {
 		try {
 			const userId = Number(req.params.user_id);
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre user_id invalide" });
-			}
-
 			const games = await gamesService.getGamesOfUser(userId);
 			return res.status(200).json(games);
 		} catch (error) {
@@ -54,13 +40,6 @@ export const usersController = {
 	async getMessages(req: Request, res: Response) {
 		try {
 			const userId = Number(req.params.user_id);
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre user_id invalide" });
-			}
-
 			const messages = await messagesService.getAllFromUser(userId);
 			return res.status(200).json(messages);
 		} catch (error) {
@@ -73,14 +52,7 @@ export const usersController = {
 		try {
 			const { email, password, firstName, lastName, role } = req.body;
 
-			if (!email || !password || !firstName || !lastName) {
-				return res.status(400).json({
-					message:
-						"Champs requis manquants (email, password, firstName, lastName)",
-				});
-			}
-
-			const user = await usersService.createNewUser({
+			const user = await usersService.createUser({
 				email,
 				password,
 				firstName,
@@ -99,12 +71,6 @@ export const usersController = {
 		try {
 			const userId = Number(req.params.user_id);
 			const { email, firstName, lastName, role, password } = req.body;
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre user_id invalide" });
-			}
 
 			await usersService.updateProfile(userId, {
 				email,
@@ -126,13 +92,6 @@ export const usersController = {
 	async remove(req: Request, res: Response) {
 		try {
 			const userId = Number(req.params.user_id);
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre user_id invalide" });
-			}
-
 			await usersService.deleteUser(userId);
 
 			return res

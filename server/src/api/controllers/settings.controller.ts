@@ -5,13 +5,6 @@ export const settingsController = {
 	async getForCurrentUser(req: Request, res: Response) {
 		try {
 			const userId = Number(req.query.userId);
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre userId manquant ou invalide" });
-			}
-
 			const settings = await settingsService.getSettingsForUser(userId);
 			return res.status(200).json(settings);
 		} catch (error) {
@@ -24,12 +17,6 @@ export const settingsController = {
 		try {
 			const userId = Number(req.query.userId);
 			const { preferences } = req.body;
-
-			if (!userId || Number.isNaN(userId)) {
-				return res
-					.status(400)
-					.json({ message: "Paramètre userId manquant ou invalide" });
-			}
 
 			const settings = await settingsService.updateSettingsForUser({
 				userId,

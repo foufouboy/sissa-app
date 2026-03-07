@@ -39,12 +39,12 @@ export const usersService = {
 		}
 	},
 
-	async createNewUser(data: CreateUserInput) {
+	async createUser(data: CreateUserInput): Promise<PublicUser> {
 		try {
 			const user = await UserModel.create(data);
 			return toPublicUser(user);
 		} catch (error) {
-			console.error("Erreur usersService.createNewUser:", error);
+			console.error("Erreur usersService.createUser:", error);
 			throw error;
 		}
 	},
@@ -81,9 +81,7 @@ export const usersService = {
 		}
 	},
 
-	async getUsersOfGroup(
-		groupId: number,
-	): Promise<PublicUserWithGroups[]> {
+	async getUsersOfGroup(groupId: number): Promise<PublicUserWithGroups[]> {
 		try {
 			const users = await UserGroupsModel.findUsersByGroup(groupId);
 			return toPublicUsersWithGroups(users);

@@ -1,32 +1,64 @@
 import type { Request, Response } from "express";
+import { gamesService } from "../../services/games.service";
 
 export const gamesController = {
 	async list(req: Request, res: Response) {
-		return res.status(200).json({
-			message:
-				"Récupérer les parties auxquelles l'utilisateur connecté a accès (les siennes, et éventuellement celles de ses élèves).",
-		});
+		try {
+			const userId = Number(req.query.userId);
+			const games = await gamesService.getGamesOfUser(userId);
+			return res.status(200).json(games);
+		} catch (error) {
+			console.error("Erreur gamesController.list:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
 	},
 
 	async create(req: Request, res: Response) {
-		return res.status(201).json({
-			message:
-				"Enregistrer une nouvelle partie (body: pgn, white_player, black_player, result, event, game_date, user_id).",
-		});
+		try {
+			const { pgn, whitePlayer, blackPlayer, result, event, gameDate, userId } =
+				req.body;
+
+			await gamesService.createGame({
+				pgn,
+				whitePlayer,
+				blackPlayer,
+				result,
+				event,
+				gameDate,
+				userId,
+			});
+
+			return res
+				.status(201)
+				.json({ message: "Partie créée avec succès" });
+		} catch (error) {
+			console.error("Erreur gamesController.create:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
 	},
 
 	async getOne(req: Request, res: Response) {
-		return res.status(200).json({
-			message:
-				"Récupérer les détails d'une partie spécifique (param: game_id).",
-		});
+		try {
+			const gameId = Number(req.params.game_id);
+			const game = await gamesService.getGameDetail(gameId);
+			return res.status(200).json(game);
+		} catch (error) {
+			console.error("Erreur gamesController.getOne:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
 	},
 
 	async remove(req: Request, res: Response) {
-		return res.status(200).json({
-			message:
-				"Supprimer une partie (uniquement si l'utilisateur a les droits nécessaires) (param: game_id).",
-		});
+		try {
+			const gameId = Number(req.params.game_id);
+			await gamesService.deleteGame(gameId);
+
+			return res
+				.status(200)
+				.json({ message: "Partie supprimée avec succès" });
+		} catch (error) {
+			console.error("Erreur gamesController.remove:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
 	},
 };
-
