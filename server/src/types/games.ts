@@ -14,7 +14,7 @@ export interface PrivateGame {
 	created_at: Date;
 }
 
-export type CreateGameInput = Omit<PrivateGame, "created_at" | "id">;
+export type CreateGameInput = Omit<PublicGame, "createdAt" | "id">;
 
 export interface PublicGame {
 	id: number;
@@ -25,4 +25,5 @@ export interface PublicGame {
 	event: string;
 	gameDate: Date;
 	createdAt: Date;
+	userId: number;
 }
