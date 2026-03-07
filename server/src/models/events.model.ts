@@ -1,26 +1,21 @@
 import { query } from "../config/db";
-import {
-  CreateEventInput,
-  EventWithDetails,
-  PublicEvent,
-} from "../types/events";
-import { toPublicEvent, toPublicEvents } from "./dtos/events";
+import { CreateEventInput, EventWithDetails } from "../types/events";
 
 export const EventModel = {
-  async findAll(): Promise<PublicEvent[]> {
+  async findAll(): Promise<EventWithDetails[]> {
     try {
       const events = await query<EventWithDetails>(`
                 SELECT * FROM events_complete_details
             `);
 
-      return toPublicEvents(events);
+      return events;
     } catch (error) {
       console.error("Erreur lors de la récupération des évènements:", error);
       throw error;
     }
   },
 
-  async findByGroups(ids: number[]): Promise<PublicEvent[]> {
+  async findByGroups(ids: number[]): Promise<EventWithDetails[]> {
     try {
       const events = await query<EventWithDetails>(
         `
@@ -30,14 +25,14 @@ export const EventModel = {
         [ids],
       );
 
-      return toPublicEvents(events);
+      return events;
     } catch (error) {
       console.error("Erreur lors de la récupération des évènements:", error);
       throw error;
     }
   },
 
-  async findById(id: number): Promise<PublicEvent> {
+  async findById(id: number): Promise<EventWithDetails> {
     try {
       const result = await query<EventWithDetails>(
         `
@@ -51,7 +46,7 @@ export const EventModel = {
         throw new Error("Évènement non trouvé");
       }
 
-      return toPublicEvent(result[0]);
+      return result[0];
     } catch (error) {
       console.error("Erreur lors de la récupération de l'évènement:", error);
       throw error;

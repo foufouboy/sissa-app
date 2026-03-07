@@ -1,9 +1,8 @@
 import { query } from "../config/db";
-import { CreateGameInput, PrivateGame, PublicGame } from "../types/games";
-import { toPublicGame, toPublicGames } from "./dtos/games";
+import { CreateGameInput, PrivateGame } from "../types/games";
 
 export const GameModel = {
-	async findAllGamesOfPlayer(userId: number): Promise<PublicGame[]> {
+	async findAllGamesOfPlayer(userId: number): Promise<PrivateGame[]> {
 		try {
 			const result = await query<PrivateGame>(
 				`
@@ -13,14 +12,14 @@ export const GameModel = {
 				[userId],
 			);
 
-			return toPublicGames(result);
+			return result;
 		} catch (error) {
 			console.error("Erreur lors de la récupération des parties:", error);
 			throw error;
 		}
 	},
 
-	async findById(id: number): Promise<PublicGame> {
+	async findById(id: number): Promise<PrivateGame> {
 		try {
 			const result = await query<PrivateGame>(
 				`SELECT * FROM games WHERE id = $1
@@ -32,7 +31,7 @@ export const GameModel = {
 				throw new Error("Partie non trouvée");
 			}
 
-			return toPublicGame(result[0]);
+			return result[0];
 		} catch (error) {
 			console.error(
 				`Erreur lors de la récupération de la partie ${id}:`,

@@ -3,7 +3,8 @@ import type { Request, Response } from "express";
 export const eventsController = {
 	async list(req: Request, res: Response) {
 		return res.status(200).json({
-			message: "Récupérer tous les évènements pertinents pour l'utilisateur.",
+			message:
+				"Récupérer tous les évènements pertinents pour l'utilisateur.",
 		});
 	},
 
@@ -35,4 +36,3 @@ export const eventsController = {
 		});
 	},
 };
-

@@ -8,21 +8,16 @@
 import { query } from "../config/db";
 import {
 	PrivateUserWithGroups,
-	PublicUserWithGroups,
 	CreateUserWithGroupsInput,
 } from "../types/userGroups";
-import {
-	toPublicUserWithGroups,
-	toPublicUsersWithGroups,
-} from "./dtos/userGroups";
 
 export const UserGroupsModel = {
-	async findAllUsers(): Promise<PublicUserWithGroups[]> {
+	async findAllUsers(): Promise<PrivateUserWithGroups[]> {
 		try {
 			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups`,
 			);
-			return toPublicUsersWithGroups(result);
+			return result;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des utilisateurs avec leurs groupes:",
@@ -32,7 +27,7 @@ export const UserGroupsModel = {
 		}
 	},
 
-	async findUsersByGroup(id: number): Promise<PublicUserWithGroups[]> {
+	async findUsersByGroup(id: number): Promise<PrivateUserWithGroups[]> {
 		try {
 			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups
@@ -42,7 +37,7 @@ export const UserGroupsModel = {
 				[id],
 			);
 
-			return toPublicUsersWithGroups(result);
+			return result;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération du groupe d'utilisateur:",
@@ -52,7 +47,7 @@ export const UserGroupsModel = {
 		}
 	},
 
-	async findUserById(id: number): Promise<PublicUserWithGroups> {
+	async findUserById(id: number): Promise<PrivateUserWithGroups> {
 		try {
 			const result = await query<PrivateUserWithGroups>(
 				`SELECT * FROM users_with_groups WHERE id = $1`,
@@ -61,7 +56,7 @@ export const UserGroupsModel = {
 			if (!result[0]) {
 				throw new Error("Utilisateur non trouvé");
 			}
-			return toPublicUserWithGroups(result[0]);
+			return result[0];
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération de l'utilisateur avec ses groupes:",

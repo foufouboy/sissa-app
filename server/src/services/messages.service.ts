@@ -1,15 +1,29 @@
-import { info } from "node:console";
 import sgMail from "../config/sendGrid";
 import { MessageModel } from "../models/messages.model";
 import { MessageRecipientsModel } from "../models/messagesRecipients.model";
 import { UserGroupsModel } from "../models/userGroups.model";
 import { UserModel } from "../models/users.model";
-import { CreateMessageInput } from "../types/messages";
+import {
+	CreateMessageInput,
+	PublicMessage,
+	PublicUserMessage,
+} from "../types/messages";
+import {
+	toPublicMessage,
+	toPublicMessages,
+	toPublicUserMessages,
+} from "../models/dtos/messages";
 
 export const messagesService = {
-	async sendMailToUsers(messageData: CreateMessageInput, userIds: number[]) {
+	async sendMailToUsers(
+		messageData: CreateMessageInput,
+		userIds: number[],
+	): Promise<PublicMessage> {
 		try {
-			const message = await MessageModel.create(messageData, userIds);
+			const createdMessage = await MessageModel.create(
+				messageData,
+				userIds,
+			);
 
 			if (messageData.messageType === "email") {
 				const users = await UserModel.findByIds(userIds);
@@ -27,14 +41,17 @@ export const messagesService = {
 				}
 			}
 
-			return message;
+			return toPublicMessage(createdMessage);
 		} catch (error) {
 			console.error("Erreur messagesService.sendMailToUsers:", error);
 			throw error;
 		}
 	},
 
-	async sendMailToGroup(messageData: CreateMessageInput, groupId: string) {
+	async sendMailToGroup(
+		messageData: CreateMessageInput,
+		groupId: number,
+	): Promise<PublicMessage> {
 		try {
 			const usersInGroup =
 				await UserGroupsModel.findUsersByGroup(groupId);
@@ -55,10 +72,13 @@ export const messagesService = {
 	async sendNotificationToUsers(
 		messageData: CreateMessageInput,
 		userIds: number[],
-	) {
+	): Promise<PublicMessage> {
 		try {
-			const message = await MessageModel.create(messageData, userIds);
-			return message;
+			const createdMessage = await MessageModel.create(
+				messageData,
+				userIds,
+			);
+			return toPublicMessage(createdMessage);
 		} catch (error) {
 			console.error(
 				"Erreur messagesService.sendNotificationToUser:",
@@ -71,12 +91,15 @@ export const messagesService = {
 	async sendNotificationToGroup(
 		messageData: CreateMessageInput,
 		groupId: number,
-	) {
+	): Promise<PublicMessage> {
 		try {
 			const usersInGroup =
 				await UserGroupsModel.findUsersByGroup(groupId);
 			const userIds = usersInGroup.map((user) => user.id);
-			const message = await this.sendMailToUsers(messageData, userIds);
+			const message = await this.sendNotificationToUsers(
+				messageData,
+				userIds,
+			);
 			return message;
 		} catch (error) {
 			console.error(
@@ -87,27 +110,27 @@ export const messagesService = {
 		}
 	},
 
-	async getInboxOfUser(userId: number) {
+	async getInboxOfUser(userId: number): Promise<PublicUserMessage[]> {
 		try {
 			const messages = await MessageModel.findByUserWithStatus(userId);
-			return messages;
+			return toPublicUserMessages(messages);
 		} catch (error) {
 			console.error("Erreur messagesService.getInboxOfUser:", error);
 			throw error;
 		}
 	},
 
-	async getAllFromUser(userId: number) {
+	async getAllFromUser(userId: number): Promise<PublicMessage[]> {
 		try {
 			const messages = await MessageModel.findByUsers([userId]);
-			return messages;
+			return toPublicMessages(messages);
 		} catch (error) {
 			console.error("Erreur messagesService.getAllFromUser:", error);
 			throw error;
 		}
 	},
 
-	async getAllFromGroup(groupId: number) {
+	async getAllFromGroup(groupId: number): Promise<PublicMessage[]> {
 		try {
 			const usersInGroup =
 				await UserGroupsModel.findUsersByGroup(groupId);
@@ -118,17 +141,17 @@ export const messagesService = {
 			}
 
 			const messages = await MessageModel.findByUsers(userIds);
-			return messages;
+			return toPublicMessages(messages);
 		} catch (error) {
 			console.error("Erreur messagesService.getAllFromGroup:", error);
 			throw error;
 		}
 	},
 
-	async getMessageById(messageId: number) {
+	async getMessageById(messageId: number): Promise<PublicMessage> {
 		try {
 			const message = await MessageModel.findById(messageId);
-			return message;
+			return toPublicMessage(message);
 		} catch (error) {
 			console.error("Erreur messagesService.getMessageById:", error);
 			throw error;

@@ -4,72 +4,87 @@
  * SettingModel.update(data: CreateSettingInput);
  * SettingModel.delete(id: string);
  */
-import {
-	CreateSettingInput,
-	PrivateSetting,
-	PublicSetting,
-} from "../types/settings";
+import { CreateSettingInput, PrivateSetting } from "../types/settings";
 import { query } from "../config/db";
-import { toPublicSetting, toPublicSettings } from "./dtos/settings";
 
 export const SettingModel = {
-	async findByUserId(userId: number): Promise<PublicSetting> {
+	async findByUserId(userId: number): Promise<PrivateSetting> {
 		try {
 			const result = await query<PrivateSetting>(
 				`SELECT * FROM settings WHERE user_id = $1`,
-				[userId]
+				[userId],
 			);
-			return toPublicSetting(result[0]);
+			const setting = result[0];
+
+			if (!setting) {
+				throw new Error("Paramètres non trouvés");
+			}
+
+			return setting;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des paramètres:",
-				error
+				error,
 			);
 			throw error;
 		}
 	},
 
-	async create(data: CreateSettingInput) {
+	async create(data: CreateSettingInput): Promise<PrivateSetting> {
 		try {
 			const { userId, preferences } = data;
 			const result = await query<PrivateSetting>(
 				`INSERT INTO settings (user_id, preferences) VALUES ($1, $2) RETURNING *`,
-				[userId, preferences]
+				[userId, preferences],
 			);
-			return toPublicSetting(result[0]);
+
+			const setting = result[0];
+			if (!setting) {
+				throw new Error("Erreur lors de la création des paramètres");
+			}
+
+			return setting;
 		} catch (error) {
 			console.error("Erreur lors de la création des paramètres:", error);
 			throw error;
 		}
 	},
 
-	async update(data: CreateSettingInput) {
+	async update(data: CreateSettingInput): Promise<PrivateSetting> {
 		try {
 			const { userId, preferences } = data;
 			const result = await query<PrivateSetting>(
 				`UPDATE settings SET preferences = $1 WHERE user_id = $2 RETURNING *`,
-				[preferences, userId]
+				[preferences, userId],
 			);
-			return toPublicSetting(result[0]);
+
+			const setting = result[0];
+			if (!setting) {
+				throw new Error(
+					"Erreur lors de la mise à jour des paramètres",
+				);
+			}
+
+			return setting;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la mise à jour des paramètres:",
-				error
+				error,
 			);
 			throw error;
 		}
 	},
 
-	async delete(userId: number) {
+	async delete(userId: number): Promise<void> {
 		try {
 			await query<PrivateSetting>(
 				`DELETE FROM settings WHERE user_id = $1`,
-				[userId]
+				[userId],
 			);
 		} catch (error) {
 			console.error(
 				"Erreur lors de la suppression des paramètres:",
-				error
+				error,
 			);
 			throw error;
 		}

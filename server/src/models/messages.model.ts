@@ -14,18 +14,14 @@ import {
 	CreateMessageInput,
 	PrivateMessage,
 	PrivateUserMessage,
-	PublicMessage,
-	PublicUserMessage,
 } from "../types/messages";
 import { pool, query } from "../config/db";
-import {
-	toPublicMessage,
-	toPublicMessages,
-	toPublicUserMessages,
-} from "./dtos/messages";
 
 export const MessageModel = {
-	async create(messageData: CreateMessageInput, userIds: number[]) {
+	async create(
+		messageData: CreateMessageInput,
+		userIds: number[],
+	): Promise<PrivateMessage> {
 		const client = await pool.connect();
 
 		try {
@@ -55,7 +51,7 @@ export const MessageModel = {
 
 			await client.query("COMMIT");
 
-			return toPublicMessage(newMessage);
+			return newMessage;
 		} catch (error) {
 			await client.query("ROLLBACK");
 			console.error(
@@ -68,12 +64,10 @@ export const MessageModel = {
 		}
 	},
 
-	async findAll(): Promise<PublicMessage[]> {
+	async findAll(): Promise<PrivateMessage[]> {
 		try {
-			const result = await query<PrivateMessage>(
-				`SELECT * FROM messages`
-			);
-			return toPublicMessages(result);
+			const result = await query<PrivateMessage>(`SELECT * FROM messages`);
+			return result;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des messages:",
@@ -83,19 +77,19 @@ export const MessageModel = {
 		}
 	},
 
-	async findById(id: number): Promise<PublicMessage> {
+	async findById(id: number): Promise<PrivateMessage> {
 		try {
 			const result = await query<PrivateMessage>(
 				`SELECT * FROM messages WHERE id = $1
                  LIMIT 1`,
-				[id]
+				[id],
 			);
 
 			if (!result[0]) {
 				throw new Error("Message non trouvé");
 			}
 
-			return toPublicMessage(result[0]);
+			return result[0];
 		} catch (error) {
 			console.error(
 				`Erreur lors de la récupération du message ${id}:`,
@@ -105,13 +99,15 @@ export const MessageModel = {
 		}
 	},
 
-	async findByType(type: "notification" | "email"): Promise<PublicMessage[]> {
+	async findByType(
+		type: "notification" | "email",
+	): Promise<PrivateMessage[]> {
 		try {
 			const result = await query<PrivateMessage>(
 				`SELECT * FROM messages WHERE message_type = $1`,
-				[type]
+				[type],
 			);
-			return toPublicMessages(result);
+			return result;
 		} catch (error) {
 			console.error(
 				`Erreur lors de la récupération des messages de type ${type}:`,
@@ -121,16 +117,16 @@ export const MessageModel = {
 		}
 	},
 
-	async findByUsers(userIds: number[]): Promise<PublicMessage[]> {
+	async findByUsers(userIds: number[]): Promise<PrivateMessage[]> {
 		try {
 			const result = await query<PrivateMessage>(
 				`SELECT m.* FROM messages m
                  JOIN message_recipients mr ON m.id = mr.message_id
                  WHERE mr.user_id = ANY($1)
                  GROUP BY m.id`,
-				[userIds]
+				[userIds],
 			);
-			return toPublicMessages(result);
+			return result;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des messages par utilisateurs:",
@@ -140,7 +136,9 @@ export const MessageModel = {
 		}
 	},
 
-	async findByUserWithStatus(userId: number): Promise<PublicUserMessage[]> {
+	async findByUserWithStatus(
+		userId: number,
+	): Promise<PrivateUserMessage[]> {
 		try {
 			const result = await query<PrivateUserMessage>(
 				`SELECT 
@@ -150,9 +148,9 @@ export const MessageModel = {
 				JOIN message_recipients mr ON m.id = mr.message_id
 				WHERE mr.user_id = $1
 				ORDER BY mr.sent_at DESC`,
-				[userId]
+				[userId],
 			);
-			return toPublicUserMessages(result);
+			return result;
 		} catch (error) {
 			console.error(
 				"Erreur lors de la récupération des messages avec statut:",

@@ -10,46 +10,46 @@
 
 import { EventModel } from "../models/events.model";
 import { UserGroupsModel } from "../models/userGroups.model";
-import { CreateEventInput } from "../types/events";
+import { CreateEventInput, PublicEvent } from "../types/events";
+import { toPublicEvent, toPublicEvents } from "../models/dtos/events";
 
 export const eventsService = {
-  async getEventDetail(eventId: number) {
+  async getEventDetail(eventId: number): Promise<PublicEvent> {
     try {
       const event = await EventModel.findById(eventId);
-      return event;
+      return toPublicEvent(event);
     } catch (error) {
       console.error("Erreur eventsService.getEventDetail:", error);
       throw error;
     }
   },
 
-  async getAllEvents() {
+  async getAllEvents(): Promise<PublicEvent[]> {
     try {
       const events = await EventModel.findAll();
-      return events;
+      return toPublicEvents(events);
     } catch (error) {
       console.error("Erreur eventsService.getAllEvents:", error);
       throw error;
     }
   },
 
-  async getUserEvents(userId: number) {
+  async getUserEvents(userId: number): Promise<PublicEvent[]> {
     try {
       const userWithGroups = await UserGroupsModel.findUserById(userId);
       const groupIds = userWithGroups.groups.map((group) => group.id);
-      console.log(groupIds);
       const events = await EventModel.findByGroups(groupIds);
-      return events;
+      return toPublicEvents(events);
     } catch (error) {
       console.error("Erreur eventsService.getUserEvents:", error);
       throw error;
     }
   },
 
-  async getGroupsEvents(groupIds: number[]) {
+  async getGroupsEvents(groupIds: number[]): Promise<PublicEvent[]> {
     try {
       const events = await EventModel.findByGroups(groupIds);
-      return events;
+      return toPublicEvents(events);
     } catch (error) {
       console.error("Erreur eventsService.getGroupsEvents:", error);
       throw error;

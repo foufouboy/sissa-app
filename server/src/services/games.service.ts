@@ -8,7 +8,8 @@
 
 import { GameModel } from "../models/games.model";
 import { UserModel } from "../models/users.model";
-import { CreateGameInput } from "../types/games";
+import { CreateGameInput, PublicGame } from "../types/games";
+import { toPublicGame, toPublicGames } from "../models/dtos/games";
 
 export const gamesService = {
 	async createGame(gameData: CreateGameInput) {
@@ -29,20 +30,20 @@ export const gamesService = {
 			throw error;
 		}
 	},
-	async getGamesOfUser(userId: number) {
+	async getGamesOfUser(userId: number): Promise<PublicGame[]> {
 		try {
 			const games = await GameModel.findAllGamesOfPlayer(userId);
-			return games;
+			return toPublicGames(games);
 		} catch (error) {
 			console.error("Erreur gamesService.getGamesOfUser:", error);
 			throw error;
 		}
 	},
 
-	async getGameDetail(gameId: number) {
+	async getGameDetail(gameId: number): Promise<PublicGame> {
 		try {
 			const game = await GameModel.findById(gameId);
-			return game;
+			return toPublicGame(game);
 		} catch (error) {
 			console.error("Erreur gamesService.getGameDetail:", error);
 			throw error;
