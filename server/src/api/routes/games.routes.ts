@@ -1,18 +1,19 @@
 import { Router } from "express";
 import { gamesController } from "../controllers/games.controller";
+import { authMiddleware as auth } from "../middlewares/auth";
 
 const gamesRoutes = Router();
 
 // récupère les parties auxquelles on a accès (soit les siennes, soit celles de ses élèves aussi)
-gamesRoutes.get("/", gamesController.list);
+// pareil que pour les évènements ; scinder les routes
+gamesRoutes.get("/", auth.isUserOrTeacherOf, gamesController.list);
 
-// enregistre une nouvelle partie
-gamesRoutes.post("/", gamesController.create);
+gamesRoutes.post("/", auth.isConnected, gamesController.create);
 
 // récupère les détails d'une partie spécifique
-gamesRoutes.get("/:game_id", gamesController.getOne);
+gamesRoutes.get("/:game_id", auth.isUserOrTeacherOf, gamesController.getOne);
 
 // supprime une partie (il faut avoir les droits pour, seulement le joueur)
-gamesRoutes.delete("/:game_id", gamesController.remove);
+gamesRoutes.delete("/:game_id", auth.isUser, gamesController.remove);
 
 export default gamesRoutes;

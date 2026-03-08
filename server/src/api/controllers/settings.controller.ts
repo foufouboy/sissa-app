@@ -4,11 +4,18 @@ import { settingsService } from "../../services/settings.service";
 export const settingsController = {
 	async getForCurrentUser(req: Request, res: Response) {
 		try {
-			const userId = Number(req.query.userId);
+			if (!req.user) {
+				return res.status(401).json({ message: "Non authentifié" });
+			}
+
+			const userId = req.user.id;
 			const settings = await settingsService.getSettingsForUser(userId);
 			return res.status(200).json(settings);
 		} catch (error) {
-			console.error("Erreur settingsController.getForCurrentUser:", error);
+			console.error(
+				"Erreur settingsController.getForCurrentUser:",
+				error,
+			);
 			return res.status(500).json({ message: "Erreur serveur" });
 		}
 	},

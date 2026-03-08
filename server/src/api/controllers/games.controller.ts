@@ -15,8 +15,19 @@ export const gamesController = {
 
 	async create(req: Request, res: Response) {
 		try {
-			const { pgn, whitePlayer, blackPlayer, result, event, gameDate, userId } =
-				req.body;
+			const {
+				pgn,
+				whitePlayer,
+				blackPlayer,
+				result,
+				event,
+				gameDate,
+				userId,
+			} = req.body;
+
+			if (!req.user) {
+				return res.status(401).json({ message: "Non authentifié" });
+			}
 
 			await gamesService.createGame({
 				pgn,
@@ -25,7 +36,7 @@ export const gamesController = {
 				result,
 				event,
 				gameDate,
-				userId,
+				userId: req.user.id,
 			});
 
 			return res
