@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { settingsController } from "../controllers/settings.controller";
 import { authMiddleware as auth } from "../middlewares/auth";
+import {
+	validationMiddleware as validation,
+	handleValidationErrors,
+} from "../middlewares/validation";
 
 const settingsRoutes = Router();
 
@@ -11,6 +15,8 @@ settingsRoutes.get("/", auth.isConnected, settingsController.getForCurrentUser);
 settingsRoutes.put(
 	"/",
 	auth.isConnected,
+	validation.settings,
+	handleValidationErrors,
 	settingsController.updateForCurrentUser,
 );
 

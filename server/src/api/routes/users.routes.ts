@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { usersController } from "../controllers/users.controller";
 import { authMiddleware as auth } from "../middlewares/auth";
+import {
+	validationMiddleware as validation,
+	handleValidationErrors,
+} from "../middlewares/validation";
 
 const usersRoutes = Router();
 
@@ -22,7 +26,13 @@ usersRoutes.get("/:user_id/messages", auth.isUser, usersController.getMessages);
 
 // met à jour les détails d'un utilisateur spécifique (droits admins, ou l'utilisateur lui-même)
 // devra plus tard seulement permettre aux admins de changer les groupes, et pas le reste
-usersRoutes.put("/:user_id", auth.isAdminOrSelf, usersController.update);
+usersRoutes.put(
+	"/:user_id",
+	auth.isAdminOrSelf,
+	validation.user,
+	handleValidationErrors,
+	usersController.update,
+);
 
 // supprime un utilisateur (droits admins, ou l'utilisateur lui-même)
 usersRoutes.delete("/:user_id", auth.isAdminOrSelf, usersController.remove);

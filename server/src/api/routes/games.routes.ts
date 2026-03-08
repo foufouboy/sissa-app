@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { gamesController } from "../controllers/games.controller";
 import { authMiddleware as auth } from "../middlewares/auth";
+import {
+	validationMiddleware as validation,
+	handleValidationErrors,
+} from "../middlewares/validation";
 
 const gamesRoutes = Router();
 
@@ -8,7 +12,13 @@ const gamesRoutes = Router();
 // pareil que pour les évènements ; scinder les routes
 gamesRoutes.get("/", auth.isUserOrTeacherOf, gamesController.list);
 
-gamesRoutes.post("/", auth.isConnected, gamesController.create);
+gamesRoutes.post(
+	"/",
+	auth.isConnected,
+	validation.game,
+	handleValidationErrors,
+	gamesController.create,
+);
 
 // récupère les détails d'une partie spécifique
 gamesRoutes.get("/:game_id", auth.isUserOrTeacherOf, gamesController.getOne);
