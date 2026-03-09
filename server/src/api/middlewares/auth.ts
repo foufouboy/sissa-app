@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-// Fonction helper pour extraire et vérifier le token
+// Helper subordonné à requireAuth
 function verifyAndExtractUser(req: Request): AuthenticatedUser | null {
   try {
     const token = req.headers.authorization?.split(" ")[1];
@@ -39,7 +39,7 @@ function verifyAndExtractUser(req: Request): AuthenticatedUser | null {
   }
 }
 
-// Helper pour requérir l'authentification et envoyer la réponse si nécessaire
+// Fonction principale pour vérifier si l'utilisateur est authentifié
 function requireAuth(req: Request, res: Response): AuthenticatedUser | null {
   const user = verifyAndExtractUser(req);
 
