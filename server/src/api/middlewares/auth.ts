@@ -17,6 +17,7 @@ declare global {
 function verifyAndExtractUser(req: Request): AuthenticatedUser | null {
 	try {
 		const token = req.headers.authorization?.split(" ")[1];
+		console.log("token", token);
 		if (!token) return null;
 
 		const secret = process.env.JWT_SECRET;
@@ -26,12 +27,14 @@ function verifyAndExtractUser(req: Request): AuthenticatedUser | null {
 
 		const decoded = jwt.verify(token, secret) as any;
 
+		console.log("decoded", decoded);
 		return {
 			id: decoded.userId,
 			email: decoded.email,
 			role: decoded.role,
 		};
 	} catch (error) {
+		console.log("error", error);
 		return null;
 	}
 }
@@ -136,8 +139,12 @@ export const authMiddleware = {
 		if (!user) return;
 
 		const userId = Number(req.params.user_id);
+		console.log("userId", userId);
+		console.log("user.id", user.id);
+		console.log("user.role", user.role);
 
-		if (user.role !== Roles.Admin && user.id !== userId) {
+		if (user.role !== Roles.Admin && user.id != userId) {
+			console.log(user.id === userId);
 			return res.status(403).json({ message: "Accès non autorisé" });
 		}
 
