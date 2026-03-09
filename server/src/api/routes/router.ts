@@ -4,20 +4,21 @@
  */
 
 import { Router } from "express";
+import { dashboardController } from "../controllers/dashboard.controller";
+import { authMiddleware as auth } from "../middlewares/auth";
 import authRoutes from "./auth.routes";
-import usersRoutes from "./users.routes";
-import gamesRoutes from "./games.routes";
 import eventsRoutes from "./events.routes";
+import gamesRoutes from "./games.routes";
+import groupsRoutes from "./groups.routes";
 import messagesRoutes from "./messages.routes";
 import settingsRoutes from "./settings.routes";
-import groupsRoutes from "./groups.routes";
-import { dashboardController } from "../controllers/dashboard.controller";
+import usersRoutes from "./users.routes";
 
 const router = Router();
 
 // récupère les données du dashboard, et front importantes (?)
 // doit être connecté, sinon redirection
-router.get("/", dashboardController.getDashboard);
+router.get("/", auth.isConnected, dashboardController.getDashboard);
 
 router.use("/auth", authRoutes);
 router.use("/users", usersRoutes);

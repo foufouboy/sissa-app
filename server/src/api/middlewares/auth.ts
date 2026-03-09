@@ -1,187 +1,181 @@
+import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import type { Request, Response, NextFunction } from "express";
-import { AuthenticatedUser } from "../../types/users";
-import { Roles } from "../../types/roles";
 import { gamesService } from "../../services/games.service";
+import { Roles } from "../../types/roles";
+import { AuthenticatedUser } from "../../types/users";
 
 // Extension du type Request pour utiliser l'utilisateur authentifié
 declare global {
-	namespace Express {
-		interface Request {
-			user?: AuthenticatedUser;
-		}
-	}
+  namespace Express {
+    interface Request {
+      user?: AuthenticatedUser;
+    }
+  }
 }
 
 // Fonction helper pour extraire et vérifier le token
 function verifyAndExtractUser(req: Request): AuthenticatedUser | null {
-	try {
-		const token = req.headers.authorization?.split(" ")[1];
-		console.log("token", token);
-		if (!token) return null;
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    console.log("token", token);
+    if (!token) return null;
 
-		const secret = process.env.JWT_SECRET;
-		if (!secret) {
-			throw new Error("JWT_SECRET non configuré");
-		}
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error("JWT_SECRET non configuré");
+    }
 
-		const decoded = jwt.verify(token, secret) as any;
+    const decoded = jwt.verify(token, secret) as any;
 
-		console.log("decoded", decoded);
-		return {
-			id: decoded.userId,
-			email: decoded.email,
-			role: decoded.role,
-		};
-	} catch (error) {
-		console.log("error", error);
-		return null;
-	}
+    console.log("decoded", decoded);
+    return {
+      id: decoded.userId,
+      email: decoded.email,
+      role: decoded.role,
+    };
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
 }
 
 // Helper pour requérir l'authentification et envoyer la réponse si nécessaire
 function requireAuth(req: Request, res: Response): AuthenticatedUser | null {
-	const user = verifyAndExtractUser(req);
+  const user = verifyAndExtractUser(req);
 
-	if (!user) {
-		res.status(401).json({ message: "Token manquant ou invalide" });
-		return null;
-	}
+  if (!user) {
+    res.status(401).json({ message: "Token manquant ou invalide" });
+    return null;
+  }
 
-	req.user = user;
-	return user;
+  req.user = user;
+  return user;
 }
 
 export const authMiddleware = {
-	isConnected(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  isConnected(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		next();
-	},
+    next();
+  },
 
-	isAdmin(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  isAdmin(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		if (user.role !== Roles.Admin) {
-			return res
-				.status(403)
-				.json({ message: "Accès réservé aux administrateurs" });
-		}
+    if (user.role !== Roles.Admin) {
+      return res
+        .status(403)
+        .json({ message: "Accès réservé aux administrateurs" });
+    }
 
-		next();
-	},
+    next();
+  },
 
-	isTeacher(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  isTeacher(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		if (user.role !== Roles.Teacher) {
-			return res
-				.status(403)
-				.json({ message: "Accès réservé aux entraîneurs" });
-		}
+    if (user.role !== Roles.Teacher) {
+      return res.status(403).json({ message: "Accès réservé aux entraîneurs" });
+    }
 
-		next();
-	},
+    next();
+  },
 
-	async isTeacherOf(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  async isTeacherOf(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		if (user.role !== Roles.Teacher) {
-			return res
-				.status(403)
-				.json({ message: "Accès réservé aux entraîneurs" });
-		}
+    if (user.role !== Roles.Teacher) {
+      return res.status(403).json({ message: "Accès réservé aux entraîneurs" });
+    }
 
-		try {
-			const studentId = Number(req.params.user_id);
+    try {
+      const studentId = Number(req.params.user_id);
 
-			// Récupérer tous les étudiants du teacher
-			const students = await gamesService.getStudentsOfTeacher(user.id);
+      // Récupérer tous les étudiants du teacher
+      const students = await gamesService.getStudentsOfTeacher(user.id);
 
-			// Vérifier si l'étudiant demandé fait partie des étudiants du teacher
-			const hasAccess = students.some(
-				(student) => student.id === studentId,
-			);
+      // Vérifier si l'étudiant demandé fait partie des étudiants du teacher
+      const hasAccess = students.some((student) => student.id === studentId);
 
-			if (!hasAccess) {
-				return res
-					.status(403)
-					.json({ message: "Accès non autorisé à cet étudiant" });
-			}
+      if (!hasAccess) {
+        return res
+          .status(403)
+          .json({ message: "Accès non autorisé à cet étudiant" });
+      }
 
-			next();
-		} catch (error) {
-			return res
-				.status(500)
-				.json({ message: "Erreur lors de la vérification" });
-		}
-	},
+      next();
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erreur lors de la vérification" });
+    }
+  },
 
-	isUser(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  isUser(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		const userId = Number(req.params.user_id);
+    const userId = Number(req.params.user_id);
 
-		if (user.id !== userId) {
-			return res.status(403).json({ message: "Accès non autorisé" });
-		}
+    if (user.id != userId) {
+      return res.status(403).json({ message: "Accès non autorisé" });
+    }
 
-		next();
-	},
+    next();
+  },
 
-	isAdminOrSelf(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  isAdminOrSelf(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		const userId = Number(req.params.user_id);
-		console.log("userId", userId);
-		console.log("user.id", user.id);
-		console.log("user.role", user.role);
+    const userId = Number(req.params.user_id);
+    console.log("userId", userId);
+    console.log("user.id", user.id);
+    console.log("user.role", user.role);
 
-		if (user.role !== Roles.Admin && user.id != userId) {
-			console.log(user.id === userId);
-			return res.status(403).json({ message: "Accès non autorisé" });
-		}
+    if (user.role !== Roles.Admin && user.id != userId) {
+      console.log(user.id === userId);
+      return res.status(403).json({ message: "Accès non autorisé" });
+    }
 
-		next();
-	},
+    next();
+  },
 
-	async isUserOrTeacherOf(req: Request, res: Response, next: NextFunction) {
-		const user = requireAuth(req, res);
-		if (!user) return;
+  async isOwnerOfGame(req: Request, res: Response, next: NextFunction) {
+    const user = requireAuth(req, res);
+    if (!user) return;
 
-		const userId = Number(req.params.user_id);
+    const gameId = Number(req.params.game_id);
 
-		if (user.id === userId) {
-			return next();
-		}
+    try {
+      const game = await gamesService.getGameDetail(gameId);
 
-		if (user.role === Roles.Teacher) {
-			try {
-				const students = await gamesService.getStudentsOfTeacher(
-					user.id,
-				);
-				const hasAccess = students.some(
-					(student) => student.id === userId,
-				);
+      if (!game) {
+        return res.status(404).json({ message: "Partie non trouvée" });
+      }
 
-				if (hasAccess) {
-					return next();
-				}
-			} catch (error) {
-				return res
-					.status(500)
-					.json({ message: "Erreur lors de la vérification" });
-			}
-		}
+      if (game.userId === user.id) {
+        return next();
+      }
 
-		return res.status(403).json({ message: "Accès non autorisé" });
-	},
+      if (user.role === Roles.Teacher) {
+        const students = await gamesService.getStudentsOfTeacher(user.id);
+        if (students.some((s) => s.id === game.userId)) {
+          return next();
+        }
+      }
+
+      return res.status(403).json({ message: "Accès non autorisé" });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erreur lors de la vérification" });
+    }
+  },
 };
 
 export default authMiddleware;
