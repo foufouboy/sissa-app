@@ -1,5 +1,6 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { SettingModel } from "../models/settings.model";
 import { UserModel } from "../models/users.model";
 import { Roles } from "../types/roles";
 import { AuthenticatedUser } from "../types/users";
@@ -21,67 +22,76 @@ import { AuthenticatedUser } from "../types/users";
  */
 
 export const authService = {
-	async login(email: string, password: string) {
-		const user = await UserModel.findByEmail(email);
-		if (!user) {
-			throw new Error("Utilisateur non trouvé");
-		}
+  async login(email: string, password: string) {
+    const user = await UserModel.findByEmail(email);
+    if (!user) {
+      throw new Error("Utilisateur non trouvé");
+    }
 
-		const isPasswordValid = await bcrypt.compare(password, user.password);
-		if (!isPasswordValid) {
-			throw new Error("Mot de passe incorrect");
-		}
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error("Mot de passe incorrect");
+    }
 
-		const token = jwt.sign(
-			{
-				userId: user.id,
-				email: user.email,
-				role: user.role,
-			},
-			process.env.JWT_SECRET,
-			{
-				expiresIn: "1h",
-			}
-		);
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      },
+    );
 
-		return token;
-	},
+    return token;
+  },
 
-	async register(newUser: {
-		email: string;
-		password: string;
-		firstName: string;
-		lastName: string;
-	}) {
-		try {
-			// À ce moment là, tout a déjà été validé et sanitizé
-			const { email, password, firstName, lastName } = newUser;
+  async register(newUser: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }) {
+    try {
+      // À ce moment là, tout a déjà été validé et sanitizé
+      const { email, password, firstName, lastName } = newUser;
 
-			const hash = await bcrypt.hash(password, 10);
+      const hash = await bcrypt.hash(password, 10);
 
-			const user = await UserModel.create({
-				email,
-				password: hash,
-				firstName,
-				lastName,
-				role: Roles.Member,
-			});
+      const user = await UserModel.create({
+        email,
+        password: hash,
+        firstName,
+        lastName,
+        role: Roles.Member,
+      });
 
-			return user;
-		} catch (error) {
-			console.error("Erreur authService.register:", error);
-		}
-	},
+      await SettingModel.create({
+        userId: user.id,
+        preferences: {
+          darkMode: false,
+          language: "fr",
+          notifications: true,
+        },
+      });
 
-	isAdmin(user: AuthenticatedUser): boolean {
-		return user.role === "admin";
-	},
+      return user;
+    } catch (error) {
+      console.error("Erreur authService.register:", error);
+    }
+  },
 
-	isTeacher(user: AuthenticatedUser): boolean {
-		return user.role === "teacher";
-	},
+  isAdmin(user: AuthenticatedUser): boolean {
+    return user.role === "admin";
+  },
 
-	isAuth(user: AuthenticatedUser): boolean {
-		return !!user.role;
-	},
+  isTeacher(user: AuthenticatedUser): boolean {
+    return user.role === "teacher";
+  },
+
+  isAuth(user: AuthenticatedUser): boolean {
+    return !!user.role;
+  },
 };

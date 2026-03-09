@@ -84,35 +84,32 @@ export const authMiddleware = {
     next();
   },
 
-  async isTeacherOf(req: Request, res: Response, next: NextFunction) {
+  async isUserOrTeacherOf(req: Request, res: Response, next: NextFunction) {
     const user = requireAuth(req, res);
     if (!user) return;
 
-    if (user.role !== Roles.Teacher) {
-      return res.status(403).json({ message: "Accès réservé aux entraîneurs" });
+    const userId = Number(req.params.user_id);
+
+    if (user.id == userId) {
+      return next();
     }
 
-    try {
-      const studentId = Number(req.params.user_id);
-
-      // Récupérer tous les étudiants du teacher
-      const students = await gamesService.getStudentsOfTeacher(user.id);
-
-      // Vérifier si l'étudiant demandé fait partie des étudiants du teacher
-      const hasAccess = students.some((student) => student.id === studentId);
-
-      if (!hasAccess) {
+    if (user.role === Roles.Teacher) {
+      console.log("here");
+      try {
+        const students = await gamesService.getStudentsOfTeacher(user.id);
+        console.log("students", students);
+        if (students.some((student) => student.id == userId)) {
+          return next();
+        }
+      } catch (error) {
         return res
-          .status(403)
-          .json({ message: "Accès non autorisé à cet étudiant" });
+          .status(500)
+          .json({ message: "Erreur lors de la vérification" });
       }
-
-      next();
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Erreur lors de la vérification" });
     }
+
+    return res.status(403).json({ message: "Accès non autorisé" });
   },
 
   isUser(req: Request, res: Response, next: NextFunction) {
@@ -128,7 +125,7 @@ export const authMiddleware = {
     next();
   },
 
-  isAdminOrSelf(req: Request, res: Response, next: NextFunction) {
+  isUserOrAdmin(req: Request, res: Response, next: NextFunction) {
     const user = requireAuth(req, res);
     if (!user) return;
 

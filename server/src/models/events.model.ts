@@ -56,30 +56,30 @@ export const EventModel = {
   async create(data: CreateEventInput) {
     const {
       location,
-      start_date,
-      end_date,
-      all_day,
+      startDate,
+      endDate,
+      allDay,
       title,
       description,
-      created_by,
-      member_groups_ids,
+      memberGroupsIds,
     } = data;
+
+    // Actuellement, le créateur est hardcodé à 1 (admin) car nous n'en avons aucune utilité
     try {
       return await query(
         `
                 CALL create_event_with_groups(
-                    $1, $2, $3, $4, $5, $6, $7, $8
+                    $1, $2, $3, $4, $5, $6, 1, $7
                 )
             `,
         [
           location,
-          start_date,
-          end_date,
-          all_day,
+          startDate,
+          endDate,
+          allDay,
           title,
           description,
-          created_by,
-          member_groups_ids,
+          memberGroupsIds,
         ],
       );
     } catch (error) {
@@ -91,31 +91,29 @@ export const EventModel = {
   async update(id: number, data: CreateEventInput) {
     const {
       location,
-      start_date,
-      end_date,
-      all_day,
+      startDate,
+      endDate,
+      allDay,
       title,
       description,
-      created_by,
-      member_groups_ids,
+      memberGroupsIds,
     } = data;
     try {
       return await query(
         `
                 CALL update_event_with_groups(
-                    $1, $2, $3, $4, $5, $6, $7, $8, $9
+                    $1, $2, $3, $4, $5, $6, $7, 1, $8
                 )
             `,
         [
           id,
           location,
-          start_date,
-          end_date,
-          all_day,
+          startDate,
+          endDate,
+          allDay,
           title,
           description,
-          created_by,
-          member_groups_ids,
+          memberGroupsIds,
         ],
       );
     } catch (error) {

@@ -8,9 +8,7 @@ import {
 
 const gamesRoutes = Router();
 
-// récupère les parties auxquelles on a accès (soit les siennes, soit celles de ses élèves aussi)
-// pareil que pour les évènements ; scinder les routes.
-// TODO : UTILISER UNE AUTRE FONCTION QUE LIST, DE MEME POUR LES AUTRES ENTITES
+// récupère toutes les parties d'un utilisateur spécifique
 gamesRoutes.get("/", auth.isConnected, gamesController.list);
 
 gamesRoutes.post(
