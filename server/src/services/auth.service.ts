@@ -23,29 +23,34 @@ import { AuthenticatedUser } from "../types/users";
 
 export const authService = {
   async login(email: string, password: string) {
-    const user = await UserModel.findByEmail(email);
-    if (!user) {
-      throw new Error("Utilisateur non trouvé");
+    try {
+      const user = await UserModel.findByEmail(email);
+      if (!user) {
+        throw new Error("Utilisateur non trouvé");
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new Error("Mot de passe incorrect");
+      }
+
+      const token = jwt.sign(
+        {
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        },
+      );
+
+      return token;
+    } catch (error) {
+      console.error("Erreur authService.login:", error);
+      throw error;
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new Error("Mot de passe incorrect");
-    }
-
-    const token = jwt.sign(
-      {
-        userId: user.id,
-        email: user.email,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      },
-    );
-
-    return token;
   },
 
   async register(newUser: {
