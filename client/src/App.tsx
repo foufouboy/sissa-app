@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./index.sass";
+const env = import.meta.env;
 
 function App() {
   const [count, setCount] = useState(0);
@@ -7,7 +8,7 @@ function App() {
 
   useEffect(() => {
     const getDashboard = async () => {
-      const response = await fetch("http://localhost:8000/api", {
+      const response = await fetch(`${env.API_ENDPOINT}/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
