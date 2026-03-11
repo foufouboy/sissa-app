@@ -1,0 +1,35 @@
+@use '../abstracts/variables' as *
+@use '../abstracts/mixins' as *
+
+body
+    font-family: $font-family
+    font-size: $text-base
+    color: $primary-color
+    line-height: 1.6
+    text-align: center
+    background: $primary-bg
+
+h1, h2, h3, h4, h5, h6
+    font-family: $font-title
+    font-weight: 600
+    line-height: 1.2
+
+h1
+    font-size: $text-4xl
+    color: $primary-title-color
+
+h2
+    font-size: $text-3xl
+
+h3
+    font-size: $text-2xl
+
+h4
+    font-size: $text-xl
+
+a
+    color: $primary-cta
+    @include transition(color)
+    
+    &:hover
+        opacity: 0.8
