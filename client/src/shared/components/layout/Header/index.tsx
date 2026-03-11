@@ -1,15 +1,23 @@
-import { BellDot, CircleUserRound, Feather } from "lucide-react";
+import { BellDot, ChessQueen, CircleUserRound } from "lucide-react";
 import "./index.sass";
 
 function Header() {
   return (
     <header className="header">
       <div className="header-left">
-        <Feather color="rgb(129, 78, 231)" size={30} />
+        <ChessQueen color="white" />
+        <div className="header-left-title">
+          <h1>Sissa</h1>
+          <h2 className="tablet subtitle">Gestion de clubs d'échecs</h2>
+        </div>
       </div>
       <div className="header-right">
-        <BellDot color="white" size={20} strokeWidth={1.5} />
-        <CircleUserRound color="white" size={20} strokeWidth={1.5} />
+        <BellDot color="white" strokeWidth={1.5} />
+        <div className="separator tablet"></div>
+        <div className="header-right-account">
+          <CircleUserRound color="white" strokeWidth={1.5} />
+          <span className="tablet">Marc Aurèle</span>
+        </div>
       </div>
     </header>
   );

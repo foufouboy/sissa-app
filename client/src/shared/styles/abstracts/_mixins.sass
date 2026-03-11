@@ -22,10 +22,14 @@
 
 @mixin tablet
     @media (min-width: $breakpoint-sm)
+        .tablet
+            display: block;
         @content
 
 @mixin desktop
     @media (min-width: $breakpoint-lg)
+        .desktop
+            display: block;
         @content
 
 // Transitions

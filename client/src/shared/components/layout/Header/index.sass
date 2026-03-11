@@ -5,10 +5,47 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 $spacing-md;
+
+    h1
+        font-size: $text-2xl;
+        color: $primary-title-color;
+
     .header-left
         display: flex;
         align-items: center;
+        gap: $spacing-xs;
+        .header-left-title
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            .subtitle
+                margin-top: -3px;
+                font-size: $text-sm;
+                color: $primary-color;
     .header-right
         display: flex;
         align-items: center;
         gap: $spacing-md;
+        .separator
+            width: 1px;
+            height: 20px;
+            background: $primary-color;
+        .header-right-account
+            display: flex;
+            gap: $spacing-xs;
+            span
+                font-size: $text-sm;
+                color: $primary-title-color;
+                font-weight: 500;
+
+    .lucide
+        width: 20px;
+
+    @include tablet
+        height: 55px;
+        .lucide.lucide-chess-queen
+            width: 32px;
+            height: 32px;
+
+        .header-left
+            gap: $spacing-xl;
