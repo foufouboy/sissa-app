@@ -1,0 +1,10 @@
+export { default as Dashboard } from "./Dashboard";
+export { default as Games } from "./Games";
+export { default as Events } from "./Events";
+export { default as Notifications } from "./Notifications";
+export { default as Profile } from "./Profile";
+export { default as Settings } from "./Settings";
+export { default as Login } from "./Login";
+export { default as Register } from "./Register";
+export { default as AdminMessages } from "./AdminMessages";
+export { default as AdminMembers } from "./AdminMembers";
