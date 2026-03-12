@@ -33,11 +33,8 @@
         .header-right-account
             display: flex;
             gap: $spacing-xs;
-            span
-                font-size: $text-sm;
-                color: $primary-title-color;
-                font-weight: 500;
-
+            align-items: center;
+            
     .lucide
         width: 20px;
 
@@ -46,6 +43,23 @@
         .lucide.lucide-chess-queen
             width: 32px;
             height: 32px;
+        .lucide.lucide-circle-user-round
+            width: 29px;
+            height: 29px;
 
         .header-left
-            gap: $spacing-xl;
+            gap: $spacing-sm;
+
+        .name-and-role
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            .name
+                font-size: $text-xs;
+                color: $primary-title-color;
+                font-weight: 500;
+            .role
+                margin-top: -3px;
+                font-size: .7rem;
+                color: $primary-color;
+                font-weight: 400;

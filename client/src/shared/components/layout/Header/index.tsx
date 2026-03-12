@@ -15,8 +15,11 @@ function Header() {
         <BellDot color="white" strokeWidth={1.5} />
         <div className="separator tablet"></div>
         <div className="header-right-account">
+          <div className="name-and-role tablet">
+            <span className="name">Marc Aurèle</span>
+            <span className="role">Administrateur</span>
+          </div>
           <CircleUserRound color="white" strokeWidth={1.5} />
-          <span className="tablet">Marc Aurèle</span>
         </div>
       </div>
     </header>
