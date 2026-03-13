@@ -26,6 +26,12 @@
             display: block;
         @content
 
+@mixin tablet-lg
+    @media (min-width: $breakpoint-md)
+        .tablet-lg
+            display: block;
+        @content
+
 @mixin desktop
     @media (min-width: $breakpoint-lg)
         .desktop

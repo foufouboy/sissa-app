@@ -1,13 +1,20 @@
-import { BellDot, ChessQueen, CircleUserRound } from "lucide-react";
+import CatLogo from "@/../public/assets/cat.png";
+import { BellDot, CircleUserRound } from "lucide-react";
 import "./index.sass";
 
 function Header() {
   return (
     <header className="header">
       <div className="header-left">
-        <ChessQueen color="white" />
         <div className="header-left-title">
-          <h1>Sissa</h1>
+          <img
+            src={CatLogo}
+            alt="Cat Logo"
+            className="cat-logo"
+            width={45}
+            height={45}
+          />
+          <h1 className="tablet">Sissa</h1>
           <h2 className="tablet subtitle">Gestion de clubs d'échecs</h2>
         </div>
       </div>
@@ -19,7 +26,7 @@ function Header() {
             <span className="name">Marc Aurèle</span>
             <span className="role">Administrateur</span>
           </div>
-          <CircleUserRound color="white" strokeWidth={1.5} />
+          <CircleUserRound strokeWidth={1.5} />
         </div>
       </div>
     </header>

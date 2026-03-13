@@ -7,7 +7,7 @@
     height: 65px
     display: flex
     justify-content: center;
-    color: $primary-title-color;
+    color: rgb(152, 155, 160);
     max-width: $breakpoint-md;
     
     &-nav
@@ -21,12 +21,17 @@
         gap: $spacing-md;
         flex: 1;
 
-    @include tablet
+    @include tablet-lg
         // le footer flotte un peu plus haut, est comme détaché
         // du bas
-        bottom: 10px;
-        height: 55px;
-        border-radius: 100vw; 
+        @include transition(bottom);
+
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 15px;
+        height: 65px;
+        width: 500px;
+        border-radius: 5px; 
         .footer-nav__list 
             gap: $spacing-lg;
         .menu-item

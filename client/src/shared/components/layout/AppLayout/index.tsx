@@ -6,8 +6,10 @@ import "./index.sass";
 function AppLayout() {
   return (
     <div className="app-layout">
-      {" "}
       <Header />
+      <div className="page-title">
+        <h2>Dashboard</h2>
+      </div>
       <main>
         <Outlet />
       </main>
