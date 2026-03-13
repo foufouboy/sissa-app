@@ -1,13 +1,35 @@
 .footer 
-    background: $secondary-bg;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    display: flex;
+    background: $secondary-bg
+    position: fixed
+    bottom: 0
+    left: 0
+    right: 0
+    height: 65px
+    display: flex
     justify-content: center;
-    align-items: center;
-    color: $secondary-color;
-    font-size: $text-base;
-    font-weight: 600;
+    color: $primary-title-color;
+    max-width: $breakpoint-md;
+    
+    &-nav
+        width: 100%;
+        height: 100%;
+        display: flex;
+        z-index: 100; // utile plus tard
+
+    &-nav__list
+        @include flex-between;
+        gap: $spacing-md;
+        flex: 1;
+
+    @include tablet
+        // le footer flotte un peu plus haut, est comme détaché
+        // du bas
+        bottom: 10px;
+        height: 55px;
+        border-radius: 100vw; 
+        .footer-nav__list 
+            gap: $spacing-lg;
+        .menu-item
+            &__icon
+                width: 24px;
+                height: 24px;
