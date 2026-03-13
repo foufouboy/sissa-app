@@ -41,26 +41,3 @@
 // Transitions
 @mixin transition($property: all, $duration: $transition-base)
     transition: $property $duration
-
-// Button base
-@mixin button-base
-    padding: $spacing-md $spacing-lg
-    border-radius: $radius-md
-    font-family: $font-family
-    font-size: $text-base
-    cursor: pointer
-    @include transition(background-color)
-    
-    &:hover
-        opacity: 0.9
-    
-    &:disabled
-        opacity: 0.5
-        cursor: not-allowed
-
-// Card base
-@mixin card-base
-    background: $primary-bg
-    border-radius: $radius-lg
-    padding: $spacing-lg
-    box-shadow: $shadow-md

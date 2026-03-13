@@ -1,0 +1,11 @@
+.generic-button
+    background: $primary-cta;
+    color: $secondary-color;
+    padding: $spacing-sm $spacing-lg;
+    font-family: $font-family;
+    font-size: $text-sm;
+    cursor: pointer;
+    @include transition(background-color, .1s)
+    &:hover
+        background: $primary-cta-dark;
+    &:disabled
