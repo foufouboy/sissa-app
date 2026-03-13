@@ -1,4 +1,4 @@
-import CatLogo from "@/../public/assets/cat.png";
+import CatLogo from "@/assets/logo.png";
 import { BellDot, CircleUserRound } from "lucide-react";
 import "./index.sass";
 
@@ -6,14 +6,8 @@ function Header() {
   return (
     <header className="header">
       <div className="header-left">
+        <img src={CatLogo} alt="Cat Logo" className="cat-logo" width={45} />
         <div className="header-left-title">
-          <img
-            src={CatLogo}
-            alt="Cat Logo"
-            className="cat-logo"
-            width={45}
-            height={45}
-          />
           <h1 className="tablet">Sissa</h1>
           <h2 className="tablet subtitle">Gestion de clubs d'échecs</h2>
         </div>
