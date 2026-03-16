@@ -1,0 +1,73 @@
+// Styles spécifiques au MessagesWidget
+
+.dashboard
+    max-width: 1200px
+    margin: 0 auto
+
+.messages-list
+    display: flex
+    flex-direction: column
+    gap: $spacing-sm
+
+.message-item
+    cursor: pointer
+    display: flex
+    flex-direction: column
+    gap: $spacing-sm
+    padding: $spacing-md
+    transition: background-color $transition-fast
+    border-radius: $radius-sm
+
+    &:hover
+        background-color: rgba($primary-cta, 0.05)
+        cursor: default
+
+.message-item-header
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
+    gap: $spacing-sm
+
+.message-item-title
+    font-size: $text-base
+    font-family: $font-family
+    color: $secondary-title-color
+    font-weight: 600
+    margin: 0
+    line-height: 1.4
+
+.message-item-badges
+    display: flex
+    gap: $spacing-xs
+    flex-shrink: 0
+
+.message-item-status
+    font-size: $text-xs
+    font-family: $font-family
+    color: $primary-color
+    background: $notification-bg
+    padding: 2px $spacing-sm
+    border-radius: $radius-sm
+    white-space: nowrap
+
+.message-item-badge
+    font-size: $text-xs
+    font-family: $font-family
+    color: $primary-cta
+    background: rgba($primary-cta, 0.1)
+    padding: 2px $spacing-sm
+    border-radius: $radius-sm
+    white-space: nowrap
+
+.message-item-body
+    font-size: $text-sm
+    font-family: $font-family
+    color: $primary-color
+    line-height: 1.5
+    margin: 0
+
+.message-item-separator
+    width: 90%; 
+    margin: 0 auto;
+    min-height: 1px
+    background-color: $primary-border

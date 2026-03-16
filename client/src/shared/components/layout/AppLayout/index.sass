@@ -2,10 +2,17 @@
     h2
         font-size: $text-4xl;
         font-weight: 600;
-        padding: $spacing-lg $spacing-md;
+        padding: $spacing-lg 0;
         color: $secondary-title-color;
         background: $primary-bg;
-        border-top: 1px solid $primary-color;
     
 main 
     padding: $spacing-md;
+    margin-bottom: calc($spacing-xl + 65px); // hauteur du footer
+
+    @include tablet-lg
+        margin-bottom: calc($spacing-xl + 75px); // hauteur du footer
+
+.app-layout
+    main 
+        padding: 0 $spacing-lg;

@@ -31,18 +31,18 @@
             background: $primary-color;
         .header-right-account
             display: flex;
-            gap: $spacing-xs;
+            gap: $spacing-sm;
             align-items: center;
             
     .lucide
-        width: 20px;
+        width: 25px;
 
     .lucide-circle-user-round
         color: rgb(238, 236, 195);
-        width: 21px;
+        width: 26px;
+        height: 26px;
 
     @include tablet
-        height: 55px;
         .lucide.lucide-chess-queen
             width: 32px;
             height: 32px;
@@ -53,16 +53,17 @@
         .header-left
             gap: $spacing-sm;
 
-        .name-and-role
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            .name
-                font-size: $text-xs;
-                color: $primary-title-color;
-                font-weight: 500;
-            .role
-                margin-top: -3px;
-                font-size: .7rem;
-                color: $primary-color;
-                font-weight: 400;
+        .header-right-account
+            .name-and-role
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                .name
+                    font-size: $text-sm;
+                    color: $primary-title-color;
+                    font-weight: 500;
+                .role
+                    margin-top: -3px;
+                    font-size: $text-xs;
+                    color: $primary-color;
+                    font-weight: 400;

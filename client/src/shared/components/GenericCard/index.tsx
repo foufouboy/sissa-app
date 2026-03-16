@@ -1,18 +1,20 @@
 import "./index.sass";
 
 function GenericCard({
-  title,
-  children,
+	title,
+	className,
+	children,
 }: {
-  title: string;
-  children: React.ReactNode;
+	title: string;
+	className?: string;
+	children: React.ReactNode;
 }) {
-  return (
-    <div className="generic-card">
-      <h3 className="generic-card-title">{title}</h3>
-      {children}
-    </div>
-  );
+	return (
+		<div className={`generic-card ${className}`}>
+			<h3 className="generic-card-title">{title}</h3>
+			{children}
+		</div>
+	);
 }
 
 export default GenericCard;

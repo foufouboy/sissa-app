@@ -1,0 +1,54 @@
+// à mettre dans le GenericCard
+.generic-card-content
+    display: flex;
+    flex-direction: column;
+
+.dashboard
+    margin: $spacing-sm auto;
+    max-width: 1200px
+
+.generic-button-primary
+    margin-top: $spacing-sm;
+    align-self: flex-end;
+
+.widgets-container
+    display: grid;
+    grid-template-column: 1fr;
+    grid-template-areas: "inbox" "events" "games" "blog";
+
+    .games-widget
+        grid-area: games;
+        height: fit-content;
+
+    .events-widget
+        grid-area: events;
+
+    .inbox-widget
+        grid-area: inbox;
+        height: fit-content;
+
+        .messages-list
+            height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+
+    .blog-widget
+        grid-area: blog;
+
+    @include tablet
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(4, 300px);
+        grid-template-areas: "events inbox" "games inbox" "games blog" "problems blog"
+
+        .inbox-widget
+            .messages-list
+                height: unset;
+
+    @include desktop
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto; 
+
+        grid-template-areas: "games events inbox" "blog blog blog" 
+
+
+    gap: $spacing-2xl;
