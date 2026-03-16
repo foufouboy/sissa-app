@@ -12,36 +12,31 @@ function MessagesWidget() {
 		<GenericCard title="Boîte de réception" className="inbox-widget">
 			<div className="generic-card-content">
 				<div className="messages-list">
-					{recentMessages.map((message, index) => (
-						<>
-							<div className="message-item" key={message.id}>
-								<div className="message-item-header">
-									<h4 className="message-item-title">
-										{message.subject}
-									</h4>
-									<div className="message-item-badges">
-										{message.status !== "read" && (
-											<span className="message-item-status">
-												Non lu
-											</span>
-										)}
-										<span className="message-item-badge">
-											{message.infoType === "info"
-												? "Info"
-												: message.infoType === "event"
-												? "Événement"
-												: message.infoType}
+					{recentMessages.map((message) => (
+						<div className="message-item" key={message.id}>
+							<div className="message-item-header">
+								<h4 className="message-item-title">
+									{message.subject}
+								</h4>
+								<div className="message-item-badges">
+									{message.status !== "read" && (
+										<span className="message-item-status">
+											Non lu
 										</span>
-									</div>
+									)}
+									<span className="message-item-badge">
+										{message.infoType === "info"
+											? "Info"
+											: message.infoType === "event"
+											? "Événement"
+											: message.infoType}
+									</span>
 								</div>
-								<p className="message-item-body">
-									{truncateString(message.body, 80)}
-								</p>
 							</div>
-							{index !== recentMessages.length - 1 && (
-								<span className="message-item-separator"></span>
-							)}
-						</>
+							<p className="message-item-body">
+								{truncateString(message.body, 80)}
+							</p>
+						</div>
 					))}
 				</div>
 				<GenericButton className="generic-button-primary">
