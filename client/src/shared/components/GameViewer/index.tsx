@@ -3,21 +3,24 @@ import { useEffect, useRef } from "react";
 import "./index.sass";
 
 function GameViewer({ pgn }: { pgn: string }) {
-	const viewerRef = useRef<HTMLDivElement>(null);
-	console.log(pgn);
+	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (viewerRef.current) {
-			LichessPgnViewer(viewerRef.current, {
-				pgn,
-				showControls: true,
-				showMoves: false,
-				showPlayers: true,
-			});
-		}
+		if (!wrapperRef.current) return;
+
+		wrapperRef.current.innerHTML = "";
+		const container = document.createElement("div");
+		wrapperRef.current.appendChild(container);
+
+		LichessPgnViewer(container, {
+			pgn,
+			showControls: true,
+			showMoves: false,
+			showPlayers: true,
+		});
 	}, [pgn]);
 
-	return <div className="game-viewer" ref={viewerRef}></div>;
+	return <div className="game-viewer" ref={wrapperRef}></div>;
 }
 
 export default GameViewer;

@@ -1,22 +1,53 @@
 .generic-card
-    border: 1px solid $primary-border;
-    background: $primary-bg;
-    position: relative;
-    padding: $spacing-md;
+    border: 1px solid $primary-border
+    background: $primary-bg
+    position: relative
+    padding: $spacing-md
 
     &::before
-        content: "";
-        position: absolute;
-        top: -6px;
-        left: -6px;
-        width: 100%;
-        height: 100%;
-        background: $primary-bg;
-        border: 1px solid $primary-border;
-        z-index: -15;
+        content: ""
+        position: absolute
+        top: -6px
+        left: -6px
+        width: 100%
+        height: 100%
+        background: $primary-bg
+        border: 1px solid $primary-border
+        z-index: -15
 
     h3
-        font-size: $text-md;
-        font-family: $font-family;
-        color: $primary-cta;
-        margin-bottom: $spacing-sm;
+        font-size: $text-md
+        font-family: $font-family
+        color: $primary-cta
+        margin-bottom: $spacing-sm
+
+    &.collapsible
+        .generic-card-header
+            display: flex
+            justify-content: space-between
+            align-items: center
+            cursor: pointer
+            user-select: none
+            margin-bottom: 0
+
+            &:hover
+                .generic-card-title
+                    color: $primary-cta-dark
+
+            .generic-card-title
+                margin-bottom: 0
+
+        .dropdown-toggle
+            background: none
+            border: none
+            color: $primary-cta
+            font-size: $text-md
+            cursor: pointer
+            transition: transform $transition-fast
+            padding: $spacing-xs
+
+            &.open
+                transform: rotate(180deg)
+
+        .generic-card-content-collapsible
+            margin-top: $spacing-sm

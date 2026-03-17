@@ -15,7 +15,6 @@
 	flex-direction: column
 	gap: $spacing-sm
 	transition: background-color $transition-fast
-	border-radius: $radius-sm
 
 	&:hover
 		background-color: rgba($primary-cta, 0.05)
@@ -88,11 +87,11 @@
 		flex-direction: row
 
 	.blog-post-item
-		&:not(:last-child)::after
-			width: 1px
-			height: 100%
-			margin-top: 0
-			margin-left: $spacing-md
+		&:not(:last-child)
+			border-right: 1px solid $primary-border
+
+			&::after
+				content: none
 
 	.blog-post-header
 		flex-direction: column
