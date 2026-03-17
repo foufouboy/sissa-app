@@ -1,1 +1,51 @@
 // Styles spécifiques au GamesWidget
+.games-content
+    background-color: $primary-cta;
+
+.games-list
+    font-size: $text-sm;
+    margin-top: $spacing-sm;
+
+.game-item
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-md;
+    background-color: rgb(35, 40, 45);
+    color: rgb(170, 170, 170);
+    padding: 5px $spacing-sm 
+    transition: background-color $transition-fast;
+    border-top: 1px solid rgb(170, 170, 170, .3);
+    cursor: pointer;
+
+    &.selected-game
+        background-color: $primary-cta-dark;
+
+    .game-index
+        font-size: $text-xs;
+        color: $primary-color;
+        font-weight: 600;
+
+    .game-player-results
+        display: flex;
+        flex-flow: column;
+        flex: 1;
+        justify-content: space-between;
+
+        .game-player-result
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .game-player-result-score
+                font-size: $text-xs;
+                font-weight: 600;
+                text-align: center;
+                width: 10px;
+
+
+.win-color
+    color: rgb(103, 214, 82);
+
+.loss-color
+    color: rgb(214, 82, 82);
