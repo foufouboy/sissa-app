@@ -1,44 +1,63 @@
-// à mettre dans le GenericCard
 .generic-card-content
-    display: flex;
-    flex-direction: column;
+    display: flex
+    flex-direction: column
 
 .generic-button-primary
-    margin-top: $spacing-sm;
-    align-self: flex-end;
+    margin-top: $spacing-sm
+    align-self: flex-end
+
+.dashboard-header
+    margin-bottom: $spacing-xl
+
+    .title
+        font-size: $text-4xl
+        font-weight: 600
+        padding-top: $spacing-lg
+        color: $secondary-title-color
+
+    .subtitle
+        font-size: $text-sm
+        font-family: $font-family
+        color: $primary-color
+        opacity: 0.8
+        margin: 0
 
 .widgets-container
-    display: grid;
-    grid-template-column: 1fr;
-    grid-template-areas: "inbox" "events" "games" "puzzle" "blog";
+    display: grid
+    grid-template-columns: 1fr
+    gap: $spacing-2xl
+    grid-template-areas: "inbox" "events" "games" "puzzle" "blog"
 
     .games-widget
-        grid-area: games;
-        height: fit-content;
+        grid-area: games
 
     .events-widget
-        grid-area: events;
+        grid-area: events
 
     .inbox-widget
-        grid-area: inbox;
+        grid-area: inbox
 
     .blog-widget
-        grid-area: blog;
+        grid-area: blog
 
     .puzzle-widget
-        grid-area: puzzle;
-        height: fit-content;
+        grid-area: puzzle
 
     @include tablet
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 300px 300px 300px auto;
-        grid-template-areas: "events inbox" "games inbox" "games blog" "puzzle blog"
+        grid-template-columns: repeat(2, 1fr)
+        grid-template-areas: "events inbox" "games inbox" "puzzle blog" "puzzle blog"
+        grid-template-rows: 1fr
 
     @include desktop
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: auto auto; 
+        grid-template-columns: repeat(3, 1fr)
+        grid-template-areas: "games inbox events" "games inbox puzzle" "blog blog puzzle"
 
-        grid-template-areas: "games events inbox" "blog blog blog" 
+@include tablet
+    .page-title
+        font-size: $text-5xl
+        padding: $spacing-xl 0 $spacing-sm 0
 
-
-    gap: $spacing-2xl;
+@include desktop
+    .page-title
+        font-size: $text-6xl
+        padding: $spacing-2xl 0 $spacing-sm 0

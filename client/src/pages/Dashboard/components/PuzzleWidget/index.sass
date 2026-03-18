@@ -9,12 +9,17 @@
 
         iframe
             width: 100%;
-            height: fit-content;
+            max-width: 400px;
+            height: 444px;
             aspect-ratio: 10/11;
-            body.simple-board
-                display: flex;
-                justify-content: center;
-                align-items: center;
 
-                #daily-puzzle
-                    max-width: unset;
+
+@include tablet
+    .puzzle-widget
+        .puzzle-content
+            iframe
+                height: 350px;
+
+@include desktop
+    .puzzle-widget
+        height: fit-content;

@@ -4,6 +4,7 @@ import GenericButton from "@/shared/components/GenericButton";
 import GenericCard from "@/shared/components/GenericCard";
 import { games } from "@/shared/utils/mockData";
 import { useState } from "react";
+import { Link } from "react-router";
 import "./index.sass";
 
 function GamesWidget() {
@@ -32,7 +33,7 @@ function GamesWidget() {
 					</div>
 				</div>
 				<GenericButton className="generic-button-primary">
-					Voir plus
+					<Link to="/games">Voir plus</Link>
 				</GenericButton>
 			</div>
 		</GenericCard>

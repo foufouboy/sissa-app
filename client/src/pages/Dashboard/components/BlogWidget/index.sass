@@ -82,9 +82,23 @@
 .blog-post-read-time
 	font-family: $font-family
 
+@include tablet
+	.blog-posts-list
+		height: 370px;
+		overflow-y: auto;
+		scrollbar-width: thin;
+
+	.blog-widget
+		height: fit-content;
+
 @include desktop
+
+	.blog-widget
+		height: fit-content;
+
 	.blog-posts-list
 		flex-direction: row
+		height: 300px;
 
 	.blog-post-item
 		&:not(:last-child)

@@ -4,7 +4,7 @@
     height: fit-content;
 
     .messages-list
-        height: 400px;
+        height: 300px;
         overflow-y: auto;
         scrollbar-width: thin;
 
@@ -57,7 +57,6 @@
     color: $primary-color
     background: $notification-bg
     padding: 2px $spacing-sm
-    border-radius: $radius-sm
     white-space: nowrap
 
 .message-item-badge
@@ -66,7 +65,6 @@
     color: $primary-cta
     background: rgba($primary-cta, 0.1)
     padding: 2px $spacing-sm
-    border-radius: $radius-sm
     white-space: nowrap
 
 .message-item-body
@@ -77,13 +75,14 @@
     margin: 0
 
 @include tablet
-    .inbox-widget
-        .messages-list
-            height: 550px
-    
     .message-item-header
         flex-flow: column
 
 @include tablet-lg
     .message-item-header
         flex-flow: row
+
+@include desktop
+    .inbox-widget
+        .messages-list
+            height: 300px;
