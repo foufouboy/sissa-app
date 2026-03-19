@@ -1,0 +1,68 @@
+@use "@/shared/styles/abstracts/variables" as *
+
+.event-item
+    cursor: pointer
+    display: flex
+    gap: $spacing-md
+    padding: $spacing-md
+    transition: background-color $transition-fast
+
+    &:hover
+        background-color: rgba($primary-cta, 0.05)
+
+.event-date-badge
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    min-width: 50px
+    padding: $spacing-xs
+    background-color: $secondary-bg
+    border-radius: 3px
+
+    .event-day
+        font-size: $text-lg
+        font-weight: 700
+        color: $primary-bg
+
+    .event-month
+        font-size: $text-xs
+        text-transform: uppercase
+        color: $primary-bg
+
+.event-details
+    flex: 1
+    display: flex
+    flex-direction: column
+    gap: $spacing-xs
+
+.event-title
+    font-size: $text-base
+    font-family: $font-family
+    color: $secondary-title-color
+    font-weight: 600
+    margin: 0
+    line-height: 1.4
+
+.event-description
+    font-size: $text-sm
+    font-family: $font-family
+    color: $primary-color
+    line-height: 1.5
+    margin: 0
+
+.event-meta
+    display: flex
+    align-items: center
+    gap: $spacing-sm
+    font-size: $text-xs
+    font-family: $font-family
+
+    .event-time-badge
+        color: $primary-cta
+        background: rgba($primary-cta, 0.1)
+        padding: 2px $spacing-sm
+        white-space: nowrap
+
+    .event-location
+        font-weight: 600
