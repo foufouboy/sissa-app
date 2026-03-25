@@ -1,42 +1,34 @@
-.footer 
-    background: $secondary-bg
-    position: fixed
-    bottom: 0
-    left: 0
-    right: 0
-    height: 65px
-    display: flex
-    justify-content: center;
-    color: rgb(152, 155, 160);
-    max-width: $breakpoint-md;
-    z-index: 5;
-    border: 1px solid $primary-cta;
-    
-    &-nav
-        width: 100%;
-        height: 100%;
-        display: flex;
-        z-index: 100; // utile plus tard
+@use '@/shared/styles/abstracts/variables' as *
 
-    &-nav__list
-        @include flex-between;
+.footer
+    background: $secondary-bg
+    padding: $spacing-lg
+    text-align: center
+    padding-bottom: calc($spacing-md + 65px)
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    justify-content: center;
+
+    &__text
+        font-size: $text-xs
+        color: $primary-title-color
+        margin: 0
+        opacity: 0.7
+
+    &__logo
+        width: 35px;
+        opacity: 0.7
+        position: relative;
+        bottom: 3px;
+
+
+    @include tablet
         gap: $spacing-md;
-        flex: 1;
+        &__text
+            font-size: $text-sm
+        &__logo
+            width: 45px;
 
     @include tablet-lg
-        // le footer flotte un peu plus haut, est comme détaché
-        // du bas
-        @include transition(bottom);
-
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 15px;
-        height: 65px;
-        width: 500px;
-        border-radius: 5px; 
-        .footer-nav__list 
-            gap: $spacing-lg;
-        .menu-item
-            &__icon
-                width: 24px;
-                height: 24px;
+        padding-bottom: calc($spacing-lg + 75px)

@@ -1,19 +1,19 @@
 .generic-card
     border: 1px solid $primary-border
     background: $primary-bg
-    position: relative
     padding: $spacing-md
+    position: relative;
 
     &::before
-        content: ""
-        position: absolute
-        top: -6px
-        left: -6px
-        width: 100%
-        height: 100%
-        background: $primary-bg
-        border: 1px solid $primary-border
-        z-index: -15
+        content: "";
+        position: absolute;
+        top: -6px;
+        left: -6px;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: 1px solid $primary-border;
+        z-index: -1;
 
     h3
         font-size: $text-md

@@ -1,35 +1,24 @@
-import { Calendar, ChessQueen, Home, Mail, User } from "lucide-react";
-import { useLocation } from "react-router";
-import MenuItem from "./MenuItem";
 import "./index.sass";
+import transparentLogo from "@/assets/logo_transparent.png";
 
 function Footer() {
-  const location = useLocation();
-  const menuItems = [
-    { icon: Home, label: "Home", to: "/" },
-    { icon: Calendar, label: "Agenda", to: "/events" },
-    { icon: ChessQueen, label: "Parties", to: "/games" },
-    { icon: Mail, label: "Messages", to: "/notifications" },
-    { icon: User, label: "Profil", to: "/profile" },
-  ];
-
-  return (
-    <footer className="footer">
-      <nav className="footer-nav">
-        <ul className="footer-nav__list">
-          {menuItems.map((item) => (
-            <MenuItem
-              key={item.to}
-              icon={item.icon}
-              label={item.label}
-              to={item.to}
-              isActive={location.pathname === item.to}
-            />
-          ))}
-        </ul>
-      </nav>
-    </footer>
-  );
+	return (
+		<footer className="footer">
+			<img
+				src={transparentLogo}
+				alt="Sissa Logo"
+				className="footer__logo"
+			/>
+			<p className="footer__text">
+				© {new Date().getFullYear()} Sissa App. Tous droits réservés.
+			</p>
+			<img
+				src={transparentLogo}
+				alt="Sissa Logo"
+				className="footer__logo"
+			/>
+		</footer>
+	);
 }
 
 export default Footer;
