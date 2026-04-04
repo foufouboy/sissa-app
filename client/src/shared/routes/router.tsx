@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
 import {
 	AdminMembers,
 	AdminMessages,
@@ -14,16 +14,37 @@ import {
 import ErrorBoundary from "../components/ErrorBoundary";
 import AppLayout from "../components/layout/AppLayout";
 import AuthLayout from "../components/layout/AuthLayout/";
+import { isAuthenticated } from "../utils/auth";
+import loaders from "../services/loaders";
+import actions from "../services/actions";
+
+const authLoader = () => {
+	if (isAuthenticated()) {
+		return redirect("/");
+	}
+	return null;
+};
+
+const rootLoader = async () => {
+	if (!isAuthenticated()) {
+		return redirect("/auth/login");
+	}
+	const settings = await loaders.getSettings();
+	return settings;
+};
 
 export const router = createBrowserRouter([
 	{
-		// Seuls les utilisateurs connectés peuvent accéder à ce layout
 		path: "/",
 		Component: AppLayout,
+		id: "root",
+		loader: rootLoader,
+		errorElement: <ErrorBoundary />,
 		children: [
 			{
 				index: true,
 				Component: Dashboard,
+				loader: loaders.getDashboardData,
 			},
 			{
 				path: "games",
@@ -59,10 +80,11 @@ export const router = createBrowserRouter([
 				path: "profile",
 				Component: Profile,
 			},
-			{
-				path: "settings",
-				Component: Settings,
-			},
+		{
+			path: "settings",
+			Component: Settings,
+			action: actions.updateSettings,
+		},
 			// Seulement accessible par l'administrateur
 			{
 				path: "admin",
@@ -82,6 +104,7 @@ export const router = createBrowserRouter([
 	{
 		path: "/auth",
 		Component: AuthLayout,
+		loader: authLoader,
 		children: [
 			{
 				path: "login",

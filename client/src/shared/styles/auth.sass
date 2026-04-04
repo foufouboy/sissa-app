@@ -1,0 +1,142 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.auth
+    display: flex
+    align-items: center
+    justify-content: center
+    min-height: 100vh
+    background: $secondary-bg
+
+.auth-card
+    background: $secondary-bg
+    padding: $spacing-xl
+    width: 100vw
+
+.auth-header
+    text-align: center
+    margin-bottom: $spacing-xl
+
+.auth-icon
+    height: 70px
+    opacity: 0.5
+    margin: 0 auto $spacing-xs
+
+.auth-title
+    font-family: $font-title
+    font-size: $text-4xl
+    color: $primary-title-color
+    margin: 0 0 $spacing-xs 0
+
+.auth-subtitle
+    font-size: $text-sm
+    color: $primary-color
+    margin: 0
+
+.auth-error
+    background: rgba(220, 38, 38, 0.1)
+    border: 1px solid rgba(220, 38, 38, 0.3)
+    padding: $spacing-md
+    margin-bottom: $spacing-lg
+    display: flex
+    align-items: center
+    gap: $spacing-sm
+
+.auth-error-icon
+    width: 20px
+    height: 20px
+    color: rgb(248, 113, 113)
+    flex-shrink: 0
+
+.auth-error-text
+    font-size: $text-sm
+    color: rgb(248, 113, 113)
+    margin: 0
+
+.auth-form
+    display: flex
+    flex-direction: column
+    gap: $spacing-lg
+
+.form-group
+    display: flex
+    flex-direction: column
+    gap: $spacing-sm
+
+.form-label
+    font-size: $text-sm
+    font-weight: 500
+    color: $primary-title-color
+    font-family: $font-family
+
+.form-input
+    border: 1px solid rgba($primary-cta, 0.3)
+    border-radius: $radius-sm
+    padding: $spacing-md
+    font-size: $text-base
+    color: $primary-title-color
+    background: $secondary-bg
+    font-family: $font-family
+
+    &::placeholder
+        color: $primary-color
+        opacity: 0.5
+
+    &:focus
+        outline: none
+        border-color: $primary-cta-light
+
+.auth-button
+    width: 100%
+    padding: $spacing-md $spacing-lg
+    font-size: $text-base
+    font-weight: 600
+    margin-top: $spacing-sm
+
+.auth-footer
+    text-align: center
+    margin-top: $spacing-lg
+    padding-top: $spacing-lg
+    border-top: 1px solid rgba($primary-color, 0.1)
+
+.auth-link
+    font-size: $text-sm
+    color: $primary-cta-light
+    text-decoration: none
+    @include transition(color)
+
+    &:hover
+        color: $primary-cta
+        text-decoration: underline
+
+@include tablet
+    .auth
+        height: auto
+        background: transparent;
+
+    .auth-card
+        padding: $spacing-2xl
+        box-shadow: $shadow-xl, -10px -5px 0 0 $primary-cta, 10px 5px 0 0 $primary-cta
+        border: 1px solid rgba($primary-cta, 0.4)
+        max-width: 500px
+        height: auto
+        margin: $spacing-2xl 0;
+
+    .auth-title
+        font-size: $text-4xl
+
+    .auth-subtitle
+        font-size: $text-base
+
+    .auth-icon
+        height: 80px
+
+@include desktop
+    .auth-card
+        max-width: 600px
+        border-radius: $radius-sm
+        border: 5px solid rgba($primary-cta-dark, .6)
+        box-shadow: $shadow-xl, -35px -15px 0 0 $primary-cta, 35px 15px 0 0 $primary-cta
+
+    .auth-title
+        font-size: $text-5xl

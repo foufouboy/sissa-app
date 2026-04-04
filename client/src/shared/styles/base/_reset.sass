@@ -1,3 +1,5 @@
+@use '../abstracts/variables' as *
+    
 * 
     margin: 0
     padding: 0
@@ -5,7 +7,10 @@
     text-decoration: none
     list-style: none 
     border: none 
-    outline: none 
+    outline: none;
+
+    &:focus-visible
+        outline: 2px solid $primary-cta-light;
 
 * 
     scrollbar-width: thin;

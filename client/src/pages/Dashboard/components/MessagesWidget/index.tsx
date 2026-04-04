@@ -1,18 +1,20 @@
 import GenericButton from "@/shared/components/GenericButton";
 import GenericCard from "@/shared/components/GenericCard";
 import "./index.sass";
-import { messages } from "@/shared/utils/mockData";
 import { truncateString } from "@/shared/utils/utils";
 import { Link } from "react-router";
 
-function MessagesWidget() {
-	// Ici, les derniers messages reçus
+function MessagesWidget({ messages }) {
 	const { unreadCount, recentMessages } = messages;
+
 	return (
-		<GenericCard title="Boîte de réception" className="inbox-widget">
+		<GenericCard
+			title={`Boîte de réception${unreadCount ? ` (${unreadCount})` : ""}`}
+			className="inbox-widget"
+		>
 			<div className="generic-card-content">
 				<div className="messages-list">
-					{recentMessages.map((message) => (
+					{recentMessages.map((message: any) => (
 						<div className="message-item" key={message.id}>
 							<div className="message-item-header">
 								<h4 className="message-item-title">
@@ -28,8 +30,8 @@ function MessagesWidget() {
 										{message.infoType === "info"
 											? "Info"
 											: message.infoType === "event"
-											? "Événement"
-											: message.infoType}
+												? "Événement"
+												: message.infoType}
 									</span>
 								</div>
 							</div>

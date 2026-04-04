@@ -1,0 +1,145 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.settings
+    max-width: 800px
+    margin: 0 auto
+    margin-bottom: $spacing-lg;
+
+.settings-header
+    margin-bottom: $spacing-xl
+
+    .title
+        font-size: $text-4xl
+        font-weight: 600
+        padding-top: $spacing-lg
+        color: $secondary-title-color
+
+    .subtitle
+        font-size: $text-sm
+        font-family: $font-family
+        color: $primary-color
+        opacity: 0.8
+        margin: 0
+
+.settings-card
+    width: 100%
+
+.settings-error
+    background: rgba(220, 38, 38, 0.1)
+    border: 1px solid rgba(220, 38, 38, 0.3)
+    padding: $spacing-md
+    margin-bottom: $spacing-lg
+    display: flex
+    align-items: center
+    gap: $spacing-sm
+
+.settings-error-icon
+    width: 20px
+    height: 20px
+    color: rgb(248, 113, 113)
+    flex-shrink: 0
+
+.settings-error-text
+    font-size: $text-sm
+    color: rgb(248, 113, 113)
+    margin: 0
+
+.settings-success
+    background: rgba(34, 197, 94, 0.1)
+    border: 1px solid rgba(34, 197, 94, 0.3)
+    padding: $spacing-md
+    margin-bottom: $spacing-lg
+
+.settings-success-text
+    font-size: $text-sm
+    color: rgb(97, 177, 126)
+    margin: 0
+
+.settings-form
+    display: flex
+    flex-direction: column
+
+.form-field
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: $spacing-xl
+    padding: $spacing-lg 0
+    border-bottom: 1px solid $primary-border
+
+    &:last-of-type
+        border-bottom: none
+
+.form-field-header
+    flex: 1
+
+.form-field-label
+    font-size: $text-base
+    font-weight: 500
+    color: $secondary-title-color
+    font-family: $font-family
+    display: block
+    margin-bottom: $spacing-xs
+
+.form-field-description
+    font-size: $text-sm
+    color: $primary-color
+    font-family: $font-family
+    margin: 0
+
+.form-checkbox
+    width: 44px
+    height: 24px
+    cursor: pointer
+    appearance: none
+    background: rgba($primary-color, 0.2)
+    border: 1px solid $primary-border
+    position: relative
+    transition: background $transition-fast
+
+    &::before
+        content: ""
+        position: absolute
+        width: 18px
+        height: 18px
+        top: 2px
+        left: 2px
+        background: $primary-bg
+        transition: left $transition-fast
+
+    &:checked
+        background: $primary-cta
+
+        &::before
+            left: 22px
+
+.form-select
+    padding: $spacing-sm $spacing-md
+    font-size: $text-base
+    color: $secondary-title-color
+    background: $primary-bg
+    border: 1px solid $primary-border
+    font-family: $font-family
+    cursor: pointer
+    min-width: 150px
+    @include transition(border-color)
+
+    &:focus
+        outline: none
+        border-color: $primary-cta
+
+.settings-button
+    margin-top: $spacing-lg
+    padding: $spacing-md $spacing-lg
+    font-size: $text-base
+    font-weight: 600
+    align-self: flex-start
+
+@include tablet
+    .settings
+        margin-bottom: $spacing-xl;
+    .settings-header
+        .title
+            font-size: $text-5xl
+

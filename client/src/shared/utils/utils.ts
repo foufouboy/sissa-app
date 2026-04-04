@@ -4,3 +4,27 @@ export const truncateString = (str: string, maxLength: number) => {
 	}
 	return str;
 };
+
+export const getRegisterValidationErrorMessage = (validationErrors: any) => {
+	if (!Array.isArray(validationErrors) || validationErrors.length === 0) {
+		return "Vos champs sont incorrects.\n Vérifiez que vous avez rempli tous les champs correctement et que les mots de passe correspondent.";
+	}
+
+	if (
+		validationErrors.some((error: any) => error?.path?.includes("firstName"))
+	) {
+		return "Le prénom est requis, et doit être de plus de deux lettres !";
+	}
+
+	if (
+		validationErrors.some((error: any) => error?.path?.includes("lastName"))
+	) {
+		return "Le nom est requis, et doit être de plus de deux lettres !";
+	}
+
+	if (validationErrors.some((error: any) => error?.path?.includes("email"))) {
+		return "L'email existe déjà, ou n'est pas valide !";
+	}
+
+	return "Vos champs sont incorrects.\n Vérifiez que vous avez rempli tous les champs correctement et que les mots de passe correspondent.";
+};

@@ -1,0 +1,106 @@
+@use '../abstracts/variables' as *
+
+// Thème sombre : activé via document.documentElement.dataset.theme = "dark"
+// (voir AppLayout — préférence utilisateur darkMode)
+
+$dark-bg: rgb(22, 24, 28)
+$dark-surface: rgb(32, 36, 42)
+$dark-surface-elevated: rgb(38, 42, 50)
+$dark-text: rgb(210, 212, 220)
+$dark-text-muted: rgb(150, 155, 165)
+$dark-title: rgb(240, 242, 245)
+$dark-border: rgba(255, 255, 255, 0.1)
+
+html[data-theme="dark"]
+    color-scheme: dark
+
+    body
+        background: $dark-bg
+        color: $dark-text
+
+    .header
+        background: $dark-surface-elevated
+
+        .profile-dropdown
+            background: rgb(36, 40, 48)
+            border-color: rgba($primary-cta, 0.35)
+
+    .nav
+        box-shadow: $shadow-xl;
+
+    .footer
+        background: $dark-surface-elevated
+
+    .generic-card
+        background: $dark-surface
+        border-color: $dark-border
+
+        &::before
+            border-color: rgba(255, 255, 255, 0.06)
+
+    .dashboard-header
+        .title
+            color: $dark-title
+
+        .subtitle
+            color: $dark-text-muted
+
+    .settings-header
+        .title
+            color: $dark-title
+
+        .subtitle
+            color: $dark-text-muted
+
+    .form-field
+        border-bottom-color: $dark-border
+
+    .form-field-label
+        color: $dark-title
+
+    .form-field-description
+        color: $dark-text-muted
+
+    .form-checkbox
+        border-color: $dark-border
+
+        &::before
+            background: $dark-surface-elevated
+
+    .form-select
+        color: $dark-title
+        background: $dark-bg
+        border-color: $dark-border
+
+    .message-item-title
+        color: $dark-title
+
+    .message-item-body,
+    .message-item-status
+        color: $dark-text-muted
+
+    .message-item::after
+        background-color: $dark-border
+
+    .event-title
+        color: $dark-title
+
+    .event-description
+        color: $dark-text-muted
+
+    .event-date-badge
+        background-color: $dark-surface-elevated
+
+        .event-day,
+        .event-month
+            color: $dark-title
+
+    .blog-post-title
+        color: $dark-title
+
+    .blog-post-excerpt,
+    .blog-post-meta
+        color: $dark-text-muted
+
+    .blog-post-item:not(:last-child)::after
+        background-color: $dark-border

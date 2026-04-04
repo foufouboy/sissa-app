@@ -1,0 +1,13 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.auth-layout
+    min-height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
+    background: linear-gradient(135deg, $secondary-bg 0%, rgb(45, 50, 60) 100%)
+
+@include desktop
+    .auth-layout
+        background: linear-gradient(135deg, $secondary-bg 0%, rgb(56, 62, 75) 100%)
