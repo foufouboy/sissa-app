@@ -1,4 +1,6 @@
+import type { MouseEventHandler } from "react";
 import "./index.sass";
+
 function GenericButton({
 	onClick,
 	className,
@@ -6,7 +8,7 @@ function GenericButton({
 	type = "button",
 	disabled = false,
 }: {
-	onClick?: () => void;
+	onClick?: MouseEventHandler<HTMLButtonElement>;
 	className: string;
 	children: React.ReactNode;
 	type?: "button" | "submit" | "reset";

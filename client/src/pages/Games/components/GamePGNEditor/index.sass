@@ -1,0 +1,98 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.game-pgn-editor
+    min-height: 0
+    width: 100%
+    display: flex
+    flex-direction: column
+    gap: $spacing-sm
+
+    &__field
+        display: flex
+        flex-direction: column
+        gap: $spacing-sm
+        width: 100%
+
+        @include tablet
+            flex-direction: row
+            align-items: stretch
+            gap: $spacing-md
+
+    &__label
+        font-size: $text-base
+        font-weight: 700
+        color: rgb(240, 242, 245)
+        font-family: $font-family
+        flex-shrink: 0
+
+        @include tablet
+            align-self: center
+            min-width: 3rem
+
+    html[data-theme="light"] &
+        &__label
+            color: $secondary-title-color
+
+    &__textarea
+        flex: 1
+        min-height: 180px
+        width: 100%
+        resize: vertical
+        padding: $spacing-sm $spacing-md
+        font-family: ui-monospace, monospace
+        font-size: $text-sm
+        line-height: 1.45
+        color: rgb(240, 242, 245)
+        background: rgb(18, 20, 24)
+        border: 2px solid $primary-cta
+        border-radius: $radius-md
+        outline: none
+        box-sizing: border-box
+
+        &:focus
+            border-color: $primary-cta-light
+            box-shadow: 0 0 0 1px rgba($primary-cta, 0.35)
+
+        &::placeholder
+            color: rgba(240, 242, 245, 0.45)
+
+    html[data-theme="light"] &
+        &__textarea
+            color: $secondary-title-color
+            background: $primary-bg
+            border-color: $primary-cta
+
+    &__actions
+        display: flex
+        justify-content: flex-end
+        width: 100%
+
+    &__button
+        display: inline-flex
+        align-items: center
+        gap: $spacing-sm
+        padding: $spacing-sm $spacing-lg
+        font-family: $font-family
+        font-size: $text-sm
+        font-weight: 600
+        letter-spacing: 0.04em
+        text-transform: uppercase
+        color: $secondary-color
+        cursor: pointer
+        border: none
+        border-radius: $radius-md
+        background: linear-gradient(180deg, lighten($primary-cta, 6%) 0%, $primary-cta-dark 100%)
+        box-shadow: $shadow-sm
+        @include transition(background-color, 0.15s)
+
+        &:hover
+            background: linear-gradient(180deg, lighten($primary-cta, 10%) 0%, $primary-cta 100%)
+
+        &:active
+            transform: translateY(1px)
+
+    &__button-icon
+        width: 16px
+        height: 16px
+        flex-shrink: 0
