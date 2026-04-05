@@ -12,10 +12,11 @@ const authService = {
 				email,
 				password,
 			});
-			console.log(response.data);
+
 			return response.data;
 		} catch (error: any) {
-			console.log(error);
+			console.log(error.response);
+			console.log(error.response.data);
 			throw new Error(
 				error.response.data.message || "Erreur de connexion",
 			);
