@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
 import {
-  handleValidationErrors,
-  validationMiddleware as validation,
+	handleValidationErrors,
+	validationMiddleware as validation,
 } from "../middlewares/validation";
 
 const authRoutes = Router();
@@ -16,10 +16,14 @@ authRoutes.post("/login", authController.login);
 
 // enregistre un nouvel utilisateur
 authRoutes.post(
-  "/register",
-  validation.user,
-  handleValidationErrors,
-  authController.register,
+	"/register",
+	(req, res, next) => {
+		console.log("req.body", req.body);
+		next();
+	},
+	validation.user,
+	handleValidationErrors,
+	authController.register,
 );
 
 export default authRoutes;

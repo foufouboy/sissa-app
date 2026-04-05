@@ -16,3 +16,11 @@ export const isValidPgn = (pgn: string): boolean => {
 		return false;
 	}
 };
+
+export const getRoleName = (role: string): string => {
+	return role === "admin"
+		? "Administrateur"
+		: role === "teacher"
+			? "Professeur"
+			: "Membre";
+};
