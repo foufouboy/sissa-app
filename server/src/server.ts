@@ -23,5 +23,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(8000, () => {
+	console.log(process.env.CORS_ORIGIN);
 	console.log(`Sissa Server - Running at localhost:${8000}`);
 });
