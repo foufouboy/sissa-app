@@ -1,6 +1,5 @@
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 import api from "./api.service";
-import type { AxiosResponse } from "axios";
 
 if (!API_ENDPOINT) {
 	console.log("API_ENDPOINT is not set");
