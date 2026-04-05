@@ -14,7 +14,7 @@ const authService = {
 			});
 			return response.data;
 		} catch (error: any) {
-			console.log("here catch");
+			console.log(error);
 			throw new Error(
 				error.response.data.message || "Erreur de connexion",
 			);
