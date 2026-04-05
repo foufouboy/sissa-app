@@ -18,9 +18,9 @@ export type PublicSetting = Omit<
   createdAt: Date;
   updatedAt: Date;
   preferences: {
-    darkMode: boolean;
-    language: "en" | "fr";
-    notifications: boolean;
+    darkMode?: boolean;
+    language?: "en" | "fr";
+    notifications?: boolean;
   };
 };
 

@@ -49,6 +49,7 @@ export const router = createBrowserRouter([
 			{
 				path: "games",
 				Component: Games,
+				loader: loaders.getOwnGames,
 				children: [
 					{
 						path: ":gameId",
@@ -80,11 +81,11 @@ export const router = createBrowserRouter([
 				path: "profile",
 				Component: Profile,
 			},
-		{
-			path: "settings",
-			Component: Settings,
-			action: actions.updateSettings,
-		},
+			{
+				path: "settings",
+				Component: Settings,
+				action: actions.updateSettings,
+			},
 			// Seulement accessible par l'administrateur
 			{
 				path: "admin",

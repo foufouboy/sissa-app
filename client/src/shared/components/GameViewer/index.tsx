@@ -2,7 +2,13 @@ import LichessPgnViewer from "@lichess-org/pgn-viewer";
 import { useEffect, useRef } from "react";
 import "./index.sass";
 
-function GameViewer({ pgn }: { pgn: string }) {
+function GameViewer({
+	pgn,
+	showMoves = false,
+}: {
+	pgn: string;
+	showMoves?: "right" | "bottom" | "auto" | false;
+}) {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -15,7 +21,7 @@ function GameViewer({ pgn }: { pgn: string }) {
 		LichessPgnViewer(container, {
 			pgn,
 			showControls: true,
-			showMoves: false,
+			showMoves: showMoves ? showMoves : false,
 			showPlayers: true,
 		});
 	}, [pgn]);

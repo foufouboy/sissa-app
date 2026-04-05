@@ -8,10 +8,6 @@ function ErrorBoundary() {
 	const navigate = useNavigate();
 
 	const errorStatus = error?.status || 500;
-	const errorMessage =
-		error?.statusText ||
-		error?.message ||
-		"Une erreur inattendue s'est produite";
 
 	return (
 		<div className="error-boundary">

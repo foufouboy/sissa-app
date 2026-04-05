@@ -3,6 +3,7 @@ import { PrivateGame, PublicGame } from "../../types/games";
 export const toPublicGame = (g: PrivateGame): PublicGame => {
     return {
         id: g.id,
+        userId: g.user_id,
         pgn: g.pgn,
         whitePlayer: g.white_player,
         blackPlayer: g.black_player,

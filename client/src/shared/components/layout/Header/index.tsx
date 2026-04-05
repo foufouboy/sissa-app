@@ -1,7 +1,7 @@
 import CatLogo from "@/assets/logo.png";
 import { BellDot, CircleUserRound, User, Settings, LogOut } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, Link, useRouteLoaderData } from "react-router";
+import { useNavigate, Link } from "react-router";
 import "./index.sass";
 import { useAuth } from "@/shared/contexts/AuthContext";
 

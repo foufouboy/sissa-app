@@ -22,7 +22,7 @@ function AppLayout() {
 	return (
 		<div className="app-layout">
 			<Header />
-			<main>
+			<main className="app-layout__main">
 				<Outlet />
 			</main>
 			<Nav />
