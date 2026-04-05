@@ -12,7 +12,7 @@ const authService = {
 				email,
 				password,
 			});
-			console.log(response.data);
+			console.log(response);
 			return response.data;
 		} catch (error: any) {
 			console.log(error);
