@@ -9,9 +9,24 @@ const loaders = {
 	},
 
 	getSettings: async () => {
-		const data = await settings.getSettings();
-
-		return { settings: data.preferences };
+		try {
+			const data = await settings.getSettings();
+			return {
+				settings: data?.preferences ?? {
+					darkMode: false,
+					notifications: true,
+					language: "fr",
+				},
+			};
+		} catch {
+			return {
+				settings: {
+					darkMode: false,
+					notifications: true,
+					language: "fr",
+				},
+			};
+		}
 	},
 
 	getOwnGames: async () => {

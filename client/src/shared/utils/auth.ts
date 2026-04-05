@@ -2,6 +2,7 @@ const TOKEN_KEY = "sissa_token";
 const USER_KEY = "sissa_user";
 
 export const setToken = (token: string) => {
+	if (!token || token === "undefined") return;
 	localStorage.setItem(TOKEN_KEY, token);
 };
 
@@ -26,5 +27,6 @@ export const clearAuth = () => {
 };
 
 export const isAuthenticated = (): boolean => {
-	return !!getToken();
+	const token = getToken();
+	return !!token && token !== "undefined";
 };

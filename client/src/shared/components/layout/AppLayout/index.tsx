@@ -6,18 +6,17 @@ import Footer from "../Footer";
 import "./index.sass";
 
 function AppLayout() {
-	const { settings } = useRouteLoaderData("root") as {
-		settings: { darkMode: boolean };
+	const data = useRouteLoaderData("root") as {
+		settings?: { darkMode: boolean };
 	};
+	const darkMode = data?.settings?.darkMode ?? false;
 
 	useEffect(() => {
-		document.documentElement.dataset.theme = settings.darkMode
-			? "dark"
-			: "light";
+		document.documentElement.dataset.theme = darkMode ? "dark" : "light";
 		return () => {
 			document.documentElement.removeAttribute("data-theme");
 		};
-	}, [settings.darkMode]);
+	}, [darkMode]);
 
 	return (
 		<div className="app-layout">

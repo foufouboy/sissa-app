@@ -5,8 +5,17 @@ import GenericCard from "@/shared/components/GenericCard";
 import { useFetcher, useRouteLoaderData, useRevalidator } from "react-router";
 import "./style.sass";
 
+const DEFAULT_SETTINGS = {
+	notifications: true,
+	darkMode: false,
+	language: "fr",
+};
+
 function Settings() {
-	const { settings } = useRouteLoaderData("root");
+	const data = useRouteLoaderData("root") as {
+		settings?: { notifications: boolean; darkMode: boolean; language: string };
+	};
+	const settings = data?.settings ?? DEFAULT_SETTINGS;
 	const revalidator = useRevalidator();
 	const fetcher = useFetcher();
 

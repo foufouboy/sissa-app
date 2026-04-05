@@ -44,7 +44,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 	const login = async (email: string, password: string) => {
 		const result = await authService.login(email, password);
-		console.log(result);
+
+		if (!result?.token || !result?.user) {
+			throw new Error("Réponse invalide du serveur");
+		}
 
 		setToken(result.token);
 		setUser(result.user);
