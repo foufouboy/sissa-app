@@ -148,7 +148,7 @@ function Register() {
 						/>
 					</div>
 
-					<GenericButton className="auth-button">
+					<GenericButton className="auth-button" type="submit">
 						{isLoading ? "Inscription..." : "S'inscrire"}
 					</GenericButton>
 				</form>

@@ -13,6 +13,7 @@ const authService = {
 				password,
 			})
 			.catch((error) => {
+				console.log("here catch");
 				throw new Error(
 					error.response.data.message || "Erreur de connexion",
 				);
