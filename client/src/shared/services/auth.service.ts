@@ -7,19 +7,18 @@ if (!API_ENDPOINT) {
 
 const authService = {
 	login: async (email: string, password: string) => {
-		const response = await api
-			.post(`/auth/login`, {
+		try {
+			const response = await api.post(`/auth/login`, {
 				email,
 				password,
-			})
-			.catch((error) => {
-				console.log("here catch");
-				throw new Error(
-					error.response.data.message || "Erreur de connexion",
-				);
 			});
-
-		return response.data;
+			return response.data;
+		} catch (error: any) {
+			console.log("here catch");
+			throw new Error(
+				error.response.data.message || "Erreur de connexion",
+			);
+		}
 	},
 
 	register: async (
