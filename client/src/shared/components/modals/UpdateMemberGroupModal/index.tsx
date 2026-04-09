@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ConfirmModal from "@/shared/components/ConfirmModal";
 
 export interface Group {

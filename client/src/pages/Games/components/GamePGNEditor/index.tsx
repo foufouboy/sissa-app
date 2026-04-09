@@ -27,7 +27,7 @@ function GamePGNEditor({ value, onChange, onModify }: GamePGNEditorProps) {
 				/>
 			</div>
 			<div className="game-pgn-editor__actions">
-				<GenericButton onClick={onModify}>
+				<GenericButton className="" onClick={onModify}>
 					Modifier le PGN
 				</GenericButton>
 			</div>
