@@ -41,7 +41,10 @@ function AdminMembers() {
 
 	const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 	const [activeModal, setActiveModal] = useState<ModalType>(null);
-	const [feedback, setFeedback] = useState<{ error?: string; message?: string } | null>(null);
+	const [feedback, setFeedback] = useState<{
+		error?: string;
+		message?: string;
+	} | null>(null);
 	const intentRef = useRef<ModalType>(null);
 	const isSubmitting = fetcher.state !== "idle";
 
@@ -53,7 +56,10 @@ function AdminMembers() {
 
 		const intent = intentRef.current;
 		setActiveModal(null);
-		if (intent === "delete") { setSelectedMember(null); revalidator.revalidate(); }
+		if (intent === "delete") {
+			setSelectedMember(null);
+			revalidator.revalidate();
+		}
 		if (intent === "updateGroup") revalidator.revalidate();
 
 		intentRef.current = null;

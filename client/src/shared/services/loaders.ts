@@ -36,8 +36,9 @@ const loaders = {
 	},
 
 	getMembers: async () => {
-		const user = JSON.parse(localStorage.getItem("user") ?? "null");
-		if (user?.role !== "Administrateur") {
+		const user = JSON.parse(localStorage.getItem("sissa_user") ?? "null");
+		console.log(user);
+		if (user?.role !== "Administrateur" && user?.role !== "admin") {
 			throw new Response("Forbidden", { status: 403 });
 		}
 		const [membersData, groupsData] = await withDelay(
