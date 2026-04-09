@@ -1,6 +1,7 @@
 import dashboard from "./dashboard.service";
 import settings from "./settings.service";
 import games from "./games.service";
+import members from "./members.service";
 import { withDelay } from "@/shared/utils/utils";
 
 const loaders = {
@@ -32,6 +33,11 @@ const loaders = {
 	getOwnGames: async () => {
 		const data = await withDelay(games.getOwnGames());
 		return { games: data };
+	},
+
+	getMembers: async () => {
+		const data = await withDelay(members.getAll());
+		return { members: data };
 	},
 };
 

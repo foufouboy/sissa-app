@@ -35,6 +35,46 @@
         background: $primary-bg
         border-color: $primary-border
 
+.group-badge
+    display: inline-block
+    padding: 2px $spacing-sm
+    font-size: $text-xs
+    font-weight: 600
+
+    &--enfant
+        background: rgba(52, 211, 153, 0.15)
+        color: rgb(110, 231, 183)
+
+    &--adulte
+        background: rgba(59, 130, 246, 0.15)
+        color: rgb(147, 197, 253)
+
+    &--loisir
+        background: rgba(251, 146, 60, 0.15)
+        color: rgb(253, 186, 116)
+
+    &--competition
+        background: rgba(244, 63, 94, 0.15)
+        color: rgb(253, 164, 175)
+
+.modal-checkboxes
+    display: flex
+    flex-direction: column
+    gap: $spacing-sm
+    padding: $spacing-sm 0
+
+.modal-checkbox-label
+    display: flex
+    align-items: center
+    gap: $spacing-sm
+    cursor: pointer
+
+    input[type="checkbox"]
+        width: 16px
+        height: 16px
+        cursor: pointer
+        accent-color: $primary-cta
+
 .modal-form
     margin-bottom: $spacing-sm
 

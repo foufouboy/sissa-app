@@ -1,0 +1,168 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.group-badge
+    display: inline-block
+    padding: 2px $spacing-sm
+    font-size: $text-xs
+    font-weight: 600
+
+    &--enfant
+        background: rgba(52, 211, 153, 0.15)
+        color: rgb(110, 231, 183)
+
+    &--adulte
+        background: rgba(59, 130, 246, 0.15)
+        color: rgb(147, 197, 253)
+
+    &--loisir
+        background: rgba(251, 146, 60, 0.15)
+        color: rgb(253, 186, 116)
+
+    &--competition
+        background: rgba(244, 63, 94, 0.15)
+        color: rgb(253, 164, 175)
+
+.admin-members
+    width: 100%
+
+    &__header
+        margin-bottom: $spacing-xl
+
+        .title
+            font-size: $text-4xl
+            font-weight: 600
+            padding-top: $spacing-lg
+            color: $secondary-title-color
+
+        .subtitle
+            font-size: $text-sm
+            font-family: $font-family
+            color: $primary-color
+            opacity: 0.8
+            margin: 0
+
+    &__table-wrapper
+        width: 100%
+        overflow-x: auto
+        box-shadow: $shadow-xl
+        background: rgb(35, 40, 45)
+
+        html[data-theme="light"] &
+            background: $secondary-bg
+
+    &__table
+        width: 100%
+        border-collapse: collapse
+        font-family: $font-family
+        font-size: $text-sm
+
+        thead
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08)
+
+            html[data-theme="light"] &
+                border-color: $primary-border
+
+        th
+            padding: $spacing-md $spacing-lg
+            text-align: left
+            font-size: $text-xs
+            font-weight: 600
+            color: $primary-color
+            text-transform: uppercase
+            letter-spacing: 0.05em
+            white-space: nowrap
+
+        td
+            padding: $spacing-md $spacing-lg
+            color: $primary-title-color
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04)
+            vertical-align: middle
+
+            html[data-theme="light"] &
+                border-color: rgba(0, 0, 0, 0.04)
+
+        tbody tr
+            @include transition(background-color)
+
+            &:hover
+                background: rgba(255, 255, 255, 0.03)
+
+                html[data-theme="light"] &
+                    background: rgba(0, 0, 0, 0.02)
+
+            &:last-child td
+                border-bottom: none
+
+    &__col-email
+        @include tablet
+            display: table-cell
+
+    &__col-actions
+        width: 80px
+        text-align: right
+
+    &__name
+        font-weight: 600
+
+    &__email
+        color: $primary-color
+        font-size: $text-xs
+
+    &__groups
+        display: flex
+        flex-wrap: wrap
+        gap: 4px
+
+    &__no-group
+        font-size: $text-xs
+        color: $primary-color
+
+    &__role-badge
+        display: inline-block
+        padding: 2px $spacing-sm
+        font-size: $text-xs
+        font-weight: 600
+
+        &--administrateur
+            background: rgba(103, 82, 214, 0.2)
+            color: rgb(167, 154, 240)
+
+        &--enseignant
+            background: rgba(59, 130, 246, 0.15)
+            color: rgb(147, 197, 253)
+
+        &--membre
+            background: rgba(255, 255, 255, 0.08)
+            color: $primary-color
+
+    &__actions
+        display: flex
+        justify-content: flex-end
+        gap: $spacing-sm
+
+    &__action-btn
+        display: flex
+        align-items: center
+        justify-content: center
+        padding: 6px
+        background: rgba(255, 255, 255, 0.06)
+        border: none
+        color: $primary-title-color
+        cursor: pointer
+        @include transition(background-color)
+
+        &:hover
+            background: rgba(255, 255, 255, 0.12)
+
+        &--danger
+            color: rgb(248, 113, 113)
+
+            &:hover
+                background: rgba(185, 28, 28, 0.2)
+
+        html[data-theme="light"] &
+            background: rgba(0, 0, 0, 0.04)
+
+            &:hover
+                background: rgba(0, 0, 0, 0.08)

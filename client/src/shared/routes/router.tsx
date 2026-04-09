@@ -92,6 +92,8 @@ export const router = createBrowserRouter([
 					{
 						path: "members",
 						Component: AdminMembers,
+						loader: loaders.getMembers,
+						action: actions.membersAction,
 					},
 				],
 			},
