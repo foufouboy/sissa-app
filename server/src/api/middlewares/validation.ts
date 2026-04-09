@@ -27,8 +27,10 @@ export const validationMiddleware = {
 		}),
 
 		body("password")
-			.isLength({ min: 8 })
-			.withMessage("Mot de passe trop court (minimum 8 caractères)"),
+			.matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)
+			.withMessage(
+				"Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial",
+			),
 
 		body("confirmPassword").custom((value, { req }) => {
 			if (value !== req.body.password) {
