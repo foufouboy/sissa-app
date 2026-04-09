@@ -1,5 +1,5 @@
 import { query } from "../config/db";
-import { CreateGameInput, PrivateGame } from "../types/games";
+import { CreateGameInput, PrivateGame, UpdateGameInput } from "../types/games";
 
 export const GameModel = {
 	async findAllGamesOfPlayer(userId: number): Promise<PrivateGame[]> {
@@ -70,6 +70,27 @@ export const GameModel = {
 			);
 		} catch (error) {
 			console.error("Erreur lors de la création de la partie:", error);
+			throw error;
+		}
+	},
+
+	async update(id: number, data: UpdateGameInput): Promise<PrivateGame> {
+		try {
+			const result = await query<PrivateGame>(
+				`UPDATE games SET pgn = $1 WHERE id = $2 RETURNING *`,
+				[data.pgn, id],
+			);
+
+			if (!result[0]) {
+				throw new Error("Partie non trouvée");
+			}
+
+			return result[0];
+		} catch (error) {
+			console.error(
+				`Erreur lors de la mise à jour de la partie ${id}:`,
+				error,
+			);
 			throw error;
 		}
 	},

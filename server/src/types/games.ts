@@ -16,6 +16,8 @@ export interface PrivateGame {
 
 export type CreateGameInput = Omit<PublicGame, "createdAt" | "id">;
 
+export type UpdateGameInput = Pick<PublicGame, "pgn">;
+
 export interface PublicGame {
 	id: number;
 	pgn: string;

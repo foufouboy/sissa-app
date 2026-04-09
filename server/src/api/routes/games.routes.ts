@@ -22,6 +22,15 @@ gamesRoutes.post(
 // récupère les détails d'une partie spécifique
 gamesRoutes.get("/:game_id", auth.isOwnerOfGame, gamesController.getOne);
 
+// met à jour le pgn d'une partie
+gamesRoutes.put(
+  "/:game_id",
+  auth.isOwnerOfGame,
+  validation.gamePgn,
+  handleValidationErrors,
+  gamesController.update,
+);
+
 // supprime une partie (il faut avoir les droits pour, seulement le joueur)
 gamesRoutes.delete("/:game_id", auth.isOwnerOfGame, gamesController.remove);
 

@@ -8,7 +8,7 @@
 
 import { GameModel } from "../models/games.model";
 import { UserModel } from "../models/users.model";
-import { CreateGameInput, PublicGame } from "../types/games";
+import { CreateGameInput, PublicGame, UpdateGameInput } from "../types/games";
 import { toPublicGame, toPublicGames } from "../models/dtos/games";
 
 export const gamesService = {
@@ -46,6 +46,16 @@ export const gamesService = {
 			return toPublicGame(game);
 		} catch (error) {
 			console.error("Erreur gamesService.getGameDetail:", error);
+			throw error;
+		}
+	},
+
+	async updateGame(gameId: number, data: UpdateGameInput): Promise<PublicGame> {
+		try {
+			const game = await GameModel.update(gameId, data);
+			return toPublicGame(game);
+		} catch (error) {
+			console.error("Erreur gamesService.updateGame:", error);
 			throw error;
 		}
 	},

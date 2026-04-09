@@ -50,6 +50,18 @@ export const gamesController = {
     }
   },
 
+  async update(req: Request, res: Response) {
+    try {
+      const gameId = Number(req.params.game_id);
+      const { pgn } = req.body;
+      const game = await gamesService.updateGame(gameId, { pgn });
+      return res.status(200).json(game);
+    } catch (error) {
+      console.error("Erreur gamesController.update:", error);
+      return res.status(500).json({ message: "Erreur serveur" });
+    }
+  },
+
   async remove(req: Request, res: Response) {
     try {
       const gameId = Number(req.params.game_id);

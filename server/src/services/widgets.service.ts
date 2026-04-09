@@ -2,6 +2,7 @@ import { UserModel } from "../models/users.model";
 import { eventsService } from "./events.service";
 import { gamesService } from "./games.service";
 import { messagesService } from "./messages.service";
+import { Roles } from "../types/roles";
 import type {
 	GamesStatsWidget,
 	EventsWidget,
@@ -75,18 +76,26 @@ export const widgetsService = {
 		};
 	},
 
-	async getDashboardWidgets(userId: number): Promise<DashboardWidgets> {
+	async getDashboardWidgets(userId: number, role: Roles): Promise<DashboardWidgets> {
 		const [games, events, messages] = await Promise.all([
 			this.getGamesWidget(userId),
 			this.getEventsWidget(userId),
 			this.getMessagesWidget(userId),
 		]);
 
-		return {
-			games,
-			events,
-			messages,
-		};
+		const base = { games, events, messages };
+
+		if (role === Roles.Admin) {
+			const adminUsersOverview = await this.getAdminUsersOverviewWidget();
+			return { ...base, adminUsersOverview };
+		}
+
+		if (role === Roles.Teacher) {
+			const coachActivity = await this.getCoachActivityWidget(userId);
+			return { ...base, coachActivity };
+		}
+
+		return base;
 	},
 
 	async getCoachActivityWidget(

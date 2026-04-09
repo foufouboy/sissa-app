@@ -49,6 +49,14 @@ export const validationMiddleware = {
 			.isLength({ min: 2 })
 			.withMessage("Nom trop court (minimum 2 caractères)"),
 	],
+	gamePgn: [
+		body("pgn").custom(async (value) => {
+			if (!isValidPgn(value)) {
+				throw new Error("Pgn invalide");
+			}
+			return true;
+		}),
+	],
 	// un pgn doit être valide
 	game: [
 		body("pgn").custom(async (value) => {

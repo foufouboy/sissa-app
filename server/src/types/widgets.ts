@@ -35,5 +35,7 @@ export interface DashboardWidgets {
 	games: GamesStatsWidget;
 	events: EventsWidget;
 	messages: MessagesWidget;
+	adminUsersOverview?: AdminUsersOverviewWidget;
+	coachActivity?: CoachActivityWidget;
 }
 

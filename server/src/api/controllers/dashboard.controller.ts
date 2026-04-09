@@ -8,8 +8,8 @@ export const dashboardController = {
         return res.status(401).json({ message: "Non authentifié" });
       }
 
-      const userId = req.user.id;
-      const widgets = await widgetsService.getDashboardWidgets(userId);
+      const { id: userId, role } = req.user;
+      const widgets = await widgetsService.getDashboardWidgets(userId, role);
       return res.status(200).json(widgets);
     } catch (error) {
       console.error("Erreur dashboardController.getDashboard:", error);
