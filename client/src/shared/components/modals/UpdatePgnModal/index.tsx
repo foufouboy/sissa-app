@@ -31,7 +31,12 @@ function UpdatePgnModal({
 					: "Aucune partie sélectionnée."
 			}
 		>
-			{error && <p className="modal-error">{error}</p>}
+			{error && (
+				<p className="modal-error">
+					Erreur lors de la mise à jour du PGN. Êtes-vous sûr qu'il
+					est correct ?
+				</p>
+			)}
 			<div className="modal-actions">
 				<button
 					type="button"

@@ -18,16 +18,10 @@ const actions = {
 			});
 
 			if (response?.error) {
-				throw new Error(response.error);
-	
-				
+				return { error: response.error };
 			}
 			return { message: "Partie créée avec succès !", game: response };
-		} catch (error: any) {
-			console.log(error);
-			if (error.response.data.errors) {
-				return { error: "Un ou plusieurs champs sont invalides" };
-			}
+		} catch {
 			return { error: "Erreur lors de la création de la partie" };
 		}
 	},
@@ -97,9 +91,13 @@ const actions = {
 
 			if (!userId) return { error: "Identifiant manquant" };
 
-			const response = await membersService.updateMemberGroups(userId, groupIds);
+			const response = await membersService.updateMemberGroups(
+				userId,
+				groupIds,
+			);
 
-			if (response?.error) return { error: "Erreur lors de la mise à jour" };
+			if (response?.error)
+				return { error: "Erreur lors de la mise à jour" };
 
 			return { message: "Groupe mis à jour avec succès !" };
 		} catch {
@@ -116,7 +114,8 @@ const actions = {
 
 			const response = await membersService.deleteMember(userId);
 
-			if (response?.error) return { error: "Erreur lors de la suppression" };
+			if (response?.error)
+				return { error: "Erreur lors de la suppression" };
 
 			return { message: "Membre supprimé avec succès !" };
 		} catch {

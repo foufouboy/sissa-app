@@ -58,7 +58,12 @@ function CreateGameModal({
 			title="Nouvelle partie"
 			description="Renseignez les informations de la partie."
 		>
-			{error && <p className="modal-error">{error}</p>}
+			{error && (
+				<p className="modal-error">
+					Une erreur est survenue. Vérifiez que vos champs sont bien
+					corrects !
+				</p>
+			)}
 			{message && <p className="modal-success">{message}</p>}
 
 			<div className="modal-form">

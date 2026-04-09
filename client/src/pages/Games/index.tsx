@@ -44,7 +44,10 @@ function Games() {
 	const [pgnDraft, setPgnDraft] = useState("");
 	const [viewerPgn, setViewerPgn] = useState("");
 	const [activeModal, setActiveModal] = useState<ModalType>(null);
-	const [feedback, setFeedback] = useState<{ error?: string; message?: string } | null>(null);
+	const [feedback, setFeedback] = useState<{
+		error?: string;
+		message?: string;
+	} | null>(null);
 
 	const intentRef = useRef<ModalType>(null);
 	const isSubmitting = fetcher.state !== "idle";
@@ -60,16 +63,20 @@ function Games() {
 	}, [selectedGame]);
 
 	useEffect(() => {
-		if (fetcher.state !== "idle" || !fetcher.data) return;
+		if (fetcher.state !== "idle" || !fetcher.data || !intentRef.current) return;
 		setFeedback(fetcher.data);
 
-		if (!fetcher.data.message || !intentRef.current) return;
+		if (!fetcher.data.message) return;
 
 		const intent = intentRef.current;
 		setActiveModal(null);
+		setFeedback(null);
 
 		if (intent === "updatePgn") setViewerPgn(pgnDraft);
-		if (intent === "delete") { setSelectedGame(null); revalidator.revalidate(); }
+		if (intent === "delete") {
+			setSelectedGame(null);
+			revalidator.revalidate();
+		}
 		if (intent === "create") revalidator.revalidate();
 
 		intentRef.current = null;
