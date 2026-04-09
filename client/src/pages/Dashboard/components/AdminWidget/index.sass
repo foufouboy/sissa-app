@@ -1,0 +1,70 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.admin-widget
+    &__content
+        display: flex
+        flex-direction: column
+        gap: $spacing-md
+
+    &__total
+        display: flex
+        align-items: center
+        gap: $spacing-sm
+        padding: $spacing-md
+        background: rgba(255, 255, 255, 0.04)
+        border-radius: $radius-md
+
+        html[data-theme="light"] &
+            background: rgba(0, 0, 0, 0.04)
+
+    &__total-count
+        font-size: $text-2xl
+        font-weight: 700
+        color: $primary-cta-light
+
+    &__total-label
+        font-size: $text-sm
+        color: $primary-color
+        font-family: $font-family
+
+    &__roles
+        display: flex
+        flex-direction: column
+        gap: $spacing-sm
+
+    &__role-row
+        display: flex
+        flex-direction: column
+        gap: 4px
+
+    &__role-info
+        display: flex
+        align-items: center
+        gap: 6px
+        font-family: $font-family
+
+    &__role-label
+        flex: 1
+        font-size: $text-sm
+        color: $primary-title-color
+
+    &__role-count
+        font-size: $text-xs
+        font-weight: 600
+        color: $primary-color
+
+    &__bar-track
+        height: 4px
+        background: rgba(255, 255, 255, 0.08)
+        border-radius: $radius-full
+        overflow: hidden
+
+        html[data-theme="light"] &
+            background: rgba(0, 0, 0, 0.08)
+
+    &__bar-fill
+        height: 100%
+        background: $primary-cta
+        border-radius: $radius-full
+        @include transition(width)

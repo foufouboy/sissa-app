@@ -29,7 +29,7 @@
     display: grid
     grid-template-columns: 1fr
     gap: $spacing-2xl
-    grid-template-areas: "inbox" "events" "games" "puzzle" "blog"
+    grid-template-areas: "admin" "inbox" "events" "games" "puzzle" "blog"
 
     .games-widget
         grid-area: games
@@ -46,14 +46,17 @@
     .puzzle-widget
         grid-area: puzzle
 
+    .admin-widget
+        grid-area: admin
+
     @include tablet
         grid-template-columns: repeat(2, 1fr)
-        grid-template-areas: "events inbox" "games inbox" "puzzle blog" "puzzle blog"
+        grid-template-areas: "admin admin" "events inbox" "games inbox" "puzzle blog" "puzzle blog"
         grid-template-rows: 1fr
 
     @include desktop
         grid-template-columns: repeat(3, 1fr)
-        grid-template-areas: "games inbox events" "games inbox puzzle" "blog blog puzzle"
+        grid-template-areas: "admin admin admin" "games inbox events" "games inbox puzzle" "blog blog puzzle"
 
 @include tablet
     .page-title
