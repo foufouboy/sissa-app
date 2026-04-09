@@ -51,12 +51,15 @@
 
     @include tablet
         grid-template-columns: repeat(2, 1fr)
-        grid-template-areas: "admin admin" "events inbox" "games inbox" "puzzle blog" "puzzle blog"
+        grid-template-areas: "admin admin" "events inbox" "blog blog" "puzzle games" 
         grid-template-rows: 1fr
+        
+        .puzzle-widget
+            height: fit-content;
 
     @include desktop
         grid-template-columns: repeat(3, 1fr)
-        grid-template-areas: "admin admin admin" "games inbox events" "games inbox puzzle" "blog blog puzzle"
+        grid-template-areas: "admin admin admin" "events inbox inbox" "blog blog blog" "games puzzle puzzle"
 
 @include tablet
     .page-title
