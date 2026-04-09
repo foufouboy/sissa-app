@@ -161,6 +161,17 @@ export const validationMiddleware = {
 			.withMessage("Type de message invalide"),
 		body("userIds").isArray().withMessage("Liste d'utilisateurs invalide"),
 	],
+	userGroups: [
+		body("groupIds")
+			.isArray()
+			.withMessage("groupIds doit être un tableau")
+			.custom((value: unknown[]) => {
+				if (!value.every((id) => Number.isInteger(id) && Number(id) > 0)) {
+					throw new Error("groupIds doit contenir uniquement des entiers positifs");
+				}
+				return true;
+			}),
+	],
 	settings: [
 		body("notifications")
 			.isBoolean()

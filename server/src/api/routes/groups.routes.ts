@@ -4,6 +4,9 @@ import { authMiddleware as auth } from "../middlewares/auth";
 
 const groupsRoutes = Router();
 
+// récupère tous les groupes
+groupsRoutes.get("/", auth.isAdmin, groupsController.list);
+
 // récupère tous les utilisateurs appartenant à un groupe donné
 groupsRoutes.get(
   "/:group_id/users",

@@ -2,8 +2,19 @@ import type { Request, Response } from "express";
 import { usersService } from "../../services/users.service";
 import { messagesService } from "../../services/messages.service";
 import { eventsService } from "../../services/events.service";
+import { groupsService } from "../../services/groups.service";
 
 export const groupsController = {
+	async list(req: Request, res: Response) {
+		try {
+			const groups = await groupsService.getAllGroups();
+			return res.status(200).json(groups);
+		} catch (error) {
+			console.error("Erreur groupsController.list:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
+	},
+
 	async listUsersByGroup(req: Request, res: Response) {
 		try {
 			const groupId = Number(req.params.group_id);

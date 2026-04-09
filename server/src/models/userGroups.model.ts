@@ -5,7 +5,7 @@
  * UserGroupsModel.update(data: CreateUserWithGroupsInput);
  */
 
-import { query } from "../config/db";
+import { pool, query } from "../config/db";
 import {
 	PrivateUserWithGroups,
 	CreateUserWithGroupsInput,
@@ -88,27 +88,32 @@ export const UserGroupsModel = {
 	},
 
 	async update(data: CreateUserWithGroupsInput): Promise<void> {
+		const client = await pool.connect();
 		try {
 			const { userId, groupIds } = data;
+			const uniqueGroupIds = [...new Set(groupIds)];
 
-			await query("BEGIN");
+			await client.query("BEGIN");
 
-			await query(`DELETE FROM users_members_groups WHERE user_id = $1`, [
-				userId,
-			]);
-
-			await query(
-				`
-                INSERT INTO users_members_groups (user_id, member_group_id)
-                SELECT $1, UNNEST($2::int[])
-                `,
-				[userId, groupIds],
+			await client.query(
+				`DELETE FROM users_members_groups WHERE user_id = $1`,
+				[userId],
 			);
 
-			await query("COMMIT");
+			if (uniqueGroupIds.length > 0) {
+				await client.query(
+					`INSERT INTO users_members_groups (user_id, member_group_id)
+                    SELECT $1, UNNEST($2::int[])`,
+					[userId, uniqueGroupIds],
+				);
+			}
+
+			await client.query("COMMIT");
 		} catch (error) {
-			await query("ROLLBACK");
+			await client.query("ROLLBACK");
 			throw error;
+		} finally {
+			client.release();
 		}
 	},
 };

@@ -15,6 +15,16 @@ export const usersController = {
 		}
 	},
 
+	async listWithGroups(req: Request, res: Response) {
+		try {
+			const users = await usersService.getAllUsersWithGroups();
+			return res.status(200).json(users);
+		} catch (error) {
+			console.error("Erreur usersController.listWithGroups:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
+	},
+
 	async getOne(req: Request, res: Response) {
 		try {
 			const userId = Number(req.params.user_id);
@@ -85,6 +95,31 @@ export const usersController = {
 				.json({ message: "Utilisateur mis à jour avec succès" });
 		} catch (error) {
 			console.error("Erreur usersController.update:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
+	},
+
+	async getOneWithGroups(req: Request, res: Response) {
+		try {
+			const userId = Number(req.params.user_id);
+			const user = await usersService.getUserWithGroups(userId);
+			return res.status(200).json(user);
+		} catch (error) {
+			console.error("Erreur usersController.getOneWithGroups:", error);
+			return res.status(500).json({ message: "Erreur serveur" });
+		}
+	},
+
+	async updateGroups(req: Request, res: Response) {
+		try {
+			const userId = Number(req.params.user_id);
+			const { groupIds } = req.body;
+			await usersService.updateGroupsOfUser({ userId, groupIds });
+			return res
+				.status(200)
+				.json({ message: "Groupes mis à jour avec succès" });
+		} catch (error) {
+			console.error("Erreur usersController.updateGroups:", error);
 			return res.status(500).json({ message: "Erreur serveur" });
 		}
 	},

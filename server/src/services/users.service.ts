@@ -21,7 +21,7 @@ import {
 	PublicUserWithGroups,
 } from "../types/userGroups";
 import { UserGroupsModel } from "../models/userGroups.model";
-import { toPublicUsersWithGroups } from "../models/dtos/userGroups";
+import { toPublicUserWithGroups, toPublicUsersWithGroups } from "../models/dtos/userGroups";
 
 export const usersService = {
 	// PROFILE
@@ -71,6 +71,16 @@ export const usersService = {
 
 	// MANAGEMENT
 
+	async getUserWithGroups(userId: number): Promise<PublicUserWithGroups> {
+		try {
+			const user = await UserGroupsModel.findUserById(userId);
+			return toPublicUserWithGroups(user);
+		} catch (error) {
+			console.error("Erreur usersService.getUserWithGroups:", error);
+			throw error;
+		}
+	},
+
 	async updateGroupsOfUser(data: CreateUserWithGroupsInput) {
 		try {
 			await UserGroupsModel.update(data);
@@ -87,6 +97,16 @@ export const usersService = {
 			return toPublicUsersWithGroups(users);
 		} catch (error) {
 			console.error("Erreur usersService.getUsersOfGroup:", error);
+			throw error;
+		}
+	},
+
+	async getAllUsersWithGroups(): Promise<PublicUserWithGroups[]> {
+		try {
+			const users = await UserGroupsModel.findAllUsers();
+			return toPublicUsersWithGroups(users);
+		} catch (error) {
+			console.error("Erreur usersService.getAllUsersWithGroups:", error);
 			throw error;
 		}
 	},
