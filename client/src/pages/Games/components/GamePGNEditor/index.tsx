@@ -1,17 +1,20 @@
-import { Play } from "lucide-react";
+import GenericButton from "@/shared/components/GenericButton";
 import "./index.sass";
 
 interface GamePGNEditorProps {
 	value: string;
 	onChange: (value: string) => void;
-	onImport: () => void;
+	onModify: () => void;
 }
 
-function GamePGNEditor({ value, onChange, onImport }: GamePGNEditorProps) {
+function GamePGNEditor({ value, onChange, onModify }: GamePGNEditorProps) {
 	return (
 		<div className="game-pgn-editor">
 			<div className="game-pgn-editor__field">
-				<label className="game-pgn-editor__label" htmlFor="game-pgn-textarea">
+				<label
+					className="game-pgn-editor__label"
+					htmlFor="game-pgn-textarea"
+				>
 					PGN
 				</label>
 				<textarea
@@ -24,14 +27,9 @@ function GamePGNEditor({ value, onChange, onImport }: GamePGNEditorProps) {
 				/>
 			</div>
 			<div className="game-pgn-editor__actions">
-				<button
-					type="button"
-					className="game-pgn-editor__button"
-					onClick={onImport}
-				>
-					<Play className="game-pgn-editor__button-icon" aria-hidden />
-					Importer le PGN
-				</button>
+				<GenericButton onClick={onModify}>
+					Modifier le PGN
+				</GenericButton>
 			</div>
 		</div>
 	);

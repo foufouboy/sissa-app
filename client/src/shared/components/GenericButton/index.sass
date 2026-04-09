@@ -1,11 +1,24 @@
 .generic-button
-    background: $primary-cta;
-    color: $secondary-color;
-    padding: $spacing-sm $spacing-lg;
-    font-family: $font-family;
-    font-size: $text-sm;
-    cursor: pointer;
+    color: $secondary-color
+    padding: $spacing-sm $spacing-lg
+    font-family: $font-family
+    font-size: $text-sm
+    cursor: pointer
+    border: none
     @include transition(background-color, .1s)
-    &:hover
-        background: $primary-cta-dark;
+
+    &--primary
+        background: $primary-cta
+
+        &:hover:not(:disabled)
+            background: $primary-cta-dark
+
+    &--danger
+        background: rgb(185, 28, 28)
+
+        &:hover:not(:disabled)
+            background: rgb(153, 27, 27)
+
     &:disabled
+        opacity: 0.5
+        cursor: not-allowed

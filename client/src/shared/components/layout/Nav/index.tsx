@@ -1,4 +1,4 @@
-import { Calendar, ChessQueen, Home, Mail, User } from "lucide-react";
+import { Calendar, ChessQueen, Home, Users, User } from "lucide-react";
 import { useLocation } from "react-router";
 import MenuItem from "./MenuItem";
 import "./index.sass";
@@ -9,7 +9,7 @@ function Nav() {
     { icon: Home, label: "Home", to: "/" },
     { icon: Calendar, label: "Agenda", to: "/events" },
     { icon: ChessQueen, label: "Parties", to: "/games" },
-    { icon: Mail, label: "Messages", to: "/notifications" },
+    { icon: Users, label: "Membres", to: "/admin/members" },
     { icon: User, label: "Profil", to: "/profile" },
   ];
 

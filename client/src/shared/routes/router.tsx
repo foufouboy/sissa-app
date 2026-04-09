@@ -50,12 +50,7 @@ export const router = createBrowserRouter([
 				path: "games",
 				Component: Games,
 				loader: loaders.getOwnGames,
-				children: [
-					{
-						path: ":gameId",
-						Component: Games,
-					},
-				],
+				action: actions.gamesAction,
 			},
 			{
 				path: "events",

@@ -1,5 +1,12 @@
 import CatLogo from "@/assets/logo.png";
-import { BellDot, CircleUserRound, User, Settings, LogOut } from "lucide-react";
+import {
+	BellDot,
+	CircleUserRound,
+	User,
+	Settings,
+	LogOut,
+	ShieldCheck,
+} from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
 import "./index.sass";
@@ -7,6 +14,7 @@ import { useAuth } from "@/shared/contexts/AuthContext";
 
 function Header() {
 	const { user, isLoading, logout } = useAuth();
+	console.log(user);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const navigate = useNavigate();
@@ -87,6 +95,20 @@ function Header() {
 								<Settings size={18} />
 								<span>Paramètres</span>
 							</button>
+							{user?.role === "Administrateur" && (
+								<>
+									<div className="dropdown-separator"></div>
+									<button
+										className="dropdown-item"
+										onClick={() =>
+											handleNavigation("/admin/members")
+										}
+									>
+										<ShieldCheck size={18} />
+										<span>Gestion des membres</span>
+									</button>
+								</>
+							)}
 							<div className="dropdown-separator"></div>
 							<button
 								className="dropdown-item logout"

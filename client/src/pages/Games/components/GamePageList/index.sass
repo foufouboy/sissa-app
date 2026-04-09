@@ -1,8 +1,72 @@
 @use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
 
 .game-page-list
     min-height: 0
     width: 100%
+    border-radius: $radius-md
+    box-shadow: $shadow-xl
+    background: rgb(35, 40, 45)
+    
+    .games-list 
+        font-size: $text-sm
+
+    &__toggle
+        width: 100%
+        display: flex
+        justify-content: space-between
+        align-items: center
+        padding: $spacing-md
+        background: none
+        border: none
+        cursor: pointer
+        color: $primary-title-color
+        font-family: $font-family
+        font-size: $text-md
+        font-weight: 600
+        @include transition(background-color)
+
+        &:hover
+            background: rgba(255, 255, 255, 0.05)
+        
+        @include tablet-lg
+            pointer-events: none
+
+    &__toggle-label
+        display: flex
+        align-items: center
+        gap: $spacing-sm
+
+    &__count
+        font-size: $text-xs
+        font-weight: 400
+        color: $primary-color
+        background: rgba(255, 255, 255, 0.08)
+        padding: 2px $spacing-sm
+        border-radius: $radius-full
+
+    &__chevron
+        width: 16px
+        height: 16px
+        color: $primary-color
+        flex-shrink: 0
+        @include transition(transform)
+
+        @include tablet-lg
+            display: none
+
+        .game-page-list__toggle.open &
+            transform: rotate(180deg)
+
+    &__content
+        max-height: 348px
+        overflow-y: auto
+        scrollbar-width: thin
+        border-top: 1px solid rgba(255, 255, 255, 0.07)
+        @include tablet
+            max-height: 448px
+        @include desktop
+            max-height: 628px
 
     &__empty
         margin: 0

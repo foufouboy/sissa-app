@@ -1,6 +1,11 @@
 @use '@/shared/styles/abstracts/variables' as *
 @use '@/shared/styles/abstracts/mixins' as *
 
+#root:has(.games)
+    background-image: url('@/assets/bg_games_light.png')
+    background-size: 400px 400px
+    background-repeat: repeat
+
 .games
     width: 100%
 
@@ -13,16 +18,34 @@
             padding-top: $spacing-lg
             color: $secondary-title-color
 
+            @include desktop
+                font-size: $text-6xl
+
+        .subtitle
+            font-size: $text-sm
+            font-family: $font-family
+            color: $secondary-title-color
+            font-weight: 600
+            opacity: 0.8
+            margin: 0
+
     &-page-content
         display: grid
-        padding: $spacing-md
         width: 100%
-        gap: $spacing-xl
+        gap: $spacing-lg
         grid-template-columns: 1fr
-        grid-template-areas: "viewer" "list" "editor"
+        grid-template-areas: "viewer" "actions" "list" "editor"
+
+        .generic-button
+            padding: $spacing-md $spacing-lg
+            font-size: $text-base
+            font-weight: 600
 
         .game-page-viewer
             grid-area: viewer
+
+        .games-viewer-actions
+            grid-area: actions
 
         .game-page-list
             grid-area: list
@@ -31,5 +54,11 @@
             grid-area: editor
 
         @include tablet-lg
-            grid-template-columns: 1fr 1fr
-            grid-template-areas: "list viewer" "editor editor"
+            grid-template-columns: 2fr 4fr
+            grid-template-areas: "list viewer" "list actions" "auto editor"
+
+    &-viewer-actions
+        display: flex
+        gap: $spacing-sm
+        flex-wrap: wrap
+        justify-content: flex-end

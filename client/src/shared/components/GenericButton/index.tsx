@@ -7,16 +7,18 @@ function GenericButton({
 	children,
 	type = "button",
 	disabled = false,
+	variant = "primary",
 }: {
 	onClick?: MouseEventHandler<HTMLButtonElement>;
 	className: string;
 	children: React.ReactNode;
 	type?: "button" | "submit" | "reset";
 	disabled?: boolean;
+	variant?: "primary" | "danger";
 }) {
 	return (
 		<button
-			className={`generic-button ${className}`}
+			className={`generic-button generic-button--${variant} ${className}`}
 			onClick={onClick}
 			type={type}
 			disabled={disabled}

@@ -1,0 +1,81 @@
+@use '@/shared/styles/abstracts/variables' as *
+@use '@/shared/styles/abstracts/mixins' as *
+
+.modal-overlay
+    position: fixed
+    inset: 0
+    background: rgba(0, 0, 0, 0.6)
+    backdrop-filter: blur(1px)
+    display: flex
+    align-items: center
+    justify-content: center
+    z-index: 100
+    padding: $spacing-md
+
+.modal
+    background: $secondary-bg
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    box-shadow: $shadow-xl
+    width: 100%
+    max-width: 480px
+    max-height: 90vh
+    display: flex
+    flex-direction: column
+    overflow: hidden
+    outline: none
+
+    &__header
+        display: flex
+        align-items: center
+        justify-content: space-between
+        padding: $spacing-md $spacing-lg
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08)
+        flex-shrink: 0
+
+    &__title
+        font-size: $text-lg
+        font-family: $font-family
+        color: $primary-title-color
+        margin: 0
+        font-weight: 600
+
+    &__close
+        display: flex
+        align-items: center
+        justify-content: center
+        background: none
+        border: none
+        cursor: pointer
+        color: $primary-color
+        padding: $spacing-xs
+        border-radius: $radius-sm
+        @include transition(color)
+
+        &:hover
+            color: $primary-title-color
+
+    &__close-icon
+        width: 18px
+        height: 18px
+
+    &__body
+        padding: $spacing-lg
+        overflow-y: auto
+        flex: 1
+
+html[data-theme="light"]
+    .modal
+        background: $primary-bg
+        border-color: $primary-border
+
+        &__title
+            color: $secondary-title-color
+
+        &__close
+            color: $primary-color
+
+            &:hover
+                color: $secondary-title-color
+
+        &__header
+            border-bottom-color: $primary-border

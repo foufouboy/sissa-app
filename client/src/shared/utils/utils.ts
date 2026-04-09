@@ -1,3 +1,8 @@
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+export const withDelay = <T>(promise: Promise<T>, ms = 700): Promise<T> =>
+	Promise.all([promise, sleep(ms)]).then(([result]) => result);
+
 export const truncateString = (str: string, maxLength: number) => {
 	if (str.length > maxLength) {
 		return str.substring(0, maxLength) + "...";
@@ -11,7 +16,9 @@ export const getRegisterValidationErrorMessage = (validationErrors: any) => {
 	}
 
 	if (
-		validationErrors.some((error: any) => error?.path?.includes("firstName"))
+		validationErrors.some((error: any) =>
+			error?.path?.includes("firstName"),
+		)
 	) {
 		return "Le prénom est requis, et doit être de plus de deux lettres !";
 	}

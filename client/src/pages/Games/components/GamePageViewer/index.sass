@@ -5,11 +5,22 @@
     width: 100%
     display: flex
     flex-direction: column
+    padding: $spacing-xl
+    padding-bottom: 0
+    border-radius: $radius-md
+    box-shadow: $shadow-xl
+    background: linear-gradient(to top, rgb(35, 40, 45), rgb(25, 30, 35))
 
-    &__placeholder
-        margin: 0
-        padding: $spacing-lg
-        font-size: $text-sm
-        color: $primary-color
-        text-align: center
-        align-self: stretch
+    &__meta
+        display: flex
+        flex-wrap: wrap
+        gap: $spacing-md
+        margin-bottom: $spacing-md
+
+    &__meta-item
+        display: flex
+        align-items: center
+        gap: 5px
+        font-size: $text-base
+        color: $primary-title-color
+        font-family: $font-family

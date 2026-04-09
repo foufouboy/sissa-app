@@ -5,9 +5,11 @@ import "./index.sass";
 function GameViewer({
 	pgn,
 	showMoves = false,
+	showPlayers = true,
 }: {
 	pgn: string;
 	showMoves?: "right" | "bottom" | "auto" | false;
+	showPlayers?: boolean;
 }) {
 	const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -22,7 +24,7 @@ function GameViewer({
 			pgn,
 			showControls: true,
 			showMoves: showMoves ? showMoves : false,
-			showPlayers: true,
+			showPlayers,
 		});
 	}, [pgn]);
 

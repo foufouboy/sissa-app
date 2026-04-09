@@ -1,0 +1,112 @@
+@use '../abstracts/variables' as *
+@use '../abstracts/mixins' as *
+
+.modal-error
+    margin: 0
+    font-size: $text-sm
+    color: rgb(248, 113, 113)
+
+.modal-success
+    margin: 0
+    font-size: $text-sm
+    color: rgb(97, 177, 126)
+
+.modal-input
+    width: 100%
+    padding: $spacing-sm $spacing-md
+    font-family: $font-family
+    font-size: $text-sm
+    color: $primary-title-color
+    background: rgba(255, 255, 255, 0.06)
+    border: 1px solid rgba(255, 255, 255, 0.15)
+    border-radius: 0
+    outline: none
+    box-sizing: border-box
+    @include transition(border-color)
+
+    &:focus
+        border-color: $primary-cta-light
+
+    &::placeholder
+        color: $primary-color
+
+    html[data-theme="light"] &
+        color: $secondary-title-color
+        background: $primary-bg
+        border-color: $primary-border
+
+.modal-form
+    margin-bottom: $spacing-sm
+
+    &__grid
+        display: grid
+        grid-template-columns: 1fr 1fr
+        gap: $spacing-sm
+
+.modal-field
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+    &--full
+        grid-column: 1 / -1
+
+.modal-label
+    font-size: $text-xs
+    font-weight: 600
+    color: $primary-color
+    font-family: $font-family
+
+.modal-select
+    cursor: pointer
+
+    option
+        background: rgb(35, 40, 45)
+        color: $primary-title-color
+
+.modal-textarea
+    resize: vertical
+    min-height: 160px
+    font-family: monospace
+    font-size: $text-xs
+
+.modal-actions
+    display: flex
+    justify-content: flex-end
+    gap: $spacing-sm
+    margin-top: $spacing-sm
+
+.modal-btn
+    padding: $spacing-sm $spacing-lg
+    font-family: $font-family
+    font-size: $text-sm
+    font-weight: 600
+    border: none
+    border-radius: 0
+    cursor: pointer
+    @include transition(background-color)
+
+    &:disabled
+        opacity: 0.5
+        cursor: not-allowed
+
+    &--cancel
+        background: rgba(255, 255, 255, 0.07)
+        color: $primary-title-color
+
+        &:hover:not(:disabled)
+            background: rgba(255, 255, 255, 0.12)
+
+    &--confirm
+        background: $primary-cta
+        color: $secondary-color
+
+        &:hover:not(:disabled)
+            background: $primary-cta-dark
+
+    &--danger
+        background: rgb(185, 28, 28)
+        color: $secondary-color
+
+        &:hover:not(:disabled)
+            background: rgb(153, 27, 27)

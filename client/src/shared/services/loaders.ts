@@ -1,23 +1,23 @@
 import dashboard from "./dashboard.service";
 import settings from "./settings.service";
 import games from "./games.service";
+import { withDelay } from "@/shared/utils/utils";
 
 const loaders = {
 	getDashboardData: async () => {
-		const data = await dashboard.getDashboardData();
+		const data = await withDelay(dashboard.getDashboardData());
 		return { records: data };
 	},
 
 	getSettings: async () => {
 		try {
 			const data = await settings.getSettings();
-			return {
-				settings: data?.preferences ?? {
-					darkMode: false,
-					notifications: true,
-					language: "fr",
-				},
-			};
+
+			if (!data || !data.preferences) {
+				throw new Error("Données invalides");
+			}
+
+			return { settings: data.preferences };
 		} catch {
 			return {
 				settings: {
@@ -30,7 +30,7 @@ const loaders = {
 	},
 
 	getOwnGames: async () => {
-		const data = await games.getOwnGames();
+		const data = await withDelay(games.getOwnGames());
 		return { games: data };
 	},
 };
