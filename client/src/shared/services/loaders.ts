@@ -36,8 +36,10 @@ const loaders = {
 	},
 
 	getMembers: async () => {
-		const data = await withDelay(members.getAll());
-		return { members: data };
+		const [membersData, groupsData] = await withDelay(
+			Promise.all([members.getAll(), members.getGroups()]),
+		);
+		return { members: membersData, availableGroups: groupsData };
 	},
 };
 

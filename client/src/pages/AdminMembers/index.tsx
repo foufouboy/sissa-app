@@ -24,49 +24,40 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 const GROUP_LABELS: Record<string, string> = {
-	Enfant: "Enfant",
-	enfant: "Enfant",
-	Adulte: "Adulte",
-	adulte: "Adulte",
-	Loisir: "Loisir",
-	loisir: "Loisir",
-	Compétition: "Compétition",
-	competition: "Compétition",
-	Competition: "Compétition",
+	child: "Enfant",
+	adult: "Adulte",
+	hobby: "Loisir",
+	competitive: "Compétition",
 };
 
-function groupSlug(name: string): string {
-	return name
-		.toLowerCase()
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "");
-}
-
 function AdminMembers() {
-	const { members: membersRaw } = useLoaderData() as { members: unknown };
+	const { members: membersRaw, availableGroups = [] } = useLoaderData() as {
+		members: unknown;
+		availableGroups: Array<{ id: string; name: string }>;
+	};
 	const members = normalizeMember(membersRaw);
 	const fetcher = useFetcher();
 	const revalidator = useRevalidator();
 
 	const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 	const [activeModal, setActiveModal] = useState<ModalType>(null);
+	const [feedback, setFeedback] = useState<{ error?: string; message?: string } | null>(null);
 	const intentRef = useRef<ModalType>(null);
 	const isSubmitting = fetcher.state !== "idle";
-	const fetcherError = fetcher.data?.error as string | undefined;
-	const fetcherMessage = fetcher.data?.message as string | undefined;
 
 	useEffect(() => {
-		if (fetcher.state !== "idle" || !fetcherMessage) return;
+		if (fetcher.state !== "idle" || !fetcher.data) return;
+		setFeedback(fetcher.data);
+
+		if (!fetcher.data.message || !intentRef.current) return;
+
 		const intent = intentRef.current;
 		setActiveModal(null);
-		if (intent === "delete") {
-			setSelectedMember(null);
-			revalidator.revalidate();
-		}
+		if (intent === "delete") { setSelectedMember(null); revalidator.revalidate(); }
 		if (intent === "updateGroup") revalidator.revalidate();
 
 		intentRef.current = null;
-	}, [fetcher.state, fetcherMessage]);
+	}, [fetcher.state, fetcher.data]);
 
 	const submit = useCallback(
 		(intent: ModalType, extra: Record<string, string> = {}) => {
@@ -80,7 +71,10 @@ function AdminMembers() {
 		[fetcher],
 	);
 
-	const closeModal = useCallback(() => setActiveModal(null), []);
+	const closeModal = useCallback(() => {
+		setActiveModal(null);
+		setFeedback(null);
+	}, []);
 
 	const openModal = (type: ModalType, member: Member) => {
 		setSelectedMember(member);
@@ -112,7 +106,7 @@ function AdminMembers() {
 					</thead>
 					<tbody>
 						{members.map((member) => {
-							const isAdmin = member.role === "Administrateur";
+							const isAdmin = member.role === "admin";
 							return (
 								<tr key={member.id}>
 									<td className="admin-members__name">
@@ -135,9 +129,10 @@ function AdminMembers() {
 												member.groups.map((g) => (
 													<span
 														key={g.id}
-														className={`group-badge group-badge--${groupSlug(g.name)}`}
+														className={`group-badge group-badge--${g.name}`}
 													>
-														{GROUP_LABELS[g.name] ?? g.name}
+														{GROUP_LABELS[g.name] ??
+															g.name}
 													</span>
 												))
 											) : (
@@ -181,14 +176,13 @@ function AdminMembers() {
 				onClose={closeModal}
 				member={selectedMember}
 				isSubmitting={isSubmitting}
-				error={activeModal === "updateGroup" ? fetcherError : undefined}
-				message={
-					activeModal === "updateGroup" ? fetcherMessage : undefined
-				}
-				onConfirm={(groups) =>
+				error={feedback?.error}
+				message={feedback?.message}
+				availableGroups={availableGroups}
+				onConfirm={(groupIds) =>
 					submit("updateGroup", {
 						userId: selectedMember!.id,
-						groups: groups.join(","),
+						groupIds: groupIds.join(","),
 					})
 				}
 			/>
@@ -198,7 +192,7 @@ function AdminMembers() {
 				onClose={closeModal}
 				member={selectedMember}
 				isSubmitting={isSubmitting}
-				error={activeModal === "delete" ? fetcherError : undefined}
+				error={feedback?.error}
 				onConfirm={() =>
 					submit("delete", { userId: selectedMember!.id })
 				}

@@ -10,11 +10,24 @@ const membersService = {
 		}
 	},
 
-	updateMember: async (userId: string, data: { groups?: string[] }) => {
+	getGroups: async () => {
 		try {
-			const response = await api.put(`/admin/users/${userId}`, data);
+			const response = await api.get("/groups/");
 			return response.data;
 		} catch (error: any) {
+			console.error(error.response);
+			return { error: error.response };
+		}
+	},
+
+	updateMemberGroups: async (userId: string, groupIds: number[]) => {
+		try {
+			const response = await api.put(`/users/${userId}/groups`, {
+				groupIds,
+			});
+			return response.data;
+		} catch (error: any) {
+			console.error(error.response);
 			return { error: error.response };
 		}
 	},

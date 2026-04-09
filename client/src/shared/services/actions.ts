@@ -90,12 +90,14 @@ const actions = {
 		try {
 			const formData = await request.formData();
 			const userId = formData.get("userId") as string;
-			const groupsRaw = formData.get("groups") as string;
-			const groups = groupsRaw ? groupsRaw.split(",").filter(Boolean) : [];
+			const groupIdsRaw = formData.get("groupIds") as string;
+			const groupIds = groupIdsRaw
+				? groupIdsRaw.split(",").filter(Boolean).map(Number)
+				: [];
 
 			if (!userId) return { error: "Identifiant manquant" };
 
-			const response = await membersService.updateMember(userId, { groups });
+			const response = await membersService.updateMemberGroups(userId, groupIds);
 
 			if (response?.error) return { error: "Erreur lors de la mise à jour" };
 

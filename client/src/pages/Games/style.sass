@@ -17,6 +17,8 @@
             font-weight: 600
             padding-top: $spacing-lg
             color: $secondary-title-color
+            html[data-theme="dark"] &
+                color: $primary-title-color
 
             @include desktop
                 font-size: $text-6xl
@@ -28,6 +30,9 @@
             font-weight: 600
             opacity: 0.8
             margin: 0
+
+            html[data-theme="dark"] &
+                color: $primary-title-color
 
     &-page-content
         display: grid

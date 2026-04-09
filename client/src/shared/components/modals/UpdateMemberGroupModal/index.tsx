@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import ConfirmModal from "@/shared/components/ConfirmModal";
 
-export const GROUPS = ["Enfant", "Adulte", "Loisir", "Compétition"] as const;
+export interface Group {
+	id: string;
+	name: string;
+}
 
 export interface Member {
 	id: string;
@@ -9,39 +12,42 @@ export interface Member {
 	lastName: string;
 	email: string;
 	role: string;
-	groups: Array<{ id: string; name: string }>;
+	groups: Group[];
 }
 
 interface UpdateMemberGroupModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	member: Member | null;
+	availableGroups: Group[];
 	isSubmitting: boolean;
 	error?: string;
 	message?: string;
-	onConfirm: (groups: string[]) => void;
+	onConfirm: (groupIds: string[]) => void;
 }
+
+const GROUP_LABELS: Record<string, string> = {
+	child: "Enfant",
+	adult: "Adulte",
+	hobby: "Loisir",
+	competitive: "Compétition",
+};
 
 function UpdateMemberGroupModal({
 	isOpen,
 	onClose,
 	member,
+	availableGroups,
 	isSubmitting,
 	error,
 	message,
 	onConfirm,
 }: UpdateMemberGroupModalProps) {
-	const [selected, setSelected] = useState<string[]>([]);
+	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-	useEffect(() => {
-		if (isOpen) {
-			setSelected(member?.groups?.map((g) => g.name) ?? []);
-		}
-	}, [isOpen, member]);
-
-	const toggle = (group: string) => {
-		setSelected((prev) =>
-			prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group],
+	const toggle = (id: string) => {
+		setSelectedIds((prev) =>
+			prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
 		);
 	};
 
@@ -62,16 +68,18 @@ function UpdateMemberGroupModal({
 			<div className="modal-field">
 				<label className="modal-label">Groupes</label>
 				<div className="modal-checkboxes">
-					{GROUPS.map((g) => (
-						<label key={g} className="modal-checkbox-label">
+					{availableGroups.map((g) => (
+						<label key={g.id} className="modal-checkbox-label">
 							<input
 								type="checkbox"
-								checked={selected.includes(g)}
-								onChange={() => toggle(g)}
+								checked={selectedIds.includes(g.id)}
+								onChange={() => toggle(g.id)}
 								disabled={isSubmitting}
 							/>
-							<span className={`group-badge group-badge--${g.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}>
-								{g}
+							<span
+								className={`group-badge group-badge--${g.name}`}
+							>
+								{GROUP_LABELS[g.name]}
 							</span>
 						</label>
 					))}
@@ -91,7 +99,10 @@ function UpdateMemberGroupModal({
 					type="button"
 					className="modal-btn modal-btn--confirm"
 					disabled={isSubmitting}
-					onClick={() => onConfirm(selected)}
+					onClick={() => {
+						onConfirm(selectedIds);
+						setSelectedIds([]);
+					}}
 				>
 					{isSubmitting ? "Enregistrement..." : "Confirmer"}
 				</button>

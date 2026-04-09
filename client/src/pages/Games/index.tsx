@@ -44,6 +44,7 @@ function Games() {
 	const [pgnDraft, setPgnDraft] = useState("");
 	const [viewerPgn, setViewerPgn] = useState("");
 	const [activeModal, setActiveModal] = useState<ModalType>(null);
+	const [feedback, setFeedback] = useState<{ error?: string; message?: string } | null>(null);
 
 	const intentRef = useRef<ModalType>(null);
 	const isSubmitting = fetcher.state !== "idle";
@@ -59,21 +60,16 @@ function Games() {
 	}, [selectedGame]);
 
 	useEffect(() => {
-		if (
-			fetcher.state !== "idle" ||
-			!fetcher.data?.message ||
-			!intentRef.current
-		)
-			return;
+		if (fetcher.state !== "idle" || !fetcher.data) return;
+		setFeedback(fetcher.data);
+
+		if (!fetcher.data.message || !intentRef.current) return;
 
 		const intent = intentRef.current;
 		setActiveModal(null);
 
 		if (intent === "updatePgn") setViewerPgn(pgnDraft);
-		if (intent === "delete") {
-			setSelectedGame(null);
-			revalidator.revalidate();
-		}
+		if (intent === "delete") { setSelectedGame(null); revalidator.revalidate(); }
 		if (intent === "create") revalidator.revalidate();
 
 		intentRef.current = null;
@@ -91,9 +87,10 @@ function Games() {
 		[fetcher],
 	);
 
-	const closeModal = useCallback(() => setActiveModal(null), []);
-
-	const fetcherError = fetcher.data?.error as string | undefined;
+	const closeModal = useCallback(() => {
+		setActiveModal(null);
+		setFeedback(null);
+	}, []);
 
 	return (
 		<div className="games">
@@ -146,10 +143,8 @@ function Games() {
 				isOpen={activeModal === "create"}
 				onClose={closeModal}
 				isSubmitting={isSubmitting}
-				error={activeModal === "create" ? fetcherError : undefined}
-				message={
-					activeModal === "create" ? fetcher.data?.message : undefined
-				}
+				error={feedback?.error}
+				message={feedback?.message}
 				onConfirm={(data: CreateGameData) => submit("create", data)}
 			/>
 
@@ -158,7 +153,7 @@ function Games() {
 				onClose={closeModal}
 				selectedGame={selectedGame}
 				isSubmitting={isSubmitting}
-				error={activeModal === "delete" ? fetcherError : undefined}
+				error={feedback?.error}
 				onConfirm={() => submit("delete", { gameId: selectedGame!.id })}
 			/>
 
@@ -168,7 +163,7 @@ function Games() {
 				selectedGame={selectedGame}
 				pgnDraft={pgnDraft}
 				isSubmitting={isSubmitting}
-				error={activeModal === "updatePgn" ? fetcherError : undefined}
+				error={feedback?.error}
 				onConfirm={() =>
 					submit("updatePgn", {
 						gameId: selectedGame!.id,
