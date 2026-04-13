@@ -39,7 +39,6 @@ const loaders = {
 
 	getMembers: async () => {
 		const user = JSON.parse(localStorage.getItem("sissa_user") ?? "null");
-		console.log(user);
 		if (user?.role !== "Administrateur" && user?.role !== "admin") {
 			throw new Response("Forbidden", { status: 403 });
 		}
@@ -47,6 +46,15 @@ const loaders = {
 			Promise.all([members.getAll(), members.getGroups()]),
 		);
 		return { members: membersData, availableGroups: groupsData };
+	},
+
+	getMessages: async () => {
+		const user = JSON.parse(localStorage.getItem("sissa_user") ?? "null");
+		if (user?.role !== "Administrateur" && user?.role !== "admin") {
+			throw new Response("Forbidden", { status: 403 });
+		}
+
+		return { records: null };
 	},
 
 	notFound: () => {
