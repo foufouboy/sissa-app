@@ -4,6 +4,7 @@ dotenv.config({});
 import cors from "cors";
 import express from "express";
 import router from "./api/routes/router";
+import bcrypt from "bcryptjs";
 
 const app = express();
 
