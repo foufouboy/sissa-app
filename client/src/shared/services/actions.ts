@@ -3,6 +3,8 @@ import gamesService from "./games.service";
 import membersService from "./members.service";
 import type { ActionFunctionArgs } from "react-router";
 
+// Actions pour le système de fetching des données via React Router
+
 const actions = {
 	createGame: async ({ request }: ActionFunctionArgs) => {
 		try {

@@ -86,6 +86,10 @@ export const router = createBrowserRouter([
 				path: "admin",
 				children: [
 					{
+						index: true,
+						loader: loaders.notFound,
+					},
+					{
 						path: "messages",
 						Component: AdminMessages,
 					},
@@ -96,6 +100,10 @@ export const router = createBrowserRouter([
 						action: actions.membersAction,
 					},
 				],
+			},
+			{
+				path: "*",
+				loader: loaders.notFound,
 			},
 		],
 	},
@@ -113,9 +121,5 @@ export const router = createBrowserRouter([
 				Component: Register,
 			},
 		],
-	},
-	{
-		path: "*",
-		Component: ErrorBoundary,
 	},
 ]);

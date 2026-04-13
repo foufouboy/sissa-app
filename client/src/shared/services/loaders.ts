@@ -4,6 +4,8 @@ import games from "./games.service";
 import members from "./members.service";
 import { withDelay } from "@/shared/utils/utils";
 
+// Loaders pour le système de fetching des données via React Router
+
 const loaders = {
 	getDashboardData: async () => {
 		const data = await withDelay(dashboard.getDashboardData());
@@ -45,6 +47,10 @@ const loaders = {
 			Promise.all([members.getAll(), members.getGroups()]),
 		);
 		return { members: membersData, availableGroups: groupsData };
+	},
+
+	notFound: () => {
+		throw new Response("Not Found", { status: 404 });
 	},
 };
 
